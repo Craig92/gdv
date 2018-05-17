@@ -16,8 +16,6 @@ import processing.core.PGraphics;
 
 public class SanFranciscoMap extends PApplet {
 
-	private static final long serialVersionUID = 1L;
-
 	private UnfoldingMap map;
 	private FilmLocationManager manager = FilmLocationManager.getInstance();
 	private Location sanFrancisco = new Location(37.7577627f, -122.4726194f);
@@ -32,11 +30,14 @@ public class SanFranciscoMap extends PApplet {
 	}
 
 	@SuppressWarnings("deprecation")
-	public void setup() {
+	public void settings() {
 
 		// size of the windows
 		size(Configuration.windowWidth, Configuration.windowsHeight, P2D);
 
+	}
+
+	public void setup() {
 		// set position of the map
 		map = new UnfoldingMap(this, Configuration.provider);
 		map.zoomAndPanTo(sanFrancisco, 13);
