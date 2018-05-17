@@ -4,14 +4,15 @@ import java.util.List;
 
 import data.FilmLocation;
 import data.FilmLocationManager;
+import data.FilmLocationMarker;
 import de.fhpotsdam.unfolding.UnfoldingMap;
 import de.fhpotsdam.unfolding.data.Feature;
 import de.fhpotsdam.unfolding.data.GeoJSONReader;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
-import de.fhpotsdam.unfolding.marker.SimplePointMarker;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import processing.core.PApplet;
+import processing.core.PGraphics;
 
 public class SanFranciscoMap extends PApplet {
 
@@ -21,6 +22,14 @@ public class SanFranciscoMap extends PApplet {
 	private FilmLocationManager manager = FilmLocationManager.getInstance();
 	private Location sanFrancisco = new Location(37.7577627f, -122.4726194f);
 	private List<FilmLocation> locationList = manager.getList();
+
+	private PGraphics imbdRankingSliderGraphic;
+	private PGraphics timeSliderGraphic;
+	private PGraphics filterGraphic;
+
+	public static void main(String[] args) {
+		PApplet.main(new String[] { SanFranciscoMap.class.getName() });
+	}
 
 	@SuppressWarnings("deprecation")
 	public void setup() {
@@ -36,13 +45,11 @@ public class SanFranciscoMap extends PApplet {
 		// set timeslider
 		// TODO
 
-		// set filter
+		// set imdbslider
 		// TODO
 
-	}
-
-	public void draw() {
-		map.draw();
+		// set filter
+		// TODO
 
 		// add districts to the map
 		List<Feature> districts = GeoJSONReader.loadData(this, Configuration.districtPath);
@@ -54,11 +61,24 @@ public class SanFranciscoMap extends PApplet {
 
 		// add locations to the map
 		for (FilmLocation filmLocation : locationList) {
-			Marker location = new SimplePointMarker();
+			FilmLocationMarker location = new FilmLocationMarker();
 			location.setLocation(new Location(filmLocation.getBreitengrad(), filmLocation.getLaengengrad()));
 			location.setColor(color(0, 0, 0, 0));
+			location.setFilmLocation(filmLocation);
+			location.setSelected(true);
+			location.setHighlightColor(color(155, 155, 155, 0));
 			map.addMarker(location);
 		}
 
 	}
+
+	public void draw() {
+		map.draw();
+
+	}
+
+	public void mouseClicked() {
+		// TODO
+	}
+
 }
