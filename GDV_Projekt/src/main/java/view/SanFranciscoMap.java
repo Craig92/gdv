@@ -97,7 +97,7 @@ public class SanFranciscoMap {
 		result += "Produktion: " + filmLocation.getProductionCompany() + "\n";
 		result += "Vertrieb: " + filmLocation.getDistributor() + "\n";
 		result += "IMDb Wertung: " + filmLocation.getImdbRanking() + "\n";
-		result += "Drehjahr: " + (filmLocation.getReleaseYear().getYear() + 1900);
+		result += "Drehjahr: " + (filmLocation.getReleaseYear().getYear());
 		return result;
 	}
 

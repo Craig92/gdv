@@ -31,7 +31,7 @@ public class FilmLocationImporter {
 				FilmLocation location = new FilmLocation();
 
 				location.setTitle(line[0]);
-				location.setReleaseYear(new Date(1, 1, Integer.valueOf(line[1])));
+				location.setReleaseYear(new Date(Integer.valueOf(line[1]), 1, 1));
 				location.setLocation(line[2]);
 				location.setFunFacts(line[3]);
 				location.setProductionCompany(line[4]);
