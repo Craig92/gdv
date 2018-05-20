@@ -72,7 +72,11 @@ public class SanFranciscoMap {
 		for (FilmLocationMarker location : filmLocationMarkers) {
 			if (location.isSelected()) {
 				location.setHighlightColor(pApplet.color(255, 0, 0, 100));
-				// TODO Label einblenden
+				// set TextLabel
+				pApplet.text(getLabel(location.getFilmLocation()), (Configuration.windowWidth / 2),
+						(float) (Configuration.windowsHeight * 0.70));
+				pApplet.fill(pApplet.color(0, 0, 0, 0));
+
 			} else {
 				location.setHighlightColor(pApplet.color(211, 211, 211, 50));
 			}
@@ -81,11 +85,28 @@ public class SanFranciscoMap {
 
 	/**
 	 * 
+	 * @param filmLocation
+	 * @return
+	 */
+	@SuppressWarnings("deprecation")
+	private String getLabel(FilmLocation filmLocation) {
+
+		String result = "";
+		result += "Titel: " + filmLocation.getTitle() + "\n";
+		result += "Regie: " + filmLocation.getDirector() + "\n";
+		result += "Produktion: " + filmLocation.getProductionCompany() + "\n";
+		result += "Vertrieb: " + filmLocation.getDistributor() + "\n";
+		result += "IMDb Wertung: " + filmLocation.getImdbRanking() + "\n";
+		result += "Drehjahr: " + (filmLocation.getReleaseYear().getYear() + 1900);
+		return result;
+	}
+
+	/**
+	 * 
 	 * @param districtMarkers
 	 */
 	public void addMarkers(List<Marker> districtMarkers) {
 		unfoldingMap.addMarkers(districtMarkers);
-
 	}
 
 	/**
@@ -94,14 +115,17 @@ public class SanFranciscoMap {
 	 */
 	public void addMarker(FilmLocationMarker location) {
 		unfoldingMap.addMarker(location);
-
 	}
 
+	/**
+	 * 
+	 * @param mouseX
+	 * @param mouseY
+	 */
 	public void mouseClicked(int mouseX, int mouseY) {
 
 		for (FilmLocationMarker location : filmLocationMarkers)
 			if (location.isInside(unfoldingMap, mouseX, mouseY)) {
-				System.out.println(location.getFilmLocation().getTitle());
 				location.setSelected(true);
 			} else {
 				location.setSelected(false);
