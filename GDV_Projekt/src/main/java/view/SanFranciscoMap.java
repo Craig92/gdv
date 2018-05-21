@@ -24,7 +24,7 @@ public class SanFranciscoMap {
 	private int height;
 
 	private FilmLocationManager manager = FilmLocationManager.getInstance();
-	private List<FilmLocation> locationList = manager.getList();
+	private List<FilmLocation> locationList = manager.getFilmLocationList();
 
 	private UnfoldingMap unfoldingMap;
 	private Location sanFrancisco = new Location(37.7577627f, -122.4726194f);
@@ -32,6 +32,14 @@ public class SanFranciscoMap {
 
 	private List<FilmLocationMarker> filmLocationMarkers = new ArrayList<>();
 
+	/**
+	 * 
+	 * @param pApplet
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public SanFranciscoMap(PApplet pApplet, int x, int y, int width, int height) {
 		this.pApplet = pApplet;
 		this.startDrawX = x;
@@ -41,6 +49,9 @@ public class SanFranciscoMap {
 		setup();
 	}
 
+	/**
+	 * 
+	 */
 	private void setup() {
 
 		unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height);
@@ -58,7 +69,6 @@ public class SanFranciscoMap {
 		for (FilmLocation filmLocation : locationList) {
 			FilmLocationMarker location = new FilmLocationMarker();
 			location.setLocation(new Location(filmLocation.getBreitengrad(), filmLocation.getLaengengrad()));
-			location.setHighlightColor(pApplet.color(211, 211, 211, 50));
 			location.setFilmLocation(filmLocation);
 			location.setDiameter(10);
 			filmLocationMarkers.add(location);
@@ -73,10 +83,9 @@ public class SanFranciscoMap {
 			if (location.isSelected()) {
 				location.setHighlightColor(pApplet.color(255, 0, 0, 100));
 				// set TextLabel
-				pApplet.text(getLabel(location.getFilmLocation()), (Configuration.windowWidth / 2),
-						(float) (Configuration.windowsHeight * 0.70));
-				pApplet.fill(pApplet.color(0, 0, 0, 0));
-
+				pApplet.text(getLabel(location.getFilmLocation()), Configuration.windowWidth / 2,
+						(float) (Configuration.windowsHeight * 0.65));
+				pApplet.fill(pApplet.color(0, 0, 0, 100));
 			} else {
 				location.setHighlightColor(pApplet.color(211, 211, 211, 50));
 			}

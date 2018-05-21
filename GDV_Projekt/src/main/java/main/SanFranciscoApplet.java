@@ -1,12 +1,15 @@
 package main;
 
+import controlP5.ControlEvent;
 import processing.core.PApplet;
 import processing.core.PGraphics;
+import view.Filter;
 import view.SanFranciscoMap;
 
 public class SanFranciscoApplet extends PApplet {
 
 	private SanFranciscoMap map;
+	private Filter filter;
 
 	private PGraphics mapGraphic;
 	private PGraphics imbdRankingSliderGraphic;
@@ -30,6 +33,7 @@ public class SanFranciscoApplet extends PApplet {
 	public void setup() {
 
 		surface.setResizable(true);
+
 		// set map
 		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
 				(int) (Configuration.windowsHeight * 0.78), P2D);
@@ -49,6 +53,8 @@ public class SanFranciscoApplet extends PApplet {
 		map = new SanFranciscoMap(this, (int) (Configuration.windowWidth * 0.16), 0,
 				(int) (Configuration.windowWidth * 0.68), (int) (Configuration.windowsHeight * 0.78));
 
+		filter = new Filter(this, (int) (Configuration.windowWidth * 0.85), 0, (int) (Configuration.windowWidth * 0.15),
+				Configuration.windowsHeight);
 	}
 
 	/**
@@ -56,32 +62,34 @@ public class SanFranciscoApplet extends PApplet {
 	 */
 	public void draw() {
 
+		background(color(255, 255, 255, 100));
 		imbdRankingSliderGraphic.beginDraw();
-		imbdRankingSliderGraphic.background(51);
+		imbdRankingSliderGraphic.background(color(255, 255, 255, 100));
 		imbdRankingSliderGraphic.endDraw();
 		image(imbdRankingSliderGraphic, 0, 0);
 
 		filterGraphic.beginDraw();
-		filterGraphic.background(51);
+		filterGraphic.background(color(255, 255, 255, 100));
 		filterGraphic.endDraw();
 		image(filterGraphic, (int) (Configuration.windowWidth * 0.85), 0);
 
 		timeSliderGraphic.beginDraw();
-		timeSliderGraphic.background(51);
+		timeSliderGraphic.background(color(255, 255, 255, 100));
 		timeSliderGraphic.endDraw();
 		image(timeSliderGraphic, (int) (Configuration.windowWidth * 0.16), (int) (Configuration.windowsHeight * 0.8));
 
 		mapGraphic.beginDraw();
-		mapGraphic.background(51);
+		mapGraphic.background(color(255, 255, 255, 100));
 		mapGraphic.endDraw();
 		image(mapGraphic, (int) (Configuration.windowWidth * 0.16), 0);
 
+		filter.draw();
 		map.draw();
 
 	}
 
 	/**
-	 * Bearbeiten Maus-Klicks
+	 * Verarbeitet Maus-Klicks
 	 */
 	public void mouseClicked() {
 
@@ -96,7 +104,17 @@ public class SanFranciscoApplet extends PApplet {
 			map.mouseClicked(mouseX, mouseY);
 		} else {
 			System.out.println("Filter");
+			filter.mouseClicked(mouseX, mouseY);
 		}
+	}
+
+	/**
+	 * Verarbeitet Events
+	 * 
+	 * @param event
+	 */
+	public void controlEvent(ControlEvent event) {
+		filter.controlEvent(event);
 	}
 
 }

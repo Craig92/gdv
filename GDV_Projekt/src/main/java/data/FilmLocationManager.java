@@ -1,15 +1,25 @@
 package data;
 
+import java.io.FileReader;
 import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 import java.util.stream.Collectors;
+
+import au.com.bytecode.opencsv.CSVReader;
+import main.Configuration;
 
 public class FilmLocationManager {
 
-	private List<FilmLocation> list = null;
-	private FilmLocationImporter importer = new FilmLocationImporter();
 	private static final FilmLocationManager manager = new FilmLocationManager();
+
+	private List<FilmLocation> filmLocationList = new ArrayList<FilmLocation>();
+	private Set<String> productionCompanyList = new TreeSet<>();
+	private Set<String> distributorList = new TreeSet<>();
+	private Set<String> directorList = new TreeSet<>();
+	private Set<String> titleList = new TreeSet<>();
 
 	/**
 	 * Singeton
@@ -24,7 +34,51 @@ public class FilmLocationManager {
 	 * Constructor
 	 */
 	private FilmLocationManager() {
-		setList(importer.importer());
+		setup();
+	}
+
+	/**
+	 * 
+	 */
+	@SuppressWarnings("deprecation")
+	public void setup() {
+
+		try {
+			CSVReader reader = new CSVReader(new FileReader(Configuration.locationPath), ';');
+			String[] line;
+			// ignore headerline
+			reader.readNext();
+
+			// create filmlocation from every line
+			while ((line = reader.readNext()) != null) {
+				FilmLocation location = new FilmLocation();
+				location.setTitle(line[0]);
+				titleList.add(line[0]);
+				location.setReleaseYear(new Date(Integer.valueOf(line[1]), 1, 1));
+				location.setLocation(line[2]);
+				location.setFunFacts(line[3]);
+				location.setProductionCompany(line[4]);
+				productionCompanyList.add(line[4]);
+				location.setDistributor(line[5]);
+				distributorList.add(line[5]);
+				location.setDirector(line[6]);
+				directorList.add(line[6]);
+				location.setWriter(line[7]);
+				location.setActor1(line[8]);
+				location.setActor2(line[9]);
+				location.setActor3(line[10]);
+				location.setBreitengrad(Double.parseDouble(line[11].replaceAll(",", ".")));
+				location.setLaengengrad(Double.parseDouble(line[12].replaceAll(",", ".")));
+				// TODO CSV anpassen
+				// location.setImdbRanking(Double.parseDouble(line[13].replaceAll(",", ".")));
+				// location.setDistrict(line[14]);
+				filmLocationList.add(location);
+			}
+			reader.close();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -144,23 +198,24 @@ public class FilmLocationManager {
 		}
 	}
 
-	/**
-	 * Get the full list
-	 * 
-	 * @return the list with all elements
-	 */
-	public List<FilmLocation> getList() {
-		return list;
+	public List<FilmLocation> getFilmLocationList() {
+		return filmLocationList;
 	}
 
-	/**
-	 * Set the full list
-	 * 
-	 * @param list
-	 *            the new list
-	 */
-	public void setList(List<FilmLocation> list) {
-		this.list = list;
+	public Set<String> getProductionCompanyList() {
+		return productionCompanyList;
+	}
+
+	public Set<String> getDistributorList() {
+		return distributorList;
+	}
+
+	public Set<String> getDirectorList() {
+		return directorList;
+	}
+
+	public Set<String> getTitleList() {
+		return titleList;
 	}
 
 }
