@@ -71,7 +71,6 @@ public class FilmLocationManager {
 				location.setLaengengrad(Double.parseDouble(line[12].replaceAll(",", ".")));
 				// TODO CSV anpassen
 				// location.setImdbRanking(Double.parseDouble(line[13].replaceAll(",", ".")));
-				// location.setDistrict(line[14]);
 				filmLocationList.add(location);
 			}
 			reader.close();
@@ -99,6 +98,54 @@ public class FilmLocationManager {
 		} else {
 			list = list.stream().filter(f -> f.getReleaseYear().after(start) && f.getReleaseYear().before(end))
 					.collect(Collectors.toList());
+			return list;
+		}
+	}
+
+	/**
+	 * Filter the list by the handed parameter
+	 * 
+	 * @param list
+	 *            the handed list
+	 * @param title
+	 *            the list of the titles
+	 * @return the filtered list
+	 */
+	public List<FilmLocation> filterByTitle(List<FilmLocation> list, List<String> title) {
+
+		if (list == null || title == null || title.isEmpty()) {
+			return list;
+		} else {
+			List<FilmLocation> temp = new ArrayList<FilmLocation>();
+			for (String element : title) {
+				temp.addAll(list.stream().filter(f -> f.getTitle().equals(element)).collect(Collectors.toList()));
+
+			}
+			list = temp;
+			return list;
+		}
+	}
+
+	/**
+	 * Filter the list by the handed parameter
+	 * 
+	 * @param list
+	 *            the handed list
+	 * @param title
+	 *            the list of the director
+	 * @return the filtered list
+	 */
+	public List<FilmLocation> filterByDirector(List<FilmLocation> list, List<String> director) {
+
+		if (list == null || director == null || director.isEmpty()) {
+			return list;
+		} else {
+			List<FilmLocation> temp = new ArrayList<FilmLocation>();
+			for (String element : director) {
+				temp.addAll(list.stream().filter(f -> f.getDirector().equals(element)).collect(Collectors.toList()));
+
+			}
+			list = temp;
 			return list;
 		}
 	}
@@ -170,30 +217,6 @@ public class FilmLocationManager {
 		} else {
 			list = list.stream().filter(f -> f.getImdbRanking() >= start && f.getImdbRanking() <= end)
 					.collect(Collectors.toList());
-			return list;
-		}
-	}
-
-	/**
-	 * Filter the list by the handed parameter
-	 * 
-	 * @param list
-	 *            the handed list
-	 * @param district
-	 *            the list of the districts
-	 * @return the filtered list
-	 */
-	public List<FilmLocation> filterByDistrict(List<FilmLocation> list, List<String> district) {
-
-		if (list == null || district == null || district.isEmpty()) {
-			return list;
-		} else {
-			List<FilmLocation> temp = new ArrayList<FilmLocation>();
-			for (String element : district) {
-				temp.addAll(list.stream().filter(f -> f.getDistrict().equals(element)).collect(Collectors.toList()));
-
-			}
-			list = temp;
 			return list;
 		}
 	}

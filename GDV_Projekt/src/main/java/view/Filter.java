@@ -3,17 +3,17 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
 import controlP5.Button;
-import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.DropdownList;
 import controlP5.RadioButton;
 import controlP5.Textlabel;
 import data.FilmLocationManager;
-import main.Configuration;
 import processing.core.PApplet;
 
+@SuppressWarnings("unused")
 public class Filter {
 
 	private PApplet pApplet;
@@ -43,9 +43,9 @@ public class Filter {
 	private Set<String> directorList = manager.getDirectorList();
 	private Set<String> productionCompanyList = manager.getProductionCompanyList();
 	private Set<String> distributorList = manager.getDistributorList();
-	private float typ;
 
 	/**
+	 * Constructor
 	 * 
 	 * @param pApplet
 	 * @param x
@@ -54,6 +54,7 @@ public class Filter {
 	 * @param height
 	 */
 	public Filter(PApplet pApplet, int x, int y, int width, int height) {
+
 		this.pApplet = pApplet;
 		this.startDrawX = x;
 		this.startDrawY = y;
@@ -63,71 +64,50 @@ public class Filter {
 	}
 
 	/**
-	 * 
+	 * Set the size and position of the different elements
 	 */
 	private void setup() {
+
 		cp5 = new ControlP5(pApplet);
 
-		label = new Textlabel(cp5, "Filter", (int) (Configuration.windowWidth * 0.85), 10, 400, 200)
+		label = new Textlabel(cp5, "Filter", startDrawX, startDrawY + 10, 400, 200)
 				.setFont(pApplet.createFont("Georgia", 20)).setColor(pApplet.color(0, 0, 0, 0));
 
-		descriptionLabel = new Textlabel(cp5, "Wählen Sie die zu filternden Parameter aus:",
-				(int) (Configuration.windowWidth * 0.85), 35, 400, 200).setFont(pApplet.createFont("Georgia", 14))
+		descriptionLabel = new Textlabel(cp5, "Wählen Sie die zu filternden Parameter aus:", startDrawX,
+				startDrawY + 35, 400, 200).setFont(pApplet.createFont("Georgia", 14))
 						.setColor(pApplet.color(0, 0, 0, 0));
 
-		filterButton = cp5.addButton("Filtern").setPosition((int) (Configuration.windowWidth * 0.85), 60)
-				.setSize(80, 30).setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255));
-
-		resetButton = cp5.addButton("Zurücksetzen").setPosition((int) (Configuration.windowWidth * 0.85) + 100, 60)
-				.setSize(80, 30).setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255));
-
-		filterDropdown = cp5.addDropdownList("Filtern nach...")
-				.setPosition((int) (Configuration.windowWidth * 0.85), 120).setSize(200, 400)
+		filterButton = cp5.addButton("Filtern").setPosition(startDrawX, startDrawY + 60).setSize(80, 30)
 				.setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255));
+
+		resetButton = cp5.addButton("Zurücksetzen").setPosition(startDrawX + 100, startDrawY + 60).setSize(80, 30)
+				.setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255));
+
+		filterDropdown = cp5.addDropdownList("Filtern nach...").setPosition(startDrawX, startDrawY + 120)
+				.setSize(200, 400).setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255));
 
 		filterDropdown.addItem("Titel", 1);
 		filterDropdown.addItem("Regie", 2);
 		filterDropdown.addItem("Produktion", 3);
 		filterDropdown.addItem("Vertrieb", 4);
 
-		selectAllButton = cp5.addButton("Alle auswählen").setPosition((int) (Configuration.windowWidth * 0.85), 160)
+		selectAllButton = cp5.addButton("Alle auswählen").setPosition(startDrawX, startDrawY + 160).setSize(80, 30)
+				.setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255)).setVisible(false);
+
+		deselectAllButton = cp5.addButton("Alle abwählen").setPosition(startDrawX + 100, startDrawY + 160)
 				.setSize(80, 30).setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255))
 				.setVisible(false);
 
-		deselectAllButton = cp5.addButton("Alle abwählen")
-				.setPosition((int) (Configuration.windowWidth * 0.85) + 100, 160).setSize(80, 30)
-				.setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255)).setVisible(false);
-
-		int size = 20;
-		for (String title : titleList) {
-			RadioButton button = setRadioButton("Titel: " + title, size, title, 1);
-			size += 20;
-			titleButtonList.add(button);
-		}
-
-		size = 20;
-		for (String director : directorList) {
-			RadioButton button = setRadioButton("Regie: " + director, size, director, 1);
-			size += 20;
-			directorButtonList.add(button);
-		}
-
-		size = 20;
-		for (String productionCompany : productionCompanyList) {
-			RadioButton button = setRadioButton("Produktion: " + productionCompany, size, productionCompany, 1);
-			size += 20;
-			productionCompanyButtonList.add(button);
-		}
-
-		size = 20;
-		for (String distributor : distributorList) {
-			RadioButton button = setRadioButton("Vertrieb: " + distributor, size, distributor, 1);
-			size += 20;
-			distributorButtonList.add(button);
-		}
+		addRadioButtons("Titel");
+		addRadioButtons("Regie");
+		addRadioButtons("Produktion");
+		addRadioButtons("Vertrieb");
 
 	}
 
+	/**
+	 * Draw the different elements
+	 */
 	public void draw() {
 
 		label.draw(pApplet);
@@ -135,34 +115,16 @@ public class Filter {
 
 	}
 
-	public void controlEvent(ControlEvent event) {
-
-		if (event.isFrom(filterButton)) {
-			System.out.println("FilterButton");
-		} else if (event.isFrom(resetButton)) {
-			System.out.println("ResteButton");
-		} else if (event.isFrom(filterDropdown)) {
-			float typ = event.getController().getValue();
-			System.out.println(typ);
-			setVisibility(typ);
-		} else if (event.isFrom(selectAllButton)) {
-			System.out.println("selectAllButton");
-			setRadioButtonActive(true);
-		} else if (event.isFrom(deselectAllButton)) {
-			System.out.println("deselectAllButton");
-			setRadioButtonActive(false);
-		} else {
-			System.out.println("keine Aktion" + event.getName());
-
-		}
-	}
-
 	/**
+	 * Handle the clicks of the mouse
 	 * 
 	 * @param mouseX
+	 *            the x position of the mouse
 	 * @param mouseY
+	 *            the y position of the mouse
 	 */
 	public void mouseClicked(int mouseX, int mouseY) {
+
 		if (filterDropdown.isOpen()) {
 			selectAllButton.setVisible(false);
 			deselectAllButton.setVisible(false);
@@ -173,25 +135,72 @@ public class Filter {
 	}
 
 	/**
+	 * Add the new RadioButton to the specific list
 	 * 
-	 * @param button
-	 * @param size
-	 * @return
+	 * @param parameter
+	 *            the type of the RadioButton
 	 */
-	private RadioButton setRadioButton(String name, int size, String itemName, int itemID) {
+	public void addRadioButtons(String parameter) {
 
-		return cp5.addRadioButton(name).setPosition((int) (Configuration.windowWidth * 0.85), 200 + size)
-				.setSize(20, 20).setBackgroundColor(pApplet.color(190, 190, 190, 100))
-				.setColorValue(pApplet.color(190, 190, 190, 100)).setColorForeground(pApplet.color(190, 190, 190, 100))
-				.setColorActive(pApplet.color(46, 139, 87, 100)).setColorLabel(pApplet.color(0)).setItemsPerRow(1)
-				.addItem(itemName, itemID).setVisible(false);
+		Set<String> list = new TreeSet<>();
+		int size = 20;
+
+		if (parameter.equals("Titel")) {
+			list = titleList;
+		} else if (parameter.equals("Regie")) {
+			list = directorList;
+		} else if (parameter.equals("Produktion")) {
+			list = productionCompanyList;
+		} else if (parameter.equals("Vertrieb")) {
+			list = distributorList;
+		}
+
+		for (String element : list) {
+			RadioButton button = setRadioButton(parameter + ": " + element, size, element, 1);
+			size += 20;
+			if (parameter.equals("Titel")) {
+				titleButtonList.add(button);
+			} else if (parameter.equals("Regie")) {
+				directorButtonList.add(button);
+			} else if (parameter.equals("Produktion")) {
+				productionCompanyButtonList.add(button);
+			} else if (parameter.equals("Vertrieb")) {
+				distributorButtonList.add(button);
+			}
+
+		}
 	}
 
 	/**
+	 * Set the properties of the RadioButton
+	 * 
+	 * @param name
+	 *            the name of the button
+	 * @param size
+	 *            the y size of the button
+	 * @param itemName
+	 *            the item name of the button
+	 * @param itemID
+	 *            the id of the item
+	 * @return the RadioButton
+	 */
+	private RadioButton setRadioButton(String name, int size, String itemName, int itemID) {
+
+		return cp5.addRadioButton(name).setPosition(startDrawX, 200 + size).setSize(20, 20)
+				.setBackgroundColor(pApplet.color(190, 190, 190, 100)).setColorValue(pApplet.color(190, 190, 190, 100))
+				.setColorForeground(pApplet.color(190, 190, 190, 100)).setColorActive(pApplet.color(46, 139, 87, 100))
+				.setColorLabel(pApplet.color(0)).setItemsPerRow(1).addItem(itemName, itemID).setVisible(false);
+	}
+
+	/**
+	 * Set the activity status of the RadioButtons
 	 * 
 	 * @param isSelect
+	 *            the activity status of the button
+	 * @param typ
+	 *            the type of the button
 	 */
-	private void setRadioButtonActive(boolean isSelect) {
+	public void setRadioButtonActive(boolean isSelect, float typ) {
 
 		if (typ == 0) {
 			for (RadioButton button : titleButtonList) {
@@ -229,11 +238,45 @@ public class Filter {
 	}
 
 	/**
+	 * Get the selected parameter of the RadioButtons
 	 * 
-	 * @param typ
+	 * @param parameter
+	 *            the typ of the parameter
+	 * @return list with the name of the selected items
 	 */
-	private void setVisibility(float typ) {
-		this.typ = typ;
+	public List<String> getSelectedParameterList(String parameter) {
+
+		List<String> list = new ArrayList<>();
+		List<RadioButton> rbList = new ArrayList<>();
+
+		if (parameter.equals("Titel")) {
+			rbList = titleButtonList;
+		} else if (parameter.equals("Regie")) {
+			rbList = directorButtonList;
+		} else if (parameter.equals("Produktion")) {
+			rbList = productionCompanyButtonList;
+		} else if (parameter.equals("Vertrieb")) {
+			rbList = distributorButtonList;
+		}
+
+		for (RadioButton button : rbList) {
+			if (button.getItem(0).getState()) {
+				list.add(button.getItem(0).getName());
+			}
+		}
+
+		return list;
+	}
+
+	/**
+	 * Set the visibility of the RadioButton
+	 * 
+	 * @param type
+	 *            the type of the button
+	 * @return the current type
+	 */
+	public float setVisibility(float typ) {
+
 		for (RadioButton button : titleButtonList) {
 			if (typ == 0) {
 				button.setVisible(true);
@@ -263,5 +306,6 @@ public class Filter {
 				button.setVisible(false);
 			}
 		}
+		return typ;
 	}
 }
