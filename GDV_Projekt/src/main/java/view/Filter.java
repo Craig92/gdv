@@ -43,6 +43,7 @@ public class Filter {
 	private Set<String> directorList = manager.getDirectorList();
 	private Set<String> productionCompanyList = manager.getProductionCompanyList();
 	private Set<String> distributorList = manager.getDistributorList();
+	private float typ;
 
 	/**
 	 * 
@@ -146,8 +147,10 @@ public class Filter {
 			setVisibility(typ);
 		} else if (event.isFrom(selectAllButton)) {
 			System.out.println("selectAllButton");
+			setRadioButtonActive(true);
 		} else if (event.isFrom(deselectAllButton)) {
 			System.out.println("deselectAllButton");
+			setRadioButtonActive(false);
 		} else {
 			System.out.println("keine Aktion" + event.getName());
 
@@ -167,7 +170,6 @@ public class Filter {
 			selectAllButton.setVisible(true);
 			deselectAllButton.setVisible(true);
 		}
-
 	}
 
 	/**
@@ -187,10 +189,51 @@ public class Filter {
 
 	/**
 	 * 
+	 * @param isSelect
+	 */
+	private void setRadioButtonActive(boolean isSelect) {
+
+		if (typ == 0) {
+			for (RadioButton button : titleButtonList) {
+				if (isSelect) {
+					button.activate(button.getItem(0).getName());
+				} else {
+					button.deactivate(button.getItem(0).getName());
+				}
+			}
+		} else if (typ == 1) {
+			for (RadioButton button : directorButtonList) {
+				if (isSelect) {
+					button.activate(button.getItem(0).getName());
+				} else {
+					button.deactivate(button.getItem(0).getName());
+				}
+			}
+		} else if (typ == 2) {
+			for (RadioButton button : productionCompanyButtonList) {
+				if (isSelect) {
+					button.activate(button.getItem(0).getName());
+				} else {
+					button.deactivate(button.getItem(0).getName());
+				}
+			}
+		} else if (typ == 3) {
+			for (RadioButton button : distributorButtonList) {
+				if (isSelect) {
+					button.activate(button.getItem(0).getName());
+				} else {
+					button.deactivate(button.getItem(0).getName());
+				}
+			}
+		}
+	}
+
+	/**
+	 * 
 	 * @param typ
 	 */
 	private void setVisibility(float typ) {
-
+		this.typ = typ;
 		for (RadioButton button : titleButtonList) {
 			if (typ == 0) {
 				button.setVisible(true);
