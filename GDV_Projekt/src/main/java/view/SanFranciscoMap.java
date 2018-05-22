@@ -95,6 +95,8 @@ public class SanFranciscoMap {
 			location.setLocation(new Location(filmLocation.getBreitengrad(), filmLocation.getLaengengrad()));
 			location.setFilmLocation(filmLocation);
 			location.setDiameter(10);
+			location.setColor(pApplet.color(211, 211, 211, 50));
+			location.setHighlightColor(pApplet.color(255, 0, 0, 100));
 			filmLocationMarkers.add(location);
 			filmLocationMarkerManager.addMarker(location);
 		}
@@ -129,7 +131,6 @@ public class SanFranciscoMap {
 		int height = 0;
 		for (FilmLocationMarker location : filmLocationMarkers) {
 			if (location.isSelected()) {
-				location.setHighlightColor(pApplet.color(255, 0, 0, 100));
 				// set TextLabel
 				if (height != 750) {
 					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()),
@@ -137,8 +138,6 @@ public class SanFranciscoMap {
 					pApplet.fill(pApplet.color(0, 0, 0, 100));
 					height += 150;
 				}
-			} else {
-				location.setHighlightColor(pApplet.color(211, 211, 211, 50));
 			}
 		}
 	}
