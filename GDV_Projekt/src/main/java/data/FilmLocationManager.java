@@ -69,8 +69,7 @@ public class FilmLocationManager {
 				location.setActor3(line[10]);
 				location.setBreitengrad(Double.parseDouble(line[11].replaceAll(",", ".")));
 				location.setLaengengrad(Double.parseDouble(line[12].replaceAll(",", ".")));
-				// TODO CSV anpassen
-				// location.setImdbRanking(Double.parseDouble(line[13].replaceAll(",", ".")));
+				location.setImdbRanking(Double.parseDouble(line[13].replaceAll(",", ".")));
 				filmLocationList.add(location);
 			}
 			reader.close();

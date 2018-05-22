@@ -147,6 +147,8 @@ public class SanFranciscoApplet extends PApplet {
 			map.setupFilmLocationMarker(filmLocationList);
 		} else if (event.getName().equals("Filtern nach...")) {
 			this.typ = filter.setVisibility(event.getController().getValue());
+			// TODO Listen aktualiseren damit keine ungültigen Kombinationen aufttreten
+			// können
 		} else if (event.getName().equals("Alle auswählen")) {
 			filter.setRadioButtonActive(true, this.typ);
 		} else if (event.getName().equals("Alle abwählen")) {

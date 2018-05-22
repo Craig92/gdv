@@ -189,7 +189,8 @@ public class Filter {
 		return cp5.addRadioButton(name).setPosition(startDrawX, 200 + size).setSize(20, 20)
 				.setBackgroundColor(pApplet.color(190, 190, 190, 100)).setColorValue(pApplet.color(190, 190, 190, 100))
 				.setColorForeground(pApplet.color(190, 190, 190, 100)).setColorActive(pApplet.color(46, 139, 87, 100))
-				.setColorLabel(pApplet.color(0)).setItemsPerRow(1).addItem(itemName, itemID).setVisible(false);
+				.setColorLabel(pApplet.color(0)).setItemsPerRow(1).addItem(itemName, itemID).setVisible(false)
+				.activate(itemID);
 	}
 
 	/**
