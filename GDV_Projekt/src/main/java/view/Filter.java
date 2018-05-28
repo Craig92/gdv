@@ -1,7 +1,9 @@
 package view;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -39,10 +41,10 @@ public class Filter {
 	private DropdownList filterDropdown;
 
 	private FilmLocationManager manager = FilmLocationManager.getInstance();
-	private Set<String> titleList = manager.getTitleList();
-	private Set<String> directorList = manager.getDirectorList();
-	private Set<String> productionCompanyList = manager.getProductionCompanyList();
-	private Set<String> distributorList = manager.getDistributorList();
+	private Map<String, Integer> titleList = manager.getTitleList();
+	private Map<String, Integer> directorList = manager.getDirectorList();
+	private Map<String, Integer> productionCompanyList = manager.getProductionCompanyList();
+	private Map<String, Integer> distributorList = manager.getDistributorList();
 
 	/**
 	 * Constructor
@@ -142,7 +144,7 @@ public class Filter {
 	 */
 	public void addRadioButtons(String parameter) {
 
-		Set<String> list = new TreeSet<>();
+		Map<String, Integer> list = new HashMap<>();
 		int size = 20;
 
 		if (parameter.equals("Titel")) {
@@ -155,8 +157,9 @@ public class Filter {
 			list = distributorList;
 		}
 
-		for (String element : list) {
-			RadioButton button = setRadioButton(parameter + ": " + element, size, element, 1);
+		for (Map.Entry<String, Integer> element : list.entrySet()) {
+			RadioButton button = setRadioButton(parameter + ": " + element.getKey(), size,
+					element.getKey() + " | " + element.getValue(), 1);
 			size += 20;
 			if (parameter.equals("Titel")) {
 				titleButtonList.add(button);
