@@ -81,7 +81,7 @@ public class FilmLocationManager {
 				filmLocationList.add(location);
 			}
 			reader.close();
-
+			completeMap();
 			sortMap();
 
 		} catch (Exception e) {
@@ -140,6 +140,27 @@ public class FilmLocationManager {
 				} else {
 					genreList.put(element, 1);
 				}
+			}
+		}
+	}
+
+	/**
+	 * 
+	 */
+	private void completeMap() {
+
+		for (int dezimalzahl = 0; dezimalzahl != 10; dezimalzahl++) {
+			for (int dezimalstelle = 0; dezimalstelle != 10; dezimalstelle++) {
+				String key = "" + dezimalzahl + "," + dezimalstelle;
+				if (!imdbRankingList.containsKey(key)) {
+					imdbRankingList.put(key, 0);
+				}
+			}
+		}
+
+		for (int i = 1915; i != 2018; i++) {
+			if (!releaseYearList.containsKey(i)) {
+				releaseYearList.put(i, 0);
 			}
 		}
 	}

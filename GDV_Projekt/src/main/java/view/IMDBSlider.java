@@ -30,6 +30,7 @@ public class IMDBSlider {
 	private Textlabel teamMemberLabel1;
 	private Textlabel teamMemberLabel2;
 	private Textlabel teamMemberLabel3;
+	private Textlabel vorlesungLabel;
 	private Textlabel hochschuleLabel;
 	private Textlabel yearLabel;
 
@@ -61,6 +62,7 @@ public class IMDBSlider {
 	 */
 	private void setup() {
 
+		int heightPosition = 150;
 		cp5 = new ControlP5(pApplet);
 
 		descriptionIMDBLabel = new Textlabel(cp5, "IMDb-Bewertung filtern:", startDrawX, startDrawY + 110, 400, 200)
@@ -72,30 +74,34 @@ public class IMDBSlider {
 		infoLabel2 = new Textlabel(cp5, "Attributen pro Typ gefiltert werden", startDrawX, startDrawY + 50, 400, 200)
 				.setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
 
-		teamNameLabel = new Textlabel(cp5, "Team: WestCostMovies", startDrawX,
-				(int) (startDrawY + (height * 0.80) - 75), 400, 200).setFont(pApplet.createFont("Georgia", 14))
-						.setColor(pApplet.color(0, 0, 0, 0));
+		setValues();
+		heightPosition += addSlider(150);
+
+		teamNameLabel = new Textlabel(cp5, "Team: WestCostMovies", startDrawX, (int) (startDrawY + heightPosition + 15),
+				400, 200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
 
 		teamMemberLabel1 = new Textlabel(cp5, "Silvia Altrichter, Dominique Bost,", startDrawX,
-				(int) (startDrawY + (height * 0.80) - 60), 400, 200).setFont(pApplet.createFont("Georgia", 14))
+				(int) (startDrawY + heightPosition + 30), 400, 200).setFont(pApplet.createFont("Georgia", 14))
 						.setColor(pApplet.color(0, 0, 0, 0));
 
 		teamMemberLabel2 = new Textlabel(cp5, "Thorsten Föhringer, Özkan Ünlü,", startDrawX,
-				(int) (startDrawY + (height * 0.80) - 45), 400, 200).setFont(pApplet.createFont("Georgia", 14))
+				(int) (startDrawY + heightPosition + 45), 400, 200).setFont(pApplet.createFont("Georgia", 14))
 						.setColor(pApplet.color(0, 0, 0, 0));
 
-		teamMemberLabel3 = new Textlabel(cp5, "Melissa Zindl", startDrawX, (int) (startDrawY + (height * 0.80) - 30),
+		teamMemberLabel3 = new Textlabel(cp5, "Melissa Zindl", startDrawX, (int) (startDrawY + heightPosition + 60),
 				400, 200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
 
-		hochschuleLabel = new Textlabel(cp5, "Hochschule Mannheim", startDrawX,
-				(int) (startDrawY + (height * 0.80) - 15), 400, 200).setFont(pApplet.createFont("Georgia", 14))
+		vorlesungLabel = new Textlabel(cp5, "GDV - Grundlagen der Datenvisualisierung", startDrawX,
+				(int) (startDrawY + heightPosition + 80), 400, 200).setFont(pApplet.createFont("Georgia", 14))
 						.setColor(pApplet.color(0, 0, 0, 0));
 
-		yearLabel = new Textlabel(cp5, "Sommersemester 2018", startDrawX, (int) (startDrawY + (height * 0.80)), 400,
-				200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
+		hochschuleLabel = new Textlabel(cp5, "Hochschule Mannheim", startDrawX,
+				(int) (startDrawY + heightPosition + 95), 400, 200).setFont(pApplet.createFont("Georgia", 14))
+						.setColor(pApplet.color(0, 0, 0, 0));
 
-		setValues();
-		addSlider(150);
+		yearLabel = new Textlabel(cp5, "Sommersemester 2018", startDrawX, (int) (startDrawY + heightPosition + 110),
+				400, 200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
+
 	}
 
 	/**
@@ -110,11 +116,12 @@ public class IMDBSlider {
 		teamMemberLabel1.draw(pApplet);
 		teamMemberLabel2.draw(pApplet);
 		teamMemberLabel3.draw(pApplet);
+		vorlesungLabel.draw(pApplet);
 		hochschuleLabel.draw(pApplet);
 		yearLabel.draw(pApplet);
 	}
 
-	private void addSlider(int positionY) {
+	private int addSlider(int positionY) {
 
 		int size = 20;
 		for (Map.Entry<String, Integer> element : genreList.entrySet()) {
@@ -124,9 +131,10 @@ public class IMDBSlider {
 			slider = setSlider(element.getKey(), positionY, size, element.getValue(), 100);
 			rankingSliderList.add(slider);
 
-			size += 10;
+			size += 5;
 
 		}
+		return size;
 	}
 
 	/**
@@ -146,14 +154,16 @@ public class IMDBSlider {
 	 */
 	private Slider setSlider(String name, int size, int positionY, int value, int maxValue) {
 
-		Slider slider = cp5.addSlider("Slider: " + name).setPosition(startDrawX + 100, positionY + size).setSize(75, 10)
+		Slider slider = cp5.addSlider("Slider: " + name).setPosition(startDrawX + 100, positionY + size).setSize(75, 5)
 				.setRange(0, maxValue).setValue(value).setColorBackground(pApplet.color(255, 255, 255, 75))
 				.setValueLabel("").setColorCaptionLabel(pApplet.color(0, 0, 0, 100)).setLock(true);
 
-		if (name.contains("0")) {
+		if (name.equals("0")) {
 			slider.setCaptionLabel("Keine Bewertung");
-		} else {
+		} else if (name.contains(",5") || !name.contains(",")) {
 			slider.setCaptionLabel(name);
+		} else {
+			slider.setCaptionLabel("");
 		}
 		return slider;
 	}
