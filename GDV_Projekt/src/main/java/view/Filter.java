@@ -261,8 +261,9 @@ public class Filter {
 	 */
 	private Slider setSlider(String name, int size, int positionY, int value, int maxValue) {
 
-		return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 18).setRange(0, maxValue)
+		return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 20).setRange(0, maxValue)
 				.setValue(value).setCaptionLabel(Integer.toString(maxValue))
+				.setColorBackground(pApplet.color(255, 255, 255, 75)).setColorValueLabel(pApplet.color(0, 0, 0, 100))
 				.setColorCaptionLabel(pApplet.color(0, 0, 0, 100)).setLock(true);
 	}
 
@@ -270,12 +271,6 @@ public class Filter {
 	 * Set the sum of the the values of the different lists
 	 */
 	private void setupValues() {
-
-		// titleValue = titleList.values().size();
-		// directorValue = directorList.values().size();
-		// productionCompanyValue = productionCompanyList.values().size();
-		// distributorValue = distributorList.values().size();
-		// genreValue = genreList.values().size();
 
 		for (Integer i : titleList.values()) {
 			titleValue += i;

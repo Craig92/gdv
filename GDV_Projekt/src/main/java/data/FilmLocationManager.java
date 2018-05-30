@@ -1,7 +1,6 @@
 package data;
 
 import java.io.FileReader;
-import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
@@ -20,7 +19,7 @@ public class FilmLocationManager {
 
 	private List<FilmLocation> filmLocationList = new ArrayList<FilmLocation>();
 	private Map<String, Integer> genreList = new HashMap<>();
-	private Map<String, Integer> releaseYearList = new HashMap<>();
+	private Map<Integer, Integer> releaseYearList = new HashMap<>();
 	private Map<String, Integer> imdbRankingList = new HashMap<>();
 	private Map<String, Integer> productionCompanyList = new HashMap<>();
 	private Map<String, Integer> distributorList = new HashMap<>();
@@ -46,7 +45,6 @@ public class FilmLocationManager {
 	/**
 	 * 
 	 */
-	@SuppressWarnings("deprecation")
 	public void setup() {
 
 		try {
@@ -60,7 +58,7 @@ public class FilmLocationManager {
 				FilmLocation location = new FilmLocation();
 				location.setTitle(line[0]);
 				setMap("Titel", line[0]);
-				location.setReleaseYear(new Date(Integer.valueOf(line[1]), 1, 1));
+				location.setReleaseYear(Integer.parseInt(line[1]));
 				setMap("Jahr", line[1]);
 				location.setLocation(line[2]);
 				location.setFunFacts(line[3]);
@@ -129,10 +127,10 @@ public class FilmLocationManager {
 				imdbRankingList.put(key, 1);
 			}
 		} else if (type.equals("Jahr")) {
-			if (releaseYearList.containsKey(key)) {
-				releaseYearList.put(key, releaseYearList.get(key) + 1);
+			if (releaseYearList.containsKey(Integer.valueOf(key))) {
+				releaseYearList.put(Integer.valueOf(key), releaseYearList.get(Integer.valueOf(key)) + 1);
 			} else {
-				releaseYearList.put(key, 1);
+				releaseYearList.put(Integer.valueOf(key), 1);
 			}
 		} else if (type.equals("Genre")) {
 			for (String element : key.split(",")) {
@@ -165,11 +163,11 @@ public class FilmLocationManager {
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		imdbRankingList = imdbRankingList.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+				.sorted(Map.Entry.comparingByKey(Comparator.reverseOrder()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		releaseYearList = releaseYearList.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+				.sorted(Map.Entry.comparingByKey(Comparator.naturalOrder()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		genreList = genreList.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
@@ -188,12 +186,12 @@ public class FilmLocationManager {
 	 *            the end date
 	 * @return the filtered list
 	 */
-	public List<FilmLocation> filterByDate(List<FilmLocation> list, Date start, Date end) {
+	public List<FilmLocation> filterByDate(List<FilmLocation> list, int start, int end) {
 
-		if (list == null || start == null || end == null || start.after(end)) {
+		if (list == null || start == 0 || end == 0 || start < end) {
 			return list;
 		} else {
-			list = list.stream().filter(f -> f.getReleaseYear().after(start) && f.getReleaseYear().before(end))
+			list = list.stream().filter(f -> f.getReleaseYear() >= start && f.getReleaseYear() <= end)
 					.collect(Collectors.toList());
 			return list;
 		}
@@ -309,7 +307,7 @@ public class FilmLocationManager {
 	 */
 	public List<FilmLocation> filterByIMDBRanking(List<FilmLocation> list, double start, double end) {
 
-		if (list == null) {
+		if (list == null || start < end) {
 			return list;
 		} else {
 			list = list.stream().filter(f -> f.getImdbRanking() >= start && f.getImdbRanking() <= end)
@@ -350,7 +348,7 @@ public class FilmLocationManager {
 		return genreList;
 	}
 
-	public Map<String, Integer> getReleaseYearList() {
+	public Map<Integer, Integer> getReleaseYearList() {
 		return releaseYearList;
 	}
 

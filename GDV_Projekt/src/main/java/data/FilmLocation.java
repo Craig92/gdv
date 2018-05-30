@@ -1,11 +1,9 @@
 package data;
 
-import java.util.Date;
-
 public class FilmLocation {
 
 	private String title;
-	private Date releaseYear;
+	private int releaseYear;
 	private String location;
 	private String funFacts;
 	private String productionCompany;
@@ -59,7 +57,7 @@ public class FilmLocation {
 	 * @param genre
 	 *            the film gerne
 	 */
-	public FilmLocation(String title, Date releaseYear, String funFacts, String productionCompany, String distributor,
+	public FilmLocation(String title, int releaseYear, String funFacts, String productionCompany, String distributor,
 			String director, String writer, String actor1, String actor2, String actor3, double breitengrad,
 			double laengengrad, double imdbRanking, String genre) {
 		this.title = title;
@@ -87,11 +85,11 @@ public class FilmLocation {
 		this.title = title;
 	}
 
-	public Date getReleaseYear() {
+	public int getReleaseYear() {
 		return releaseYear;
 	}
 
-	public void setReleaseYear(Date releaseYear) {
+	public void setReleaseYear(int releaseYear) {
 		this.releaseYear = releaseYear;
 	}
 

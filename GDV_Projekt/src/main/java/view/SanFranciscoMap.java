@@ -121,7 +121,6 @@ public class SanFranciscoMap {
 	 *            the current FilmLocation
 	 * @return the TextLabel as a String
 	 */
-	@SuppressWarnings("deprecation")
 	private String setFilmLocationTextLabel(FilmLocation filmLocation) {
 
 		String result = "";
@@ -131,7 +130,7 @@ public class SanFranciscoMap {
 		result += "Vertrieb: " + filmLocation.getDistributor() + "\n";
 		result += "IMDb Wertung: " + filmLocation.getImdbRanking() + "\n";
 		result += "Genre: " + filmLocation.getGenre() + "\n";
-		result += "Drehjahr: " + (filmLocation.getReleaseYear().getYear());
+		result += "Drehjahr: " + filmLocation.getReleaseYear();
 		return result;
 	}
 
