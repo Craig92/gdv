@@ -18,6 +18,7 @@ public class FilmLocation {
 	private double breitengrad;
 	private double laengengrad;
 	private double imdbRanking;
+	private String genre;
 
 	/**
 	 * Default Constructor
@@ -55,10 +56,12 @@ public class FilmLocation {
 	 *            the longitude of the film location
 	 * @param imdbRanking
 	 *            the IMDb rank
+	 * @param genre
+	 *            the film gerne
 	 */
 	public FilmLocation(String title, Date releaseYear, String funFacts, String productionCompany, String distributor,
 			String director, String writer, String actor1, String actor2, String actor3, double breitengrad,
-			double laengengrad, double imdbRanking) {
+			double laengengrad, double imdbRanking, String genre) {
 		this.title = title;
 		this.releaseYear = releaseYear;
 		this.funFacts = funFacts;
@@ -72,6 +75,7 @@ public class FilmLocation {
 		this.breitengrad = breitengrad;
 		this.laengengrad = laengengrad;
 		this.imdbRanking = imdbRanking;
+		this.setGenre(genre);
 
 	}
 
@@ -185,6 +189,14 @@ public class FilmLocation {
 
 	public void setImdbRanking(double imdbRanking) {
 		this.imdbRanking = imdbRanking;
+	}
+
+	public String getGenre() {
+		return genre;
+	}
+
+	public void setGenre(String genre) {
+		this.genre = genre;
 	}
 
 }

@@ -3,6 +3,8 @@ package view;
 import java.util.ArrayList;
 import java.util.List;
 
+import controlP5.Button;
+import controlP5.ControlP5;
 import data.FilmLocation;
 import data.FilmLocationMarker;
 import de.fhpotsdam.unfolding.UnfoldingMap;
@@ -30,7 +32,10 @@ public class SanFranciscoMap {
 	private List<FilmLocationMarker> filmLocationMarkers = new ArrayList<>();
 	private List<FilmLocation> filmLocationList;
 
+	private Button resetButton;
+
 	private MarkerManager<Marker> filmLocationMarkerManager;
+	private ControlP5 cp5;
 
 	/**
 	 * Constructor
@@ -57,13 +62,20 @@ public class SanFranciscoMap {
 	 */
 	private void setup() {
 
+		cp5 = new ControlP5(pApplet);
+
 		unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height);
 		unfoldingMap.zoomAndPanTo(zoom, sanFrancisco);
 		MapUtils.createDefaultEventDispatcher(pApplet, unfoldingMap);
 		filmLocationMarkerManager = unfoldingMap.getDefaultMarkerManager();
+		unfoldingMap.setPanningRestriction(sanFrancisco, 5);
+		unfoldingMap.setZoomRange(12, 15);
 
 		setupDistrictMarker();
 		setupFilmLocationMarker(filmLocationList);
+
+		resetButton = cp5.addButton("Karte zurücksetzen").setPosition((int) (width - 100), (int) (height - 30))
+				.setSize(100, 30).setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255));
 	}
 
 	/**
@@ -94,7 +106,7 @@ public class SanFranciscoMap {
 			FilmLocationMarker location = new FilmLocationMarker();
 			location.setLocation(new Location(filmLocation.getBreitengrad(), filmLocation.getLaengengrad()));
 			location.setFilmLocation(filmLocation);
-			location.setDiameter(10);
+			location.setDiameter(zoom - 2);
 			location.setColor(pApplet.color(211, 211, 211, 50));
 			location.setHighlightColor(pApplet.color(255, 0, 0, 100));
 			filmLocationMarkers.add(location);
@@ -118,6 +130,7 @@ public class SanFranciscoMap {
 		result += "Produktion: " + filmLocation.getProductionCompany() + "\n";
 		result += "Vertrieb: " + filmLocation.getDistributor() + "\n";
 		result += "IMDb Wertung: " + filmLocation.getImdbRanking() + "\n";
+		result += "Genre: " + filmLocation.getGenre() + "\n";
 		result += "Drehjahr: " + (filmLocation.getReleaseYear().getYear());
 		return result;
 	}
@@ -128,15 +141,19 @@ public class SanFranciscoMap {
 	public void draw() {
 		unfoldingMap.draw();
 
-		int height = 0;
+		boolean toMany = false;
+		int labelHight = 0;
 		for (FilmLocationMarker location : filmLocationMarkers) {
 			if (location.isSelected()) {
 				// set TextLabel
-				if (height != 750) {
-					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()),
-							(float) (Configuration.windowWidth * 0.175), 50 + height);
+				if (labelHight < (int) (Configuration.windowsHeight * 0.60)) {
+					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()), 25, 25 + labelHight);
 					pApplet.fill(pApplet.color(0, 0, 0, 100));
-					height += 150;
+					labelHight += 175;
+				} else if (!toMany) {
+					pApplet.text("Weitere Drehorte an dieser Position vorhanden", 25, 25 + labelHight);
+					pApplet.fill(pApplet.color(0, 0, 0, 100));
+					toMany = true;
 				}
 			}
 		}
@@ -150,6 +167,10 @@ public class SanFranciscoMap {
 	 */
 	public void mouseClicked(int mouseX, int mouseY) {
 
+		if (mouseX >= resetButton.getPosition()[0] - 100 && mouseX <= resetButton.getPosition()[0] + 100
+				&& mouseY >= resetButton.getPosition()[1] - 30 && mouseY <= resetButton.getPosition()[1] + 30) {
+			unfoldingMap.zoomAndPanTo(zoom, sanFrancisco);
+		}
 		for (FilmLocationMarker location : filmLocationMarkers)
 			if (location.isInside(unfoldingMap, mouseX, mouseY)) {
 				location.setSelected(true);

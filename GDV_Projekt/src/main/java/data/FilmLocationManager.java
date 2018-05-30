@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 import au.com.bytecode.opencsv.CSVReader;
@@ -18,14 +19,13 @@ public class FilmLocationManager {
 	private static final FilmLocationManager manager = new FilmLocationManager();
 
 	private List<FilmLocation> filmLocationList = new ArrayList<FilmLocation>();
+	private Map<String, Integer> genreList = new HashMap<>();
 	private Map<String, Integer> releaseYearList = new HashMap<>();
 	private Map<String, Integer> imdbRankingList = new HashMap<>();
 	private Map<String, Integer> productionCompanyList = new HashMap<>();
 	private Map<String, Integer> distributorList = new HashMap<>();
 	private Map<String, Integer> directorList = new HashMap<>();
 	private Map<String, Integer> titleList = new HashMap<>();
-
-	private int limit = 10;
 
 	/**
 	 * Singeton
@@ -78,6 +78,8 @@ public class FilmLocationManager {
 				location.setLaengengrad(Double.parseDouble(line[12].replaceAll(",", ".")));
 				location.setImdbRanking(Double.parseDouble(line[13].replaceAll(",", ".")));
 				setMap("IMDB", line[13]);
+				location.setGenre(line[14]);
+				setMap("Genre", line[14]);
 				filmLocationList.add(location);
 			}
 			reader.close();
@@ -132,33 +134,45 @@ public class FilmLocationManager {
 			} else {
 				releaseYearList.put(key, 1);
 			}
+		} else if (type.equals("Genre")) {
+			for (String element : key.split(",")) {
+				element = element.replaceAll(" ", "");
+				if (genreList.containsKey(element)) {
+					genreList.put(element, genreList.get(element) + 1);
+				} else {
+					genreList.put(element, 1);
+				}
+			}
 		}
 	}
 
 	private void sortMap() {
 
 		titleList = titleList.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-				.limit(limit)
+
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		directorList = directorList.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-				.limit(limit)
+
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		distributorList = distributorList.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(limit)
+				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		productionCompanyList = productionCompanyList.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(limit)
+				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		imdbRankingList = imdbRankingList.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(limit)
+				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		releaseYearList = releaseYearList.entrySet().stream()
-				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder())).limit(limit)
+				.sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
+				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
+
+		genreList = genreList.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 	}
@@ -194,7 +208,7 @@ public class FilmLocationManager {
 	 *            the list of the titles
 	 * @return the filtered list
 	 */
-	public List<FilmLocation> filterByTitle(List<FilmLocation> list, List<String> title) {
+	public List<FilmLocation> filterByTitle(List<FilmLocation> list, Set<String> title) {
 
 		if (list == null || title == null || title.isEmpty()) {
 			return list;
@@ -218,7 +232,7 @@ public class FilmLocationManager {
 	 *            the list of the director
 	 * @return the filtered list
 	 */
-	public List<FilmLocation> filterByDirector(List<FilmLocation> list, List<String> director) {
+	public List<FilmLocation> filterByDirector(List<FilmLocation> list, Set<String> director) {
 
 		if (list == null || director == null || director.isEmpty()) {
 			return list;
@@ -242,7 +256,7 @@ public class FilmLocationManager {
 	 *            the list of the companies
 	 * @return the filtered list
 	 */
-	public List<FilmLocation> filterByProductionCompany(List<FilmLocation> list, List<String> productionCompany) {
+	public List<FilmLocation> filterByProductionCompany(List<FilmLocation> list, Set<String> productionCompany) {
 
 		if (list == null || productionCompany == null || productionCompany.isEmpty()) {
 			return list;
@@ -267,7 +281,7 @@ public class FilmLocationManager {
 	 *            the list of the distributors
 	 * @return the filtered list
 	 */
-	public List<FilmLocation> filterByDistributor(List<FilmLocation> list, List<String> distributor) {
+	public List<FilmLocation> filterByDistributor(List<FilmLocation> list, Set<String> distributor) {
 
 		if (list == null || distributor == null || distributor.isEmpty()) {
 			return list;
@@ -304,8 +318,44 @@ public class FilmLocationManager {
 		}
 	}
 
+	/**
+	 * Filter the list by the handed parameter
+	 * 
+	 * @param list
+	 *            the handed list
+	 * @param genre
+	 *            the list of the genre
+	 * @return the filtered list
+	 */
+	public List<FilmLocation> filterByGenre(List<FilmLocation> list, Set<String> genre) {
+
+		if (list == null || genre == null || genre.isEmpty()) {
+			return list;
+		} else {
+			List<FilmLocation> temp = new ArrayList<FilmLocation>();
+			for (String element : genre) {
+				temp.addAll(list.stream().filter(f -> f.getGenre().contains(element)).collect(Collectors.toList()));
+
+			}
+			list = temp;
+			return list;
+		}
+	}
+
 	public List<FilmLocation> getFilmLocationList() {
 		return filmLocationList;
+	}
+
+	public Map<String, Integer> getGenreList() {
+		return genreList;
+	}
+
+	public Map<String, Integer> getReleaseYearList() {
+		return releaseYearList;
+	}
+
+	public Map<String, Integer> getIMDBRankingList() {
+		return imdbRankingList;
 	}
 
 	public Map<String, Integer> getProductionCompanyList() {
