@@ -1,8 +1,8 @@
 package main;
 
+import java.util.ArrayList;
 import java.util.List;
 
-import controlP5.ControlEvent;
 import data.FilmLocation;
 import data.FilmLocationManager;
 import processing.core.PApplet;
@@ -23,7 +23,6 @@ public class SanFranciscoApplet extends PApplet {
 	private PGraphics imbdRankingSliderGraphic;
 	private PGraphics timeSliderGraphic;
 	private PGraphics filterGraphic;
-	private float typ;
 
 	private static final FilmLocationManager manager = FilmLocationManager.getInstance();
 	private List<FilmLocation> filmLocationList = manager.getFilmLocationList();
@@ -52,25 +51,25 @@ public class SanFranciscoApplet extends PApplet {
 		// set map
 		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
 				(int) (Configuration.windowsHeight * 0.78), P2D);
-		map = new SanFranciscoMap(this, (int) (Configuration.windowWidth * 0.16), 0,
-				(int) (Configuration.windowWidth * 0.68), (int) (Configuration.windowsHeight * 0.78), filmLocationList);
+		map = new SanFranciscoMap(this, 0, 0, (int) (Configuration.windowWidth * 0.68),
+				(int) (Configuration.windowsHeight * 0.78), filmLocationList);
 
 		// set timeslider
 		timeSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
 				(int) (Configuration.windowsHeight * 0.2), P2D);
-		yearSlider = new YearSlider(this, (int) (Configuration.windowWidth * 0.16),
-				(int) (Configuration.windowsHeight * 0.80), (int) (Configuration.windowWidth * 0.68),
-				(int) (Configuration.windowsHeight * 0.78));
+		yearSlider = new YearSlider(this, 0, (int) (Configuration.windowsHeight * 0.80),
+				(int) (Configuration.windowWidth * 0.68), (int) (Configuration.windowsHeight * 0.78));
+
+		// set filter
+		filterGraphic = createGraphics((int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight, P2D);
+		filter = new Filter(this, (int) (Configuration.windowWidth * 0.70), 0, (int) (Configuration.windowWidth * 0.15),
+				Configuration.windowsHeight);
 
 		// set imdbslider
 		imbdRankingSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight,
 				P2D);
-		imdbSlider = new IMDBSlider(this, 0, 0, (int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight);
-
-		// set filter
-		filterGraphic = createGraphics((int) (Configuration.windowWidth * 0.85), Configuration.windowsHeight, P2D);
-		filter = new Filter(this, (int) (Configuration.windowWidth * 0.85), 0, (int) (Configuration.windowWidth * 0.15),
-				Configuration.windowsHeight);
+		imdbSlider = new IMDBSlider(this, (int) (Configuration.windowWidth * 0.85), 0,
+				(int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight);
 	}
 
 	/**
@@ -82,25 +81,27 @@ public class SanFranciscoApplet extends PApplet {
 		imbdRankingSliderGraphic.beginDraw();
 		imbdRankingSliderGraphic.background(color(255, 255, 255, 100));
 		imbdRankingSliderGraphic.endDraw();
-		image(imbdRankingSliderGraphic, 0, 0);
-
+		image(imbdRankingSliderGraphic, (int) (Configuration.windowWidth * 0.85), 0);
+		
 		filterGraphic.beginDraw();
 		filterGraphic.background(color(255, 255, 255, 100));
 		filterGraphic.endDraw();
-		image(filterGraphic, (int) (Configuration.windowWidth * 0.85), 0);
+		image(filterGraphic, (int) (Configuration.windowWidth * 0.70), 0);
 
 		timeSliderGraphic.beginDraw();
 		timeSliderGraphic.background(color(255, 255, 255, 100));
 		timeSliderGraphic.endDraw();
-		image(timeSliderGraphic, (int) (Configuration.windowWidth * 0.16), (int) (Configuration.windowsHeight * 0.8));
+		image(timeSliderGraphic, 0, (int) (Configuration.windowsHeight * 0.8));
 
 		mapGraphic.beginDraw();
 		mapGraphic.background(color(255, 255, 255, 100));
 		mapGraphic.endDraw();
-		image(mapGraphic, (int) (Configuration.windowWidth * 0.16), 0);
+		image(mapGraphic, 0, 0);
 
 		yearSlider.draw();
-		imdbSlider.draw();
+		if (Configuration.windowWidth > 1024) {
+			imdbSlider.draw();
+		}
 		filter.draw();
 		map.draw();
 
@@ -111,50 +112,39 @@ public class SanFranciscoApplet extends PApplet {
 	 */
 	public void mouseClicked() {
 
-		if (mouseX < (Configuration.windowWidth * 0.15)) {
-			imdbSlider.mouseClicked(mouseX, mouseY);
-		} else if (mouseX > (Configuration.windowWidth * 0.15) && mouseX < (Configuration.windowWidth * 0.85)
-				&& mouseY > (Configuration.windowsHeight * 0.8)) {
+		if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.70) && mouseY > (Configuration.windowsHeight * 0.8)) {
 			yearSlider.mouseClicked(mouseX, mouseY);
-		} else if (mouseX > (Configuration.windowWidth * 0.15) && mouseX < (Configuration.windowWidth * 0.85)
+		} else if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.70)
 				&& mouseY < (Configuration.windowsHeight * 0.8)) {
 			map.mouseClicked(mouseX, mouseY);
-		} else if (mouseX > (Configuration.windowWidth * 0.85)) {
+		} else if (mouseX > (Configuration.windowWidth * 0.70) && mouseX < (Configuration.windowWidth * 0.85)) {
 			filter.mouseClicked(mouseX, mouseY);
+			if (filter.getSelectedParameterList("Titel").isEmpty() && filter.getSelectedParameterList("Regie").isEmpty()
+					&& filter.getSelectedParameterList("Produktion").isEmpty()
+					&& filter.getSelectedParameterList("Vertrieb").isEmpty()
+					&& filter.getSelectedParameterList("Genre").isEmpty()) {
+				filmLocationList = new ArrayList<>();
+				map.setupFilmLocationMarker(filmLocationList);
+				filmLocationList = manager.getFilmLocationList();
+			} else {
+				if (filter.isButtonClicked()) {
+					filmLocationList = manager.filterByTitle(filmLocationList,
+							filter.getSelectedParameterList("Titel"));
+					filmLocationList = manager.filterByDirector(filmLocationList,
+							filter.getSelectedParameterList("Regie"));
+					filmLocationList = manager.filterByProductionCompany(filmLocationList,
+							filter.getSelectedParameterList("Produktion"));
+					filmLocationList = manager.filterByDistributor(filmLocationList,
+							filter.getSelectedParameterList("Vertrieb"));
+					filmLocationList = manager.filterByGenre(filmLocationList,
+							filter.getSelectedParameterList("Genre"));
+					map.setupFilmLocationMarker(filmLocationList);
+					filmLocationList = manager.getFilmLocationList();
+				}
+			}
+		} else if (mouseX < (Configuration.windowWidth * 0.85)) {
+			imdbSlider.mouseClicked(mouseX, mouseY);
 		}
-	}
-
-	/**
-	 * Handle the events in the different areas
-	 * 
-	 * @param event
-	 *            the current event
-	 */
-	public void controlEvent(ControlEvent event) {
-
-		if (event.getName().equals("Filtern")) {
-			filmLocationList = manager.filterByTitle(filmLocationList, filter.getSelectedParameterList("Titel"));
-			filmLocationList = manager.filterByDirector(filmLocationList, filter.getSelectedParameterList("Regie"));
-			filmLocationList = manager.filterByProductionCompany(filmLocationList,
-					filter.getSelectedParameterList("Produktion"));
-			filmLocationList = manager.filterByDistributor(filmLocationList,
-					filter.getSelectedParameterList("Vertrieb"));
-			map.setupFilmLocationMarker(filmLocationList);
-			filmLocationList = manager.getFilmLocationList();
-		} else if (event.getName().equals("Zurücksetzen")) {
-			filter.setRadioButtonActive(false, 5f);
-			filmLocationList = manager.getFilmLocationList();
-			map.setupFilmLocationMarker(filmLocationList);
-		} else if (event.getName().equals("Filtern nach...")) {
-			this.typ = filter.setVisibility(event.getController().getValue());
-			// TODO Listen aktualiseren damit keine ungültigen Kombinationen aufttreten
-			// können
-		} else if (event.getName().equals("Alle auswählen")) {
-			filter.setRadioButtonActive(true, this.typ);
-		} else if (event.getName().equals("Alle abwählen")) {
-			filter.setRadioButtonActive(false, this.typ);
-		}
-
 	}
 
 }
