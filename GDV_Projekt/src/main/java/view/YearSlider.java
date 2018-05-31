@@ -1,5 +1,7 @@
 package view;
 
+import org.joda.time.DateTime;
+
 import controlP5.ControlP5;
 import controlP5.Textlabel;
 import main.Configuration;
@@ -18,7 +20,8 @@ public class YearSlider {
 	private ControlP5 cp5;
 	private Textlabel label;
 	private Textlabel descriptionLabel;
-
+	private TimeRangeSlider timeRangeSlider;
+	
 	public YearSlider(PApplet pApplet, int x, int y, int width, int height) {
 		this.pApplet = pApplet;
 		this.startDrawX = x;
@@ -40,7 +43,10 @@ public class YearSlider {
 
 		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX, startDrawY + 35,
 				400, 200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
-
+		
+		timeRangeSlider = new YearTimeRangeSlider(this.pApplet, startDrawX +100 , startDrawY + 70, (int) (Configuration.windowWidth * 0.50), 16, new DateTime(1920, 01, 01, 01, 0, 0),
+				new DateTime(2018, 01, 01, 01, 0, 0), 60*60*24*365);
+		timeRangeSlider.setTickIntervalSeconds(60 * 60);
 	}
 
 	/**
@@ -50,19 +56,25 @@ public class YearSlider {
 
 		label.draw(pApplet);
 		descriptionLabel.draw(pApplet);
+		
+		timeRangeSlider.draw();
 	}
 
-	/**
-	 * Handle the clicks of the mouse
-	 * 
-	 * @param mouseX
-	 *            the x position of the mouse
-	 * @param mouseY
-	 *            the y position of the mouse
-	 */
-	public void mouseClicked(int mouseX, int mouseY) {
-		// TODO Auto-generated method stub
+	public void keyPressed() {
+		timeRangeSlider.onKeyPressed(pApplet.key, pApplet.keyCode);
+	}
 
+	// Gets called each time the time ranger slider has changed, both by user interaction as well as by animation
+	public void timeUpdated(DateTime startDateTime, DateTime endDateTime) {
+		System.out.println("timeUpdated to " + startDateTime.toString("YYYY") + " - " + endDateTime.toString("YYYY"));
+	}
+
+	public void mouseMoved() {
+		timeRangeSlider.onMoved(pApplet.mouseX, pApplet.mouseY);
+	}
+
+	public void mouseDragged() {
+		timeRangeSlider.onDragged(pApplet.mouseX, pApplet.mouseY, pApplet.pmouseX, pApplet.pmouseY);
 	}
 
 }
