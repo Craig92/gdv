@@ -6,7 +6,14 @@ import controlP5.CColor;
 import controlP5.ControlEvent;
 import controlP5.ControlP5;
 import controlP5.Range;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+import controlP5.ControlP5;
+import controlP5.Slider;
 import controlP5.Textlabel;
+import data.FilmLocationManager;
 import main.Configuration;
 import processing.core.PApplet;
 
@@ -22,9 +29,14 @@ public class YearSlider {
 
 	private ControlP5 cp5;
 	private Textlabel label;
-	private Textlabel descriptionLabel;
+	private Textlabel descriptionLabel, lowHandleLabel, highHandleLabel;
 	private Range range;
-	
+
+	private FilmLocationManager manager = FilmLocationManager.getInstance();
+	private List<Slider> yearSliderList = new ArrayList<>();
+	private Map<Integer, Integer> yearList = manager.getReleaseYearList();
+	private int yearValue;
+
 	public YearSlider(PApplet pApplet, int x, int y, int width, int height) {
 		this.pApplet = pApplet;
 		this.startDrawX = x;
@@ -47,39 +59,56 @@ public class YearSlider {
 		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX, startDrawY + 35,
 				400, 200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
 
-		 range = cp5.addRange("rangeController")
+		setValues();
+		addSlider(startDrawX + 40);
+		
+		range = cp5.addRange("rangeController")
 	             // disable broadcasting since setRange and setRangeValues will trigger an event
 	             .setBroadcast(false)
-	             .setPosition(startDrawX +40 ,startDrawY + 120)
-	             .setSize((int) (Configuration.windowWidth * 0.50), 30)
+	             .setPosition(startDrawX + 59 ,startDrawY + 140)
+	             //.setSize((int) (Configuration.windowWidth * 0.50), 30)
+	             .setSize(30+(2016-1915)*10, 20)
 	             .setHandleSize(15)
-	             .setRange(1920,2018)
-	             .setRangeValues(1950,1980)
-	             .setColorValueLabel(100)
-	             .setColorForeground(pApplet.color(150,40))
-	             .setColorBackground(pApplet.color(210,40))
-	             //distance between ticks to small
-	             //.showTickMarks(true)
-	             //.setNumberOfTickMarks(98)
-	             //.setColorTickMark(150)
-	             // after the initialization we turn broadcast back on again
+	             .setRange(1915,2019)
+	             .setRangeValues(1915,2015)
+	             .setLabelVisible(false)
+	             .setColorForeground(pApplet.color(150,70))
+	             .setColorBackground(pApplet.color(150,80))
+	             .setColorActive(pApplet.color(46, 139, 87, 80))
 	             .setBroadcast(true);
-		 changeFloatLabelToIntLabel();
+		changeFloatLabelToIntLabel();
+		int positionLowHandle = (int) ((int)range.getPosition()[0] + (10*(range.getLowValue()-1915)));
+		int positionHighHandle = (int) ((int)range.getPosition()[0] + (10*(range.getHighValue()-1915)));
+
+		lowHandleLabel = new Textlabel(cp5, ""+range.getLowValue(), positionLowHandle, (int)range.getPosition()[1]+20,
+				400, 200).setFont(pApplet.createFont("Georgia", 12)).setColor(pApplet.color(0, 0, 0, 0));
+		highHandleLabel = new Textlabel(cp5, ""+range.getLowValue(), positionHighHandle, (int)range.getPosition()[1]+20,
+				400, 200).setFont(pApplet.createFont("Georgia", 12)).setColor(pApplet.color(0, 0, 0, 0));
 	}
 
 	/**
 	 * Draw the different elements
 	 */
 	public void draw() {
-
 		label.draw(pApplet);
 		descriptionLabel.draw(pApplet);
 		pApplet.fill(255);
 		pApplet.rect(0,0,width,height/2);
 		//timeRangeSlider.draw();
 		changeFloatLabelToIntLabel();
+		updateHandleLabels();
 	}
 	
+	private void updateHandleLabels() {
+		lowHandleLabel.setPosition(range.getPosition()[0] + (10*(range.getLowValue()-1915)), lowHandleLabel.getPosition()[1]);
+		highHandleLabel.setPosition(range.getPosition()[0] + (10*(range.getHighValue()-1915)), highHandleLabel.getPosition()[1]);
+		String textLowHandleLabel =""+(int)range.getLowValue();
+		String textHighHandleLabel =""+(int)range.getHighValue();
+		lowHandleLabel.setText(textLowHandleLabel);
+		highHandleLabel.setText(textHighHandleLabel);
+		lowHandleLabel.draw(pApplet);
+		highHandleLabel.draw(pApplet);
+	}
 	public int getStartDate() {
 		return (int) range.getLowValue();
 	}
@@ -93,9 +122,59 @@ public class YearSlider {
 		v = (int) range.getHighValue();
 		range.setHighValueLabel(""+v);
 	}
+	
+	private void addSlider(int positionY) {
+
+		int size = 20;
+		for (Map.Entry<Integer, Integer> element : yearList.entrySet()) {
+
+			Slider slider = null;
+			slider = setSlider(element.getKey(), positionY, size, element.getValue(), 100);
+			yearSliderList.add(slider);
+
+			size += 10;
+
+		}
+	}
+
+	/**
+	 * Set the properties of the Slider
+	 * 
+	 * @param name
+	 *            the name of the slider
+	 * @param size
+	 *            the y size of the slider
+	 * @param positionY
+	 *            the y position of the slider
+	 * @param value
+	 *            the current value of the slider
+	 * @param maxValue
+	 *            the max value of the slider
+	 * @return the slider
+	 */
+	private Slider setSlider(Integer name, int size, int positionY, int value, int maxValue) {
+
+		Slider slider = cp5.addSlider("Slider: " + name).setPosition(positionY + size, startDrawY + 50).setSize(10, 75)
+				.setRange(0, maxValue).setValue(value).setColorBackground(pApplet.color(255, 255, 255, 75))
+				.setValueLabel("").setColorCaptionLabel(pApplet.color(0, 0, 0, 100)).setLock(true);
+
+		if ((name % 5) == 0) {
+			slider.setCaptionLabel(name.toString());
+		} else {
+			slider.setCaptionLabel("");
+		}
+		return slider;
+	}
+
+	private void setValues() {
+
+		for (Integer i : yearList.values()) {
+			yearValue += i;
+		}
+	}
 
 	public boolean isOnSlider(int mouseX, int mouseY) {
-		return (mouseX >= startDrawX +40 && mouseY >= startDrawY + 120 && 
-				mouseX <= Configuration.windowWidth * 0.50 && mouseY <=startDrawY + 120+ 30);
+		changeFloatLabelToIntLabel();
+		return (mouseX >= startDrawX +20 && mouseY >= startDrawY + 120);
 	}
 }
