@@ -2,7 +2,10 @@ package view;
 
 import org.joda.time.DateTime;
 
+import controlP5.CColor;
+import controlP5.ControlEvent;
 import controlP5.ControlP5;
+import controlP5.Range;
 import controlP5.Textlabel;
 import main.Configuration;
 import processing.core.PApplet;
@@ -20,7 +23,7 @@ public class YearSlider {
 	private ControlP5 cp5;
 	private Textlabel label;
 	private Textlabel descriptionLabel;
-	private TimeRangeSlider timeRangeSlider;
+	private Range range;
 	
 	public YearSlider(PApplet pApplet, int x, int y, int width, int height) {
 		this.pApplet = pApplet;
@@ -43,10 +46,25 @@ public class YearSlider {
 
 		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX, startDrawY + 35,
 				400, 200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
-		
-		timeRangeSlider = new YearTimeRangeSlider(this.pApplet, startDrawX +100 , startDrawY + 70, (int) (Configuration.windowWidth * 0.50), 16, new DateTime(1920, 01, 01, 01, 0, 0),
-				new DateTime(2018, 01, 01, 01, 0, 0), 60*60*24*365);
-		timeRangeSlider.setTickIntervalSeconds(60 * 60);
+
+		 range = cp5.addRange("rangeController")
+	             // disable broadcasting since setRange and setRangeValues will trigger an event
+	             .setBroadcast(false)
+	             .setPosition(startDrawX +40 ,startDrawY + 120)
+	             .setSize((int) (Configuration.windowWidth * 0.50), 30)
+	             .setHandleSize(15)
+	             .setRange(1920,2018)
+	             .setRangeValues(1950,1980)
+	             .setColorValueLabel(100)
+	             .setColorForeground(pApplet.color(150,40))
+	             .setColorBackground(pApplet.color(210,40))
+	             //distance between ticks to small
+	             //.showTickMarks(true)
+	             //.setNumberOfTickMarks(98)
+	             //.setColorTickMark(150)
+	             // after the initialization we turn broadcast back on again
+	             .setBroadcast(true);
+		 changeFloatLabelToIntLabel();
 	}
 
 	/**
@@ -56,25 +74,28 @@ public class YearSlider {
 
 		label.draw(pApplet);
 		descriptionLabel.draw(pApplet);
-		
-		timeRangeSlider.draw();
+		pApplet.fill(255);
+		pApplet.rect(0,0,width,height/2);
+		//timeRangeSlider.draw();
+		changeFloatLabelToIntLabel();
+	}
+	
+	public int getStartDate() {
+		return (int) range.getLowValue();
+	}
+	public int getEndDate() {
+		return (int) range.getHighValue();
+	}
+	
+	private void changeFloatLabelToIntLabel() {
+		int v = (int)range.getLowValue();
+		range.setLowValueLabel(""+v);
+		v = (int) range.getHighValue();
+		range.setHighValueLabel(""+v);
 	}
 
-	public void keyPressed() {
-		timeRangeSlider.onKeyPressed(pApplet.key, pApplet.keyCode);
+	public boolean isOnSlider(int mouseX, int mouseY) {
+		return (mouseX >= startDrawX +40 && mouseY >= startDrawY + 120 && 
+				mouseX <= Configuration.windowWidth * 0.50 && mouseY <=startDrawY + 120+ 30);
 	}
-
-	// Gets called each time the time ranger slider has changed, both by user interaction as well as by animation
-	public void timeUpdated(DateTime startDateTime, DateTime endDateTime) {
-		System.out.println("timeUpdated to " + startDateTime.toString("YYYY") + " - " + endDateTime.toString("YYYY"));
-	}
-
-	public void mouseMoved() {
-		timeRangeSlider.onMoved(pApplet.mouseX, pApplet.mouseY);
-	}
-
-	public void mouseDragged() {
-		timeRangeSlider.onDragged(pApplet.mouseX, pApplet.mouseY, pApplet.pmouseX, pApplet.pmouseY);
-	}
-
 }

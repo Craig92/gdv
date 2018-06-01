@@ -99,6 +99,7 @@ public class SanFranciscoApplet extends PApplet {
 		image(mapGraphic, 0, 0);
 
 		yearSlider.draw();
+		
 		if (Configuration.windowWidth > 1024) {
 			imdbSlider.draw();
 		}
@@ -106,15 +107,20 @@ public class SanFranciscoApplet extends PApplet {
 		map.draw();
 
 	}
-
+	
+	public void mouseDragged () {
+		if (yearSlider.isOnSlider(pmouseX, pmouseY)) {
+			filmLocationList = manager.filterByYear(filmLocationList, yearSlider.getStartDate(), yearSlider.getEndDate());
+			map.setupFilmLocationMarker(filmLocationList);
+			filmLocationList = manager.getFilmLocationList();
+		}
+	}
 	/**
 	 * Handle the clicks of the mouse in the different areas
 	 */
 	public void mouseClicked() {
-
-		if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.70) && mouseY > (Configuration.windowsHeight * 0.8)) {
-			yearSlider.mouseClicked(mouseX, mouseY);
-		} else if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.70)
+		
+		if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.70)
 				&& mouseY < (Configuration.windowsHeight * 0.8)) {
 			map.mouseClicked(mouseX, mouseY);
 		} else if (mouseX > (Configuration.windowWidth * 0.70) && mouseX < (Configuration.windowWidth * 0.85)) {

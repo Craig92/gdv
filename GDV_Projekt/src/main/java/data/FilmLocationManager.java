@@ -25,7 +25,7 @@ public class FilmLocationManager {
 	private Map<String, Integer> distributorList = new HashMap<>();
 	private Map<String, Integer> directorList = new HashMap<>();
 	private Map<String, Integer> titleList = new HashMap<>();
-
+	private int counter = 0;
 	/**
 	 * Singeton
 	 * 
@@ -356,6 +356,18 @@ public class FilmLocationManager {
 				temp.addAll(list.stream().filter(f -> f.getGenre().contains(element)).collect(Collectors.toList()));
 
 			}
+			list = temp;
+			return list;
+		}
+	}
+	
+	public List<FilmLocation> filterByYear(List<FilmLocation> list, int startYear, int endYear) {
+
+		if (list == null || startYear<1920 || endYear<1920 || startYear>2018 || endYear>2018 || endYear<startYear) {
+			return list;
+		} else {
+			List<FilmLocation> temp = new ArrayList<FilmLocation>();
+			temp.addAll(list.stream().filter(f -> f.getReleaseYear()<=endYear).filter(f2 -> f2.getReleaseYear()>=startYear).collect(Collectors.toList()));		
 			list = temp;
 			return list;
 		}
