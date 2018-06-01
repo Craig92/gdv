@@ -109,8 +109,19 @@ public class SanFranciscoApplet extends PApplet {
 	}
 	
 	public void mouseDragged () {
-		if (yearSlider.isOnSlider(pmouseX, pmouseY)) {
+		if (yearSlider.isOnSlider(pmouseX, pmouseY) 
+				&& yearSlider.startOrEndDateChanged(yearSlider.getStartDate(),yearSlider.getEndDate())) {
 			filmLocationList = manager.filterByYear(filmLocationList, yearSlider.getStartDate(), yearSlider.getEndDate());
+			filmLocationList = manager.filterByTitle(filmLocationList,
+					filter.getSelectedParameterList("Titel"));
+			filmLocationList = manager.filterByDirector(filmLocationList,
+					filter.getSelectedParameterList("Regie"));
+			filmLocationList = manager.filterByProductionCompany(filmLocationList,
+					filter.getSelectedParameterList("Produktion"));
+			filmLocationList = manager.filterByDistributor(filmLocationList,
+					filter.getSelectedParameterList("Vertrieb"));
+			filmLocationList = manager.filterByGenre(filmLocationList,
+					filter.getSelectedParameterList("Genre"));
 			map.setupFilmLocationMarker(filmLocationList);
 			filmLocationList = manager.getFilmLocationList();
 		}
@@ -144,6 +155,7 @@ public class SanFranciscoApplet extends PApplet {
 							filter.getSelectedParameterList("Vertrieb"));
 					filmLocationList = manager.filterByGenre(filmLocationList,
 							filter.getSelectedParameterList("Genre"));
+					filmLocationList = manager.filterByYear(filmLocationList, yearSlider.getStartDate(), yearSlider.getEndDate());
 					map.setupFilmLocationMarker(filmLocationList);
 					filmLocationList = manager.getFilmLocationList();
 				}

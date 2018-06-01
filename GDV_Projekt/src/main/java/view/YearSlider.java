@@ -1,15 +1,12 @@
 package view;
 
-import org.joda.time.DateTime;
-
-import controlP5.CColor;
-import controlP5.ControlEvent;
-import controlP5.ControlP5;
-import controlP5.Range;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import controlP5.Range;
+import controlP5.CColor;
+import controlP5.ControlEvent;
+import controlP5.ControlP5;
 import controlP5.ControlP5;
 import controlP5.Slider;
 import controlP5.Textlabel;
@@ -36,6 +33,8 @@ public class YearSlider {
 	private List<Slider> yearSliderList = new ArrayList<>();
 	private Map<Integer, Integer> yearList = manager.getReleaseYearList();
 	private int yearValue;
+	//Hilfsvariable um mit der Methode startOrEndDateChanged die Aufrufhäufigkeit in MouseDragged zu verringern
+	private int previousStartDate, previousEndDate;
 
 	public YearSlider(PApplet pApplet, int x, int y, int width, int height) {
 		this.pApplet = pApplet;
@@ -61,16 +60,18 @@ public class YearSlider {
 
 		setValues();
 		addSlider(startDrawX + 40);
+		previousStartDate = 1915;
+		previousEndDate = 2018;
 		
 		range = cp5.addRange("rangeController")
 	             // disable broadcasting since setRange and setRangeValues will trigger an event
 	             .setBroadcast(false)
-	             .setPosition(startDrawX + 59 ,startDrawY + 140)
+	             .setPosition(startDrawX + 58 ,startDrawY + 140)
 	             //.setSize((int) (Configuration.windowWidth * 0.50), 30)
-	             .setSize(30+(2016-1915)*10, 20)
+	             .setSize(28+(previousEndDate-previousStartDate)*10, 20)
 	             .setHandleSize(15)
-	             .setRange(1915,2019)
-	             .setRangeValues(1915,2015)
+	             .setRange(previousStartDate,previousEndDate)
+	             .setRangeValues(previousStartDate,previousEndDate)
 	             .setLabelVisible(false)
 	             .setColorForeground(pApplet.color(150,70))
 	             .setColorBackground(pApplet.color(150,80))
@@ -99,6 +100,37 @@ public class YearSlider {
 		updateHandleLabels();
 	}
 	
+	public int getStartDate() {
+		return (int) range.getLowValue();
+	}
+	
+	public int getEndDate() {
+		return (int) range.getHighValue();
+	}
+	
+	public boolean startOrEndDateChanged(int newStartDate, int newEndDate) {
+		boolean changed = !(newStartDate == previousStartDate && newEndDate == previousEndDate);
+		if (!(newStartDate == previousStartDate && newEndDate == previousEndDate)) {
+			previousStartDate = newStartDate;
+			previousEndDate = newEndDate;
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isOnSlider(int mouseX, int mouseY) {
+		changeFloatLabelToIntLabel();
+		return (mouseX >= startDrawX +20 && mouseY >= startDrawY + 120);
+	}
+	
+	private void changeFloatLabelToIntLabel() {
+		int v = (int)range.getLowValue();
+		range.setLowValueLabel(""+v);
+		v = (int) range.getHighValue();
+		range.setHighValueLabel(""+v);
+	}
+	
 	private void updateHandleLabels() {
 		lowHandleLabel.setPosition(range.getPosition()[0] + (10*(range.getLowValue()-1915)), lowHandleLabel.getPosition()[1]);
 		highHandleLabel.setPosition(range.getPosition()[0] + (10*(range.getHighValue()-1915)), highHandleLabel.getPosition()[1]);
@@ -108,19 +140,6 @@ public class YearSlider {
 		highHandleLabel.setText(textHighHandleLabel);
 		lowHandleLabel.draw(pApplet);
 		highHandleLabel.draw(pApplet);
-	}
-	public int getStartDate() {
-		return (int) range.getLowValue();
-	}
-	public int getEndDate() {
-		return (int) range.getHighValue();
-	}
-	
-	private void changeFloatLabelToIntLabel() {
-		int v = (int)range.getLowValue();
-		range.setLowValueLabel(""+v);
-		v = (int) range.getHighValue();
-		range.setHighValueLabel(""+v);
 	}
 	
 	private void addSlider(int positionY) {
@@ -171,10 +190,5 @@ public class YearSlider {
 		for (Integer i : yearList.values()) {
 			yearValue += i;
 		}
-	}
-
-	public boolean isOnSlider(int mouseX, int mouseY) {
-		changeFloatLabelToIntLabel();
-		return (mouseX >= startDrawX +20 && mouseY >= startDrawY + 120);
 	}
 }
