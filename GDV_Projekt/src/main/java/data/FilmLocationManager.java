@@ -328,7 +328,7 @@ public class FilmLocationManager {
 	 */
 	public List<FilmLocation> filterByIMDBRanking(List<FilmLocation> list, double start, double end) {
 
-		if (list == null || start < end) {
+		if (list == null || start > end) {
 			return list;
 		} else {
 			list = list.stream().filter(f -> f.getImdbRanking() >= start && f.getImdbRanking() <= end)
@@ -360,14 +360,16 @@ public class FilmLocationManager {
 			return list;
 		}
 	}
-	
+
 	public List<FilmLocation> filterByYear(List<FilmLocation> list, int startYear, int endYear) {
 
-		if (list == null || startYear<1915 || endYear<1916 || startYear>2018 || endYear>2019 || endYear<startYear) {
+		if (list == null || startYear < 1915 || endYear < 1916 || startYear > 2018 || endYear > 2019
+				|| endYear < startYear) {
 			return list;
 		} else {
 			List<FilmLocation> temp = new ArrayList<FilmLocation>();
-			temp.addAll(list.stream().filter(f -> f.getReleaseYear()<=endYear).filter(f2 -> f2.getReleaseYear()>=startYear).collect(Collectors.toList()));		
+			temp.addAll(list.stream().filter(f -> f.getReleaseYear() <= endYear)
+					.filter(f2 -> f2.getReleaseYear() >= startYear).collect(Collectors.toList()));
 			list = temp;
 			return list;
 		}

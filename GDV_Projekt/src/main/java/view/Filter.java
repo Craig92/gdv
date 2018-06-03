@@ -67,7 +67,6 @@ public class Filter {
 	private Map<String, Integer> productionCompanyList = manager.getProductionCompanyList();
 	private Map<String, Integer> distributorList = manager.getDistributorList();
 	private Map<String, Integer> genreList = manager.getGenreList();
-	private boolean isButtonClicked;
 
 	/**
 	 * Constructor
@@ -409,7 +408,6 @@ public class Filter {
 			setRadioButtonActive(true, 3);
 			setRadioButtonActive(true, 4);
 			selectAll = true;
-			isButtonClicked = true;
 		} else if (mouseX >= deselectAllButton.getPosition()[0] - 100
 				&& mouseX <= deselectAllButton.getPosition()[0] + 100
 				&& mouseY >= deselectAllButton.getPosition()[1] - 30
@@ -420,39 +418,61 @@ public class Filter {
 			setRadioButtonActive(false, 3);
 			setRadioButtonActive(false, 4);
 			selectAll = false;
-			isButtonClicked = true;
-		} else {
+		} else if (isSelected(mouseX, mouseY)) {
+			if (selectAll) {
+				setRadioButtonActive(false, 0);
+				setRadioButtonActive(false, 1);
+				setRadioButtonActive(false, 2);
+				setRadioButtonActive(false, 3);
+				setRadioButtonActive(false, 4);
+			}
 			selectAll = false;
-			isButtonClicked = false;
-			for (RadioButton button : titleButtonList) {
-				if (button.getItem(0).getState()) {
-					isButtonClicked = true;
-				}
-			}
-			for (RadioButton button : directorButtonList) {
-				if (button.getItem(0).getState()) {
-					isButtonClicked = true;
-				}
-			}
-			for (RadioButton button : productionCompanyButtonList) {
-				if (button.getItem(0).getState()) {
-					isButtonClicked = true;
-				}
-			}
-			for (RadioButton button : distributorButtonList) {
-				if (button.getItem(0).getState()) {
-					isButtonClicked = true;
-				}
-			}
-			for (RadioButton button : genreButtonList) {
-				if (button.getItem(0).getState()) {
-					isButtonClicked = true;
-				}
-			}
+
 		}
 	}
 
-	public boolean isButtonClicked() {
-		return isButtonClicked;
+	/**
+	 * Check if the button lists are selected
+	 * 
+	 * @param mouseX
+	 *            the x position of the mouse
+	 * @param mouseY
+	 *            the y position of the mouse
+	 * @return
+	 */
+	private boolean isSelected(int mouseX, int mouseY) {
+
+		boolean selected = false;
+		for (RadioButton button : titleButtonList) {
+			if (mouseX >= button.getPosition()[0] - 10 && mouseX <= button.getPosition()[0] + 10
+					&& mouseY >= button.getPosition()[1] - 10 && mouseY <= button.getPosition()[1] + 10) {
+				selected = true;
+			}
+		}
+		for (RadioButton button : directorButtonList) {
+			if (mouseX >= button.getPosition()[0] - 10 && mouseX <= button.getPosition()[0] + 10
+					&& mouseY >= button.getPosition()[1] - 10 && mouseY <= button.getPosition()[1] + 10) {
+				selected = true;
+			}
+		}
+		for (RadioButton button : productionCompanyButtonList) {
+			if (mouseX >= button.getPosition()[0] - 10 && mouseX <= button.getPosition()[0] + 10
+					&& mouseY >= button.getPosition()[1] - 10 && mouseY <= button.getPosition()[1] + 10) {
+				selected = true;
+			}
+		}
+		for (RadioButton button : distributorButtonList) {
+			if (mouseX >= button.getPosition()[0] - 10 && mouseX <= button.getPosition()[0] + 10
+					&& mouseY >= button.getPosition()[1] - 10 && mouseY <= button.getPosition()[1] + 10) {
+				selected = true;
+			}
+		}
+		for (RadioButton button : genreButtonList) {
+			if (mouseX >= button.getPosition()[0] - 10 && mouseX <= button.getPosition()[0] + 10
+					&& mouseY >= button.getPosition()[1] - 10 && mouseY <= button.getPosition()[1] + 10) {
+				selected = true;
+			}
+		}
+		return selected;
 	}
 }

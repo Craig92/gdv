@@ -36,8 +36,13 @@ public class IMDBSlider {
 
 	private FilmLocationManager manager = FilmLocationManager.getInstance();
 	private List<Slider> rankingSliderList = new ArrayList<>();
-	private Map<String, Integer> genreList = manager.getIMDBRankingList();
+	private Map<String, Integer> imdbList = manager.getIMDBRankingList();
 	private int genreValue;
+
+	private Slider highSlider;
+	private Slider lowSlider;
+	private int start;
+	private int end;
 
 	/**
 	 * Constructor
@@ -102,6 +107,9 @@ public class IMDBSlider {
 		yearLabel = new Textlabel(cp5, "Sommersemester 2018", startDrawX, (int) (startDrawY + heightPosition + 110),
 				400, 200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
 
+		highSlider = setRangeSlider("HightSlider", 10, 80, heightPosition);
+		lowSlider = setRangeSlider("LowSlider", 0, 70, heightPosition);
+
 	}
 
 	/**
@@ -121,20 +129,43 @@ public class IMDBSlider {
 		yearLabel.draw(pApplet);
 	}
 
+	/**
+	 * Add the slider to the list
+	 * 
+	 * @param positionY
+	 *            the y position of the slider
+	 * @return the y position of the slider end
+	 */
 	private int addSlider(int positionY) {
 
 		int size = 20;
-		for (Map.Entry<String, Integer> element : genreList.entrySet()) {
-
-			Slider slider = null;
-
-			slider = setSlider(element.getKey(), positionY, size, element.getValue(), 100);
+		for (Map.Entry<String, Integer> element : imdbList.entrySet()) {
+			Slider slider = setSlider(element.getKey(), positionY, size, element.getValue(), 100);
 			rankingSliderList.add(slider);
-
 			size += 5;
-
 		}
 		return size;
+	}
+
+	/**
+	 * Set the properties of the Slider for the Range
+	 * 
+	 * @param name
+	 *            the name of the slider
+	 * @param value
+	 *            the value of the slider
+	 * @param positionX
+	 *            the x position of the slider
+	 * @param positionY
+	 *            the y position of the slider
+	 * @return the slider
+	 */
+	private Slider setRangeSlider(String name, int value, int positionX, int positionY) {
+
+		return cp5.addSlider(name).setPosition(startDrawX + positionX, 150).setSize(10, positionY - 140).setRange(0, 10)
+				.setValue(value).setValueLabel("" + value).setCaptionLabel(" ").setLock(false)
+				.setSliderMode(Slider.FLEXIBLE).setColorBackground(pApplet.color(150, 80))
+				.setColorLabel(pApplet.color(0)).setLabelVisible(false);
 	}
 
 	/**
@@ -156,11 +187,11 @@ public class IMDBSlider {
 
 		Slider slider = cp5.addSlider("Slider: " + name).setPosition(startDrawX + 100, positionY + size).setSize(75, 5)
 				.setRange(0, maxValue).setValue(value).setColorBackground(pApplet.color(255, 255, 255, 75))
-				.setValueLabel("").setColorCaptionLabel(pApplet.color(0, 0, 0, 100)).setLock(true);
+				.setValueLabel(" ").setColorCaptionLabel(pApplet.color(0, 0, 0, 100)).setLock(true);
 
-		if (name.equals("0")) {
+		if (name.equals("0,0")) {
 			slider.setCaptionLabel("Keine Bewertung");
-		} else if (name.contains(",5") || !name.contains(",")) {
+		} else if (name.contains(",5") || name.contains(",0")) {
 			slider.setCaptionLabel(name);
 		} else {
 			slider.setCaptionLabel("");
@@ -168,24 +199,34 @@ public class IMDBSlider {
 		return slider;
 	}
 
+	/**
+	 * Set the sum of the the values of the different lists
+	 */
 	private void setValues() {
 
-		for (Integer i : genreList.values()) {
+		for (Integer i : imdbList.values()) {
 			genreValue += i;
 		}
 	}
 
 	/**
-	 * Handle the clicks of the mouse
+	 * Get the lower value as a rounded double to .0 or .5
 	 * 
-	 * @param mouseX
-	 *            the x position of the mouse
-	 * @param mouseY
-	 *            the y position of the mouse
+	 * @return the start value
 	 */
-	public void mouseClicked(int mouseX, int mouseY) {
-		// TODO Auto-generated method stub
+	public double getStartValue() {
+		return highSlider.getValue() > lowSlider.getValue() ? Math.round(lowSlider.getValue() * 2) / 2
+				: Math.round(highSlider.getValue() * 2) / 2;
+	}
 
+	/**
+	 * Get the highter value as a rounded double to .0 or .5
+	 * 
+	 * @return the end value
+	 */
+	public double getEndValue() {
+		return highSlider.getValue() < lowSlider.getValue() ? Math.round(lowSlider.getValue() * 2) / 2
+				: Math.round(highSlider.getValue() * 2) / 2;
 	}
 
 }

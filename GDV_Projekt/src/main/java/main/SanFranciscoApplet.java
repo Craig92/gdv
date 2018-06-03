@@ -82,7 +82,7 @@ public class SanFranciscoApplet extends PApplet {
 		imbdRankingSliderGraphic.background(color(255, 255, 255, 100));
 		imbdRankingSliderGraphic.endDraw();
 		image(imbdRankingSliderGraphic, (int) (Configuration.windowWidth * 0.85), 0);
-		
+
 		filterGraphic.beginDraw();
 		filterGraphic.background(color(255, 255, 255, 100));
 		filterGraphic.endDraw();
@@ -99,7 +99,7 @@ public class SanFranciscoApplet extends PApplet {
 		image(mapGraphic, 0, 0);
 
 		yearSlider.draw();
-		
+
 		if (Configuration.windowWidth > 1024) {
 			imdbSlider.draw();
 		}
@@ -107,32 +107,21 @@ public class SanFranciscoApplet extends PApplet {
 		map.draw();
 
 	}
-	
-	public void mouseDragged () {
-		if (yearSlider.isOnSlider(pmouseX, pmouseY) 
-				&& yearSlider.startOrEndDateChanged(yearSlider.getStartDate(),yearSlider.getEndDate())) {
-			filmLocationList = manager.filterByYear(filmLocationList, yearSlider.getStartDate(), yearSlider.getEndDate());
-			filmLocationList = manager.filterByTitle(filmLocationList,
-					filter.getSelectedParameterList("Titel"));
-			filmLocationList = manager.filterByDirector(filmLocationList,
-					filter.getSelectedParameterList("Regie"));
-			filmLocationList = manager.filterByProductionCompany(filmLocationList,
-					filter.getSelectedParameterList("Produktion"));
-			filmLocationList = manager.filterByDistributor(filmLocationList,
-					filter.getSelectedParameterList("Vertrieb"));
-			filmLocationList = manager.filterByGenre(filmLocationList,
-					filter.getSelectedParameterList("Genre"));
-			map.setupFilmLocationMarker(filmLocationList);
-			filmLocationList = manager.getFilmLocationList();
-		}
+
+	/**
+	 * Handle the dragged og the mouse in the different areas
+	 */
+	public void mouseDragged() {
+		yearSlider.changeFloatLabelToIntLabel();
+		filter();
 	}
+
 	/**
 	 * Handle the clicks of the mouse in the different areas
 	 */
 	public void mouseClicked() {
-		
-		if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.70)
-				&& mouseY < (Configuration.windowsHeight * 0.8)) {
+
+		if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.70) && mouseY < (Configuration.windowsHeight * 0.8)) {
 			map.mouseClicked(mouseX, mouseY);
 		} else if (mouseX > (Configuration.windowWidth * 0.70) && mouseX < (Configuration.windowWidth * 0.85)) {
 			filter.mouseClicked(mouseX, mouseY);
@@ -143,26 +132,31 @@ public class SanFranciscoApplet extends PApplet {
 				filmLocationList = new ArrayList<>();
 				map.setupFilmLocationMarker(filmLocationList);
 				filmLocationList = manager.getFilmLocationList();
+				filter();
 			} else {
-				if (filter.isButtonClicked()) {
-					filmLocationList = manager.filterByTitle(filmLocationList,
-							filter.getSelectedParameterList("Titel"));
-					filmLocationList = manager.filterByDirector(filmLocationList,
-							filter.getSelectedParameterList("Regie"));
-					filmLocationList = manager.filterByProductionCompany(filmLocationList,
-							filter.getSelectedParameterList("Produktion"));
-					filmLocationList = manager.filterByDistributor(filmLocationList,
-							filter.getSelectedParameterList("Vertrieb"));
-					filmLocationList = manager.filterByGenre(filmLocationList,
-							filter.getSelectedParameterList("Genre"));
-					filmLocationList = manager.filterByYear(filmLocationList, yearSlider.getStartDate(), yearSlider.getEndDate());
-					map.setupFilmLocationMarker(filmLocationList);
-					filmLocationList = manager.getFilmLocationList();
-				}
+				filter();
 			}
-		} else if (mouseX < (Configuration.windowWidth * 0.85)) {
-			imdbSlider.mouseClicked(mouseX, mouseY);
+		} else if (mouseX > (Configuration.windowWidth * 0.85)) {
+			filter();
 		}
+	}
+
+	/**
+	 * Filter the map with the different filters
+	 */
+	private void filter() {
+
+		filmLocationList = manager.filterByYear(filmLocationList, yearSlider.getStartDate(), yearSlider.getEndDate());
+		filmLocationList = manager.filterByIMDBRanking(filmLocationList, imdbSlider.getStartValue(),
+				imdbSlider.getEndValue());
+		filmLocationList = manager.filterByTitle(filmLocationList, filter.getSelectedParameterList("Titel"));
+		filmLocationList = manager.filterByDirector(filmLocationList, filter.getSelectedParameterList("Regie"));
+		filmLocationList = manager.filterByProductionCompany(filmLocationList,
+				filter.getSelectedParameterList("Produktion"));
+		filmLocationList = manager.filterByDistributor(filmLocationList, filter.getSelectedParameterList("Vertrieb"));
+		filmLocationList = manager.filterByGenre(filmLocationList, filter.getSelectedParameterList("Genre"));
+		map.setupFilmLocationMarker(filmLocationList);
+		filmLocationList = manager.getFilmLocationList();
 	}
 
 }
