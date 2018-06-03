@@ -191,6 +191,8 @@ public class IMDBSlider {
 
 		if (name.equals("0,0")) {
 			slider.setCaptionLabel("Keine Bewertung");
+		} else if (name.equals("9,9")) {
+			slider.setCaptionLabel("10,0");
 		} else if (name.contains(",5") || name.contains(",0")) {
 			slider.setCaptionLabel(name);
 		} else {
