@@ -112,8 +112,11 @@ public class SanFranciscoApplet extends PApplet {
 	 * Handle the dragged og the mouse in the different areas
 	 */
 	public void mouseDragged() {
+		if (yearSlider.isOnSlider(pmouseX, pmouseY) 
+				&& yearSlider.startOrEndDateChanged(yearSlider.getStartDate(),yearSlider.getEndDate())) {
 		yearSlider.changeFloatLabelToIntLabel();
 		filter();
+		}
 	}
 
 	/**

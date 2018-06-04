@@ -103,6 +103,10 @@ public class YearSlider {
 		changeFloatLabelToIntLabel();
 
 	}
+	public boolean isOnSlider(int mouseX, int mouseY) {
+		changeFloatLabelToIntLabel();
+		return (mouseX >= startDrawX +20 && mouseY >= startDrawY + 120);
+	}
 
 	/**
 	 * Check if the start or the end date changed
