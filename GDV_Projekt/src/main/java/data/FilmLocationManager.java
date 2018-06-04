@@ -197,28 +197,6 @@ public class FilmLocationManager {
 	}
 
 	/**
-	 * Filter the list by the start end end date
-	 * 
-	 * @param list
-	 *            the handed list
-	 * @param start
-	 *            the start date
-	 * @param end
-	 *            the end date
-	 * @return the filtered list
-	 */
-	public List<FilmLocation> filterByDate(List<FilmLocation> list, int start, int end) {
-
-		if (list == null || start == 0 || end == 0 || start < end) {
-			return list;
-		} else {
-			list = list.stream().filter(f -> f.getReleaseYear() >= start && f.getReleaseYear() <= end)
-					.collect(Collectors.toList());
-			return list;
-		}
-	}
-
-	/**
 	 * Filter the list by the handed parameter
 	 * 
 	 * @param list

@@ -46,7 +46,7 @@ public class SanFranciscoApplet extends PApplet {
 	public void setup() {
 
 		surface.setResizable(true);
-		surface.setTitle("GDV-Projekt WestSideMovie");
+		surface.setTitle("GDV-Projekt WestSideMovies | Hochschule Mannheim Sommersemester 2018");
 
 		// set map
 		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
@@ -137,7 +137,7 @@ public class SanFranciscoApplet extends PApplet {
 				filmLocationList = new ArrayList<>();
 				map.setupFilmLocationMarker(filmLocationList);
 				filmLocationList = manager.getFilmLocationList();
-				filter();
+
 			} else {
 				filter();
 			}
@@ -154,7 +154,8 @@ public class SanFranciscoApplet extends PApplet {
 		filmLocationList = manager.filterByYear(filmLocationList, yearSlider.getStartDate(), yearSlider.getEndDate());
 		filmLocationList = manager.filterByIMDBRanking(filmLocationList, imdbSlider.getStartValue(),
 				imdbSlider.getEndValue());
-		filmLocationList = manager.filterByTitle(filmLocationList, filter.getSelectedParameterList("Titel"));
+		// filmLocationList = manager.filterByTitle(filmLocationList,
+		// filter.getSelectedParameterList("Titel"));
 		filmLocationList = manager.filterByDirector(filmLocationList, filter.getSelectedParameterList("Regie"));
 		filmLocationList = manager.filterByProductionCompany(filmLocationList,
 				filter.getSelectedParameterList("Produktion"));

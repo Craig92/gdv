@@ -31,7 +31,8 @@ public class Filter {
 	private ControlP5 cp5;
 
 	private Textlabel label;
-	private Textlabel descriptionLabel;
+	private Textlabel descriptionLabel1;
+	private Textlabel descriptionLabel2;
 	private Textlabel descriptionTitelLabel;
 	private Textlabel descriptionDirectorLabel;
 	private Textlabel descriptionProductionCompanyLabel;
@@ -100,14 +101,16 @@ public class Filter {
 		label = new Textlabel(cp5, "Filter", startDrawX, startDrawY + 10, 400, 200)
 				.setFont(pApplet.createFont("Georgia", 20)).setColor(pApplet.color(0, 0, 0, 0));
 
-		descriptionLabel = new Textlabel(cp5, "Wählen Sie die zu filternden Parameter aus:", startDrawX,
-				startDrawY + 35, 400, 200).setFont(pApplet.createFont("Georgia", 14))
-						.setColor(pApplet.color(0, 0, 0, 0));
+		descriptionLabel1 = new Textlabel(cp5, "Wählen Sie die zu filternden", startDrawX, startDrawY + 35, 400, 200)
+				.setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
 
-		selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 60).setSize(80, 30)
+		descriptionLabel2 = new Textlabel(cp5, "Parameter aus:", startDrawX, startDrawY + 50, 400, 200)
+				.setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
+
+		selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 70).setSize(80, 30)
 				.setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255));
 
-		deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX + 100, startDrawY + 60)
+		deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX + 100, startDrawY + 70)
 				.setSize(80, 30).setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255));
 
 		descriptionTitelLabel = new Textlabel(cp5, "Genre filtern*:", startDrawX, startDrawY + 110, 400, 200)
@@ -146,7 +149,8 @@ public class Filter {
 	public void draw() {
 
 		label.draw(pApplet);
-		descriptionLabel.draw(pApplet);
+		descriptionLabel1.draw(pApplet);
+		descriptionLabel2.draw(pApplet);
 		descriptionTitelLabel.draw(pApplet);
 		descriptionDirectorLabel.draw(pApplet);
 		descriptionProductionCompanyLabel.draw(pApplet);
@@ -427,8 +431,7 @@ public class Filter {
 				setRadioButtonActive(false, 4);
 			}
 			selectAll = false;
-
-		}
+		} 
 	}
 
 	/**
