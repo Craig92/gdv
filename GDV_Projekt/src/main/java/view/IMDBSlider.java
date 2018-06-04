@@ -130,6 +130,17 @@ public class IMDBSlider {
 	}
 
 	/**
+	 * 
+	 * @param mouseX
+	 * @param mouseY
+	 * @return
+	 */
+	public boolean isOnSlider(int mouseX, int mouseY) {
+
+		return (mouseX >= startDrawX && mouseY >= startDrawY);
+	}
+
+	/**
 	 * Add the slider to the list
 	 * 
 	 * @param positionY
