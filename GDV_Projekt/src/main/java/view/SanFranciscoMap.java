@@ -107,7 +107,8 @@ public class SanFranciscoMap {
 			location.setLocation(new Location(filmLocation.getBreitengrad(), filmLocation.getLaengengrad()));
 			location.setFilmLocation(filmLocation);
 			location.setDiameter(zoom - 2);
-			location.setColor(pApplet.color(211, 211, 211, 50));
+			location.setColor(pApplet.color(46, 139, 87, 80));
+			location.setStrokeColor(pApplet.color(46, 139, 87, 80));
 			location.setHighlightColor(pApplet.color(255, 0, 0, 100));
 			filmLocationMarkers.add(location);
 			filmLocationMarkerManager.addMarker(location);

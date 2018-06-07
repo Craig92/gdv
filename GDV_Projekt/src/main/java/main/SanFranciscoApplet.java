@@ -109,14 +109,21 @@ public class SanFranciscoApplet extends PApplet {
 	}
 
 	/**
-	 * Handle the dragged og the mouse in the different areas
+	 * Handle the dragged of the mouse in the different areas
 	 */
 	public void mouseDragged() {
 		if (yearSlider.isOnSlider(pmouseX, pmouseY)
 				&& yearSlider.startOrEndDateChanged(yearSlider.getStartDate(), yearSlider.getEndDate())) {
 			yearSlider.changeFloatLabelToIntLabel();
 			filter();
-		} else if (imdbSlider.isOnSlider(pmouseX, pmouseY)) {
+		} else if (imdbSlider.isOnLowHandle(pmouseX, pmouseY)) {
+			imdbSlider.changeLowRectanglePostion(mouseY);
+			filter();
+		} else if (imdbSlider.isOnHighHandle(pmouseX, pmouseY)) {
+			imdbSlider.changeHighRectanglePostion(mouseY);
+			filter();
+		} else if (imdbSlider.isOnRangeHandle(pmouseX, pmouseY)) {
+			imdbSlider.changeRectanglesPostion(pmouseY, mouseY);
 			filter();
 		}
 	}
