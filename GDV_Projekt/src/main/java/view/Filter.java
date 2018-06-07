@@ -38,7 +38,10 @@ public class Filter {
 	private Textlabel descriptionProductionCompanyLabel;
 	private Textlabel descriptionDistributionLabel;
 
-	private Textlabel descriptionDiagramm;
+	private Textlabel descriptionTitleDiagramm;
+	private Textlabel descriptionDirectorDiagramm;
+	private Textlabel descriptionProductionCompanyDiagramm;
+	private Textlabel descriptionDistributionDiagramm;
 
 	private List<RadioButton> titleButtonList = new ArrayList<>();
 	private List<RadioButton> directorButtonList = new ArrayList<>();
@@ -68,6 +71,11 @@ public class Filter {
 	private Map<String, Integer> productionCompanyList = manager.getProductionCompanyList();
 	private Map<String, Integer> distributorList = manager.getDistributorList();
 	private Map<String, Integer> genreList = manager.getGenreList();
+	private Integer titleMaxValue;
+	private Integer directorMaxValue;
+	private Integer productionCompanyMaxValue;
+	private Integer genreMaxValue;
+	private Integer distributorMaxValue;
 
 	/**
 	 * Constructor
@@ -91,6 +99,8 @@ public class Filter {
 
 	/**
 	 * Set the size and position of the different elements
+	 * 
+	 * @param distributionValue
 	 */
 	private void setup() {
 
@@ -116,23 +126,31 @@ public class Filter {
 		descriptionTitelLabel = new Textlabel(cp5, "Genre filtern*:", startDrawX, startDrawY + 110, 400, 200)
 				.setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
 
-		descriptionDiagramm = new Textlabel(cp5, "Aktuelle | Gesamt", startDrawX + 175, startDrawY + 110, 400, 200)
-				.setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
+		// Filter Radio-Buttons
+		descriptionTitleDiagramm = new Textlabel(cp5, "Gesamt: " + genreValue, startDrawX + 175, startDrawY + 110, 400,
+				200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
 		heightPosition = addRadioButtons("Genre", heightPosition + 5);
 
 		descriptionDirectorLabel = new Textlabel(cp5, "Regisseure filtern*:", startDrawX, heightPosition + 5, 400, 200)
 				.setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
-
+		descriptionDirectorDiagramm = new Textlabel(cp5, "Gesamt: " + directorValue, startDrawX + 175,
+				heightPosition + 5, 400, 200).setFont(pApplet.createFont("Georgia", 14))
+						.setColor(pApplet.color(0, 0, 0, 0));
 		heightPosition = addRadioButtons("Regie", heightPosition + 5);
 
 		descriptionProductionCompanyLabel = new Textlabel(cp5, "Produktionsfirma filtern*:", startDrawX,
 				heightPosition + 5, 400, 200).setFont(pApplet.createFont("Georgia", 14))
 						.setColor(pApplet.color(0, 0, 0, 0));
-
+		descriptionProductionCompanyDiagramm = new Textlabel(cp5, "Gesamt: " + productionCompanyValue, startDrawX + 175,
+				heightPosition + 5, 400, 200).setFont(pApplet.createFont("Georgia", 14))
+						.setColor(pApplet.color(0, 0, 0, 0));
 		heightPosition = addRadioButtons("Produktion", heightPosition + 5);
 
 		descriptionDistributionLabel = new Textlabel(cp5, "Vertriebsfirma filtern*:", startDrawX, heightPosition + 5,
-				400, 200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
+				400, 200).setFont(pApplet.createFont("Georgia", 16)).setColor(pApplet.color(0, 0, 0, 0));
+		descriptionDistributionDiagramm = new Textlabel(cp5, "Gesamt: " + distributorValue, startDrawX + 175,
+				heightPosition + 5, 400, 200).setFont(pApplet.createFont("Georgia", 14))
+						.setColor(pApplet.color(0, 0, 0, 0));
 		heightPosition = addRadioButtons("Vertrieb", heightPosition + 5);
 
 		setRadioButtonActive(true, 0);
@@ -155,7 +173,10 @@ public class Filter {
 		descriptionDirectorLabel.draw(pApplet);
 		descriptionProductionCompanyLabel.draw(pApplet);
 		descriptionDistributionLabel.draw(pApplet);
-		// descriptionDiagramm.draw(pApplet);
+		descriptionTitleDiagramm.draw(pApplet);
+		descriptionDirectorDiagramm.draw(pApplet);
+		descriptionProductionCompanyDiagramm.draw(pApplet);
+		descriptionDistributionDiagramm.draw(pApplet);
 
 		pApplet.fill(100);
 
@@ -192,26 +213,28 @@ public class Filter {
 				Slider slider = null;
 
 				if (parameter.equals("Titel")) {
-					slider = setSlider("Slider: " + element.getKey(), positionY, size, element.getValue(), titleValue);
+					slider = setSlider("Slider: " + element.getKey(), positionY, size, element.getValue(),
+							titleMaxValue, titleValue, true);
 					titleSliderList.add(slider);
 					titleButtonList.add(button);
 				} else if (parameter.equals("Regie")) {
 					slider = setSlider("Slider: " + element.getKey(), positionY, size, element.getValue(),
-							directorValue);
+							directorMaxValue, directorValue, true);
 					directorButtonList.add(button);
 					directorSliderList.add(slider);
 				} else if (parameter.equals("Produktion")) {
 					slider = setSlider("Slider: " + element.getKey(), positionY, size, element.getValue(),
-							productionCompanyValue);
+							productionCompanyMaxValue, productionCompanyValue, true);
 					productionCompanySliderList.add(slider);
 					productionCompanyButtonList.add(button);
 				} else if (parameter.equals("Vertrieb")) {
 					slider = setSlider("Slider: " + element.getKey(), positionY, size, element.getValue(),
-							distributorValue);
+							distributorMaxValue, distributorValue, true);
 					distributorSliderList.add(slider);
 					distributorButtonList.add(button);
 				} else if (parameter.equals("Genre")) {
-					slider = setSlider("Slider: " + element.getKey(), positionY, size, element.getValue(), genreValue);
+					slider = setSlider("Slider: " + element.getKey(), positionY, size, element.getValue(),
+							genreMaxValue, genreValue, true);
 					genreSliderList.add(slider);
 					genreButtonList.add(button);
 				}
@@ -241,12 +264,11 @@ public class Filter {
 	private RadioButton setRadioButton(String name, int size, int positionY, String itemName, int itemID) {
 
 		return cp5.addRadioButton(name).setPosition(startDrawX, positionY + size).setSize(18, 18)
-				.setBackgroundColor(pApplet.color(190, 190, 190, 100)).setColorValue(pApplet.color(190, 190, 190, 100))
-				.setColorForeground(pApplet.color(190, 190, 190, 100)).setColorActive(pApplet.color(46, 139, 87, 100))
 				.setColorLabel(pApplet.color(0)).setItemsPerRow(1).addItem(itemName, itemID).setVisible(true)
-				.activate(itemID);
+				.activate(itemID).setColorActive(pApplet.color(0, 116, 217)).setColorBackground(pApplet.color(150, 80));
 	}
 
+	// pApplet.color(0, 116, 217) pApplet.color(0, 45, 90)
 	/**
 	 * Set the properties of the Slider
 	 * 
@@ -262,18 +284,32 @@ public class Filter {
 	 *            the max value of the slider
 	 * @return the slider
 	 */
-	private Slider setSlider(String name, int size, int positionY, int value, int maxValue) {
+	private Slider setSlider(String name, int size, int positionY, int value, int maxValue, int completeValue,
+			boolean isSelected) {
 
-		return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 20).setRange(0, maxValue)
-				.setValue(value).setCaptionLabel(Integer.toString(maxValue))
-				.setColorBackground(pApplet.color(255, 255, 255, 75)).setColorValueLabel(pApplet.color(0, 0, 0, 100))
-				.setColorCaptionLabel(pApplet.color(0, 0, 0, 100)).setLock(true);
+		if (isSelected) {
+			return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 20)
+					.setRange(0, maxValue).setValue(value).setCaptionLabel(Integer.toString(value)).setValueLabel(" ")
+					.setColorForeground(pApplet.color(0, 116, 217)).setColorBackground(pApplet.color(255, 255, 255))
+					.setColorCaptionLabel(pApplet.color(0)).setLock(true);
+		} else {
+			return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 20)
+					.setRange(0, maxValue).setValue(value).setCaptionLabel(Integer.toString(value)).setValueLabel(" ")
+					.setColorForeground(pApplet.color(222, 222, 222)).setColorBackground(pApplet.color(255, 255, 255))
+					.setColorCaptionLabel(pApplet.color(0)).setLock(true);
+		}
 	}
 
 	/**
 	 * Set the sum of the the values of the different lists
 	 */
 	private void setupValues() {
+
+		titleMaxValue = titleList.values().stream().findFirst().get();
+		directorMaxValue = directorList.values().stream().findFirst().get();
+		productionCompanyMaxValue = productionCompanyList.values().stream().findFirst().get();
+		distributorMaxValue = distributorList.values().stream().findFirst().get();
+		genreMaxValue = genreList.values().stream().findFirst().get();
 
 		for (Integer i : titleList.values()) {
 			titleValue += i;
@@ -431,7 +467,7 @@ public class Filter {
 				setRadioButtonActive(false, 4);
 			}
 			selectAll = false;
-		} 
+		}
 	}
 
 	/**
