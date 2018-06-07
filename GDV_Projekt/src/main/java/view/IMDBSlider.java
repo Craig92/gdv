@@ -141,16 +141,18 @@ public class IMDBSlider {
 				.setForeground(0xD8D8D8).setCaptionLabel(0xD8D8D8)
 				.setAlpha(ccolor.getAlpha());
 		
-		highHandleRectangle = cp5.addButton("")
+		highHandleRectangle = cp5.addButton("highHandleButton")
 				.setPosition(highSlider.getPosition()[0] - 10, (int) highSlider.getPosition()[1] + 15)
 				.setSize(highSlider.getHandleSize() * 2, highSlider.getHandleSize() * 1).setMoveable(true)
-				.setColor(ccolor2);
-		lowHandleRectangle = cp5.addButton("")
+				.setColor(ccolor2).setLabelVisible(false);
+		lowHandleRectangle = cp5.addButton("lowHandleButton")
+				.setLabelVisible(false)
 				.setPosition(lowSlider.getPosition()[0],
 						(int) lowSlider.getPosition()[1] + heightPosition - lowSlider.getHandleSize()- 150)
 				.setSize(lowSlider.getHandleSize() * 2, lowSlider.getHandleSize()).setMoveable(true)
 				.setColor(ccolor2);
-		rangeRectangle = cp5.addButton("")
+		rangeRectangle = cp5.addButton("rangeButton")
+				.setLabelVisible(false)
 				.setMoveable(true)
 				.setColor(ccolor2);
 		updateRange();
