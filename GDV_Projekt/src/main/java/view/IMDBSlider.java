@@ -134,27 +134,33 @@ public class IMDBSlider {
 						.setFont(pApplet.createFont("Georgia", 12)).setColor(pApplet.color(0, 0, 0, 0));
 
 		CColor ccolor = lowSlider.getColor();
-		CColor ccolor2 = new CColor().setActive(pApplet.color(46, 139, 87, 80)).setBackground(ccolor.getBackground())
+		CColor ccolorhigh = new CColor().setActive(pApplet.color(46, 139, 87, 80)).setBackground(ccolor.getForeground())
 				.setForeground(ccolor.getForeground()).setCaptionLabel(ccolor.getCaptionLabel())
 				.setAlpha(ccolor.getAlpha());
-		CColor ccolor3 = new CColor().setActive(0xD8D8D8).setBackground(0xD8D8D8)
-				.setForeground(0xD8D8D8).setCaptionLabel(0xD8D8D8)
+		CColor ccolorrange = new CColor().setActive(pApplet.color(46, 139, 87, 80)).setBackground(ccolor.getForeground())
+				.setForeground(ccolor.getForeground()).setCaptionLabel(ccolor.getCaptionLabel())
+				.setAlpha(ccolor.getAlpha());
+		CColor ccolorlow = new CColor().setActive(pApplet.color(46, 139, 87, 80)).setBackground(ccolor.getForeground())
+				.setForeground(ccolor.getForeground()).setCaptionLabel(ccolor.getCaptionLabel())
+				.setAlpha(ccolor.getAlpha());
+		CColor ccolorbackground = new CColor().setActive(pApplet.color(46, 139, 87, 80)).setBackground(ccolor.getBackground())
+				.setForeground(ccolor.getForeground()).setCaptionLabel(ccolor.getCaptionLabel())
 				.setAlpha(ccolor.getAlpha());
 		
 		highHandleRectangle = cp5.addButton("highHandleButton")
 				.setPosition(highSlider.getPosition()[0] - 10, (int) highSlider.getPosition()[1] + 15)
 				.setSize(highSlider.getHandleSize() * 2, highSlider.getHandleSize() * 1).setMoveable(true)
-				.setColor(ccolor2).setLabelVisible(false);
+				.setColor(ccolorhigh).setLabelVisible(false);
 		lowHandleRectangle = cp5.addButton("lowHandleButton")
 				.setLabelVisible(false)
 				.setPosition(lowSlider.getPosition()[0],
 						(int) lowSlider.getPosition()[1] + heightPosition - lowSlider.getHandleSize()- 150)
 				.setSize(lowSlider.getHandleSize() * 2, lowSlider.getHandleSize()).setMoveable(true)
-				.setColor(ccolor2);
+				.setColor(ccolorlow);
 		rangeRectangle = cp5.addButton("rangeButton")
 				.setLabelVisible(false)
 				.setMoveable(true)
-				.setColor(ccolor2);
+				.setColor(ccolorrange);
 		updateRange();
 		
 		maxYRectanglePosition = (int) highHandleRectangle.getPosition()[1];
@@ -162,10 +168,9 @@ public class IMDBSlider {
 		backgroundRectangle = cp5.addButton("")
 				.setPosition(lowSlider.getPosition()[0], maxYRectanglePosition)
 				.setSize(lowSlider.getHandleSize() * 2, minYRectanglePosition+lowHandleRectangle.getHeight()-maxYRectanglePosition)
-				.setColor(ccolor2);
+				.setColor(ccolorbackground);
 		backgroundRectangle.lock();
 		backgroundRectangle.update();
-
 	}
 
 	/**
@@ -183,10 +188,11 @@ public class IMDBSlider {
 		vorlesungLabel.draw(pApplet);
 		hochschuleLabel.draw(pApplet);
 		yearLabel.draw(pApplet);
-		backgroundRectangle.bringToFront();
+		hoverSlider();
 		updateHandleLabels();
 		lowHandleLabel.draw(pApplet);
 		highHandleLabel.draw(pApplet);
+		backgroundRectangle.bringToFront();
 		rangeRectangle.bringToFront();
 		lowHandleRectangle.bringToFront();
 		highHandleRectangle.bringToFront();
@@ -380,6 +386,24 @@ public class IMDBSlider {
 
 	private int getXPostionHandleLabel(Slider localSlider) {
 		return startDrawX + 35;
+	}
+	
+	private void hoverSlider() {
+		if (isOnLowHandle(pApplet.mouseX, pApplet.mouseY)) {
+			lowHandleRectangle.setColor(lowHandleRectangle.getColor().setForeground(lowHandleRectangle.getColor().getActive()));
+		} else {
+			lowHandleRectangle.setColor(lowHandleRectangle.getColor().setForeground(lowHandleRectangle.getColor().getBackground()));
+		}
+		if (isOnHighHandle(pApplet.mouseX, pApplet.mouseY)) {
+			highHandleRectangle.setColor(highHandleRectangle.getColor().setForeground(highHandleRectangle.getColor().getActive()));
+		} else {
+			highHandleRectangle.setColor(highHandleRectangle.getColor().setForeground(highHandleRectangle.getColor().getBackground()));
+		}
+		if (isOnRangeHandle(pApplet.mouseX, pApplet.mouseY)) {
+			rangeRectangle.setColor(rangeRectangle.getColor().setForeground(rangeRectangle.getColor().getActive()));
+		} else {
+			rangeRectangle.setColor(rangeRectangle.getColor().setForeground(rangeRectangle.getColor().getBackground()));
+		}
 	}
 
 }
