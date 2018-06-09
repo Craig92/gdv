@@ -13,6 +13,7 @@ import controlP5.Textlabel;
 import data.FilmLocationManager;
 import main.Configuration;
 import processing.core.PApplet;
+import processing.core.PFont;
 
 @SuppressWarnings("unused")
 public class YearSlider {
@@ -32,10 +33,15 @@ public class YearSlider {
 	private FilmLocationManager manager = FilmLocationManager.getInstance();
 	private List<Slider> yearSliderList = new ArrayList<>();
 	private Map<Integer, Integer> yearList = manager.getReleaseYearList();
-	private int yearValue;
-	// Hilfsvariable um mit der Methode startOrEndDateChanged die Aufrufhäufigkeit
-	// in MouseDragged zu verringern
+	private int yearValue = setValues(yearList);
 	private int previousStartDate = 1915, previousEndDate = 2018;
+
+	private PFont headerFont;
+	private PFont textFont;
+	private int textColor;
+	private int backgroundColor;
+	private int selectedColor;
+	private int unselectedColor;
 
 	public YearSlider(PApplet pApplet, int x, int y, int width, int height) {
 		this.pApplet = pApplet;
@@ -52,26 +58,29 @@ public class YearSlider {
 	private void setup() {
 
 		cp5 = new ControlP5(pApplet);
+		headerFont = pApplet.createFont("Georgia", 20);
+		textFont = pApplet.createFont("Georgia", 14);
+		textColor = pApplet.color(0, 0, 0, 0);
+		backgroundColor = pApplet.color(255, 255, 255);
+		selectedColor = pApplet.color(0, 116, 217);
+		unselectedColor = pApplet.color(150, 80);
 
-		label = new Textlabel(cp5, "Zeitachse", startDrawX, startDrawY, 400, 200)
-				.setFont(pApplet.createFont("Georgia", 20)).setColor(pApplet.color(0, 0, 0, 0));
+		label = new Textlabel(cp5, "Zeitachse", startDrawX, startDrawY, 400, 200).setFont(headerFont)
+				.setColor(textColor);
 
 		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX, startDrawY + 35,
-				400, 200).setFont(pApplet.createFont("Georgia", 14)).setColor(pApplet.color(0, 0, 0, 0));
+				400, 200).setFont(textFont).setColor(textColor);
 
-		setValues();
 		addSlider(startDrawX + 40);
 		addRange();
 
 		lowHandleLabel = new Textlabel(cp5, "" + range.getLowValue(),
 				(int) ((int) range.getPosition()[0] + (10 * (range.getLowValue() - 1915))),
-				(int) range.getPosition()[1] + 20, 400, 200).setFont(pApplet.createFont("Georgia", 12))
-						.setColor(pApplet.color(0, 0, 0, 0));
+				(int) range.getPosition()[1] + 20, 400, 200).setFont(textFont).setColor(textColor);
 
 		highHandleLabel = new Textlabel(cp5, "" + range.getLowValue(),
 				(int) ((int) range.getPosition()[0] + (10 * (range.getHighValue() - 1915))),
-				(int) range.getPosition()[1] + 20, 400, 200).setFont(pApplet.createFont("Georgia", 12))
-						.setColor(pApplet.color(0, 0, 0, 0));
+				(int) range.getPosition()[1] + 20, 400, 200).setFont(textFont).setColor(textColor);
 	}
 
 	/**
@@ -96,16 +105,17 @@ public class YearSlider {
 		range = cp5.addRange("rangeController")
 				// disable broadcasting since setRange and setRangeValues will trigger an event
 				.setBroadcast(false).setPosition(startDrawX + 58, startDrawY + 140)
-				.setSize(28 + (previousEndDate - previousStartDate) * 10, 20).setHandleSize(15)
+				.setSize(15 + (previousEndDate - previousStartDate) * 10, 20).setHandleSize(15)
 				.setRange(previousStartDate, previousEndDate).setRangeValues(previousStartDate, previousEndDate)
-				.setLabelVisible(false).setColorBackground(pApplet.color(150, 80))
-				.setColorActive(pApplet.color(46, 139, 87, 80)).setBroadcast(true);
+				.setLabelVisible(false).setColorBackground(unselectedColor).setColorActive(selectedColor)
+				.setBroadcast(true);
 		changeFloatLabelToIntLabel();
 
 	}
+
 	public boolean isOnSlider(int mouseX, int mouseY) {
 		changeFloatLabelToIntLabel();
-		return (mouseX >= startDrawX +20 && mouseY >= startDrawY + 120);
+		return (mouseX >= startDrawX + 20 && mouseY >= startDrawY + 120);
 	}
 
 	/**
@@ -134,6 +144,22 @@ public class YearSlider {
 	public void changeFloatLabelToIntLabel() {
 		range.setLowValueLabel("" + (int) range.getLowValue());
 		range.setHighValueLabel("" + (int) range.getHighValue());
+	}
+
+	/**
+	 * Change the color of the slider if the range slider changed
+	 */
+	public void updateSlider() {
+		for (int i = 0; i != yearSliderList.size(); i++) {
+			if (Float.valueOf(yearSliderList.get(i).getName().split(" ")[1]) <= range.getHighValue()
+					&& Float.valueOf(yearSliderList.get(i).getName().split(" ")[1]) >= range.getLowValue()) {
+				yearSliderList.set(i, yearSliderList.get(i).setColorForeground(selectedColor));
+				yearSliderList.get(i).setColorForeground(selectedColor);
+			} else {
+				yearSliderList.set(i, yearSliderList.get(i).setColorForeground(unselectedColor));
+				yearSliderList.get(i).setColorForeground(unselectedColor);
+			}
+		}
 	}
 
 	/**
@@ -182,8 +208,8 @@ public class YearSlider {
 	private Slider setSlider(Integer name, int size, int positionY, int value, int maxValue) {
 
 		Slider slider = cp5.addSlider("Slider: " + name).setPosition(positionY + size, startDrawY + 50).setSize(10, 75)
-				.setRange(0, maxValue).setValue(value).setColorBackground(pApplet.color(255, 255, 255, 75))
-				.setValueLabel("").setColorCaptionLabel(pApplet.color(0, 0, 0, 100)).setLock(true);
+				.setRange(0, maxValue).setValue(value).setColorForeground(selectedColor)
+				.setColorBackground(backgroundColor).setValueLabel("").setColorCaptionLabel(textColor).setLock(true);
 
 		if ((name % 5) == 0) {
 			slider.setCaptionLabel(name.toString());
@@ -196,11 +222,13 @@ public class YearSlider {
 	/**
 	 * Set the sum of the the values of the different lists
 	 */
-	private void setValues() {
+	private Integer setValues(Map<Integer, Integer> map) {
 
-		for (Integer i : yearList.values()) {
-			yearValue += i;
+		Integer value = new Integer(0);
+		for (Integer i : map.values()) {
+			value += i;
 		}
+		return value;
 	}
 
 	public int getStartDate() {

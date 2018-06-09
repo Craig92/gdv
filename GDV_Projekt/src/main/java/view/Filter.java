@@ -287,7 +287,7 @@ public class Filter {
 		return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 20).setRange(0, maxValue)
 				.setValue(value).setCaptionLabel(Integer.toString(value)).setValueLabel(" ")
 				.setColorForeground(selectedColor).setColorBackground(backgroundColor).setColorCaptionLabel(textColor)
-				.setLock(true).setColorActive(buttonColor);
+				.setLock(true);
 	}
 
 	/**

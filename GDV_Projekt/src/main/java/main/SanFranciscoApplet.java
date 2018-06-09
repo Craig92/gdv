@@ -115,15 +115,19 @@ public class SanFranciscoApplet extends PApplet {
 		if (yearSlider.isOnSlider(pmouseX, pmouseY)
 				&& yearSlider.startOrEndDateChanged(yearSlider.getStartDate(), yearSlider.getEndDate())) {
 			yearSlider.changeFloatLabelToIntLabel();
+			yearSlider.updateSlider();
 			filter();
 		} else if (imdbSlider.isOnLowHandle(pmouseX, pmouseY)) {
 			imdbSlider.changeLowRectanglePostion(mouseY);
+			yearSlider.updateSlider();
 			filter();
 		} else if (imdbSlider.isOnHighHandle(pmouseX, pmouseY)) {
 			imdbSlider.changeHighRectanglePostion(mouseY);
+			yearSlider.updateSlider();
 			filter();
 		} else if (imdbSlider.isOnRangeHandle(pmouseX, pmouseY)) {
 			imdbSlider.changeRectanglesPostion(pmouseY, mouseY);
+			yearSlider.updateSlider();
 			filter();
 		}
 	}
