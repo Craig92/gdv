@@ -105,24 +105,24 @@ public class SanFranciscoApplet extends PApplet {
 	 */
 	public void draw() {
 
-		background(color(255, 255, 255, 100));
+		background(backgroundColor);
 		imbdRankingSliderGraphic.beginDraw();
-		imbdRankingSliderGraphic.background(color(255, 255, 255, 100));
+		imbdRankingSliderGraphic.background(backgroundColor);
 		imbdRankingSliderGraphic.endDraw();
 		image(imbdRankingSliderGraphic, (int) (Configuration.windowWidth * 0.85), 0);
 
 		filterGraphic.beginDraw();
-		filterGraphic.background(color(255, 255, 255, 100));
+		filterGraphic.background(backgroundColor);
 		filterGraphic.endDraw();
 		image(filterGraphic, (int) (Configuration.windowWidth * 0.70), 0);
 
 		timeSliderGraphic.beginDraw();
-		timeSliderGraphic.background(color(255, 255, 255, 100));
+		timeSliderGraphic.background(backgroundColor);
 		timeSliderGraphic.endDraw();
 		image(timeSliderGraphic, 0, (int) (Configuration.windowsHeight * 0.8));
 
 		mapGraphic.beginDraw();
-		mapGraphic.background(color(255, 255, 255, 100));
+		mapGraphic.background(backgroundColor);
 		mapGraphic.endDraw();
 		image(mapGraphic, 0, 0);
 
