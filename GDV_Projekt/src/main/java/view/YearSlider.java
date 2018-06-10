@@ -82,7 +82,7 @@ public class YearSlider {
 	public void draw() {
 		label.draw(pApplet);
 		descriptionLabel.draw(pApplet);
-		pApplet.fill(255);
+		pApplet.fill(SanFranciscoApplet.selectedColor);
 		pApplet.rect(0, 0, width / 2, height);
 		changeFloatLabelToIntLabel();
 		updateHandleLabels();
