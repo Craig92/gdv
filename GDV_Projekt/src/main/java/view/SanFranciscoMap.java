@@ -15,6 +15,7 @@ import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MarkerManager;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import main.Configuration;
+import main.SanFranciscoApplet;
 import processing.core.PApplet;
 
 public class SanFranciscoMap {
@@ -75,7 +76,8 @@ public class SanFranciscoMap {
 		setupFilmLocationMarker(filmLocationList);
 
 		resetButton = cp5.addButton("Karte zurücksetzen").setPosition((int) (width - 100), (int) (height - 30))
-				.setSize(100, 30).setColorForeground(pApplet.color(120)).setColorActive(pApplet.color(255));
+				.setSize(100, 30).setColorForeground(SanFranciscoApplet.buttonColor)
+				.setColorActive(SanFranciscoApplet.buttonActivColor);
 	}
 
 	/**
@@ -86,7 +88,7 @@ public class SanFranciscoMap {
 		List<Feature> districts = GeoJSONReader.loadData(pApplet, Configuration.districtPath);
 		List<Marker> districtMarkers = MapUtils.createSimpleMarkers(districts);
 		for (Marker district : districtMarkers) {
-			district.setColor(pApplet.color(255, 255, 255, 10));
+			district.setColor(SanFranciscoApplet.districtMarkerColor);
 		}
 		unfoldingMap.addMarkers(districtMarkers);
 	}
@@ -107,9 +109,9 @@ public class SanFranciscoMap {
 			location.setLocation(new Location(filmLocation.getBreitengrad(), filmLocation.getLaengengrad()));
 			location.setFilmLocation(filmLocation);
 			location.setDiameter(zoom - 2);
-			location.setColor(pApplet.color(46, 139, 87, 80));
-			location.setStrokeColor(pApplet.color(46, 139, 87, 80));
-			location.setHighlightColor(pApplet.color(255, 0, 0, 100));
+			location.setColor(SanFranciscoApplet.filmLocationMarkerColor);
+			location.setStrokeColor(SanFranciscoApplet.filmLocationMarkerColor);
+			location.setHighlightColor(SanFranciscoApplet.filmLocationMarkerActivColor);
 			filmLocationMarkers.add(location);
 			filmLocationMarkerManager.addMarker(location);
 		}
@@ -148,11 +150,11 @@ public class SanFranciscoMap {
 				// set TextLabel
 				if (labelHight < (int) (Configuration.windowsHeight * 0.60)) {
 					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()), 25, 25 + labelHight);
-					pApplet.fill(pApplet.color(0, 0, 0, 100));
+					pApplet.fill(SanFranciscoApplet.textColor);
 					labelHight += 175;
 				} else if (!toMany) {
 					pApplet.text("Weitere Drehorte an dieser Position vorhanden", 25, 25 + labelHight);
-					pApplet.fill(pApplet.color(0, 0, 0, 100));
+					pApplet.fill(SanFranciscoApplet.textColor);
 					toMany = true;
 				}
 			}

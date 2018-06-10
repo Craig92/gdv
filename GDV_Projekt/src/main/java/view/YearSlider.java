@@ -4,16 +4,12 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import controlP5.Range;
-import controlP5.CColor;
-import controlP5.ControlEvent;
-import controlP5.ControlP5;
 import controlP5.ControlP5;
 import controlP5.Slider;
 import controlP5.Textlabel;
 import data.FilmLocationManager;
-import main.Configuration;
+import main.SanFranciscoApplet;
 import processing.core.PApplet;
-import processing.core.PFont;
 
 @SuppressWarnings("unused")
 public class YearSlider {
@@ -36,13 +32,14 @@ public class YearSlider {
 	private int yearValue = setValues(yearList);
 	private int previousStartDate = 1915, previousEndDate = 2018;
 
-	private PFont headerFont;
-	private PFont textFont;
-	private int textColor;
-	private int backgroundColor;
-	private int selectedColor;
-	private int unselectedColor;
-
+	/**
+	 * 
+	 * @param pApplet
+	 * @param x
+	 * @param y
+	 * @param width
+	 * @param height
+	 */
 	public YearSlider(PApplet pApplet, int x, int y, int width, int height) {
 		this.pApplet = pApplet;
 		this.startDrawX = x;
@@ -58,29 +55,25 @@ public class YearSlider {
 	private void setup() {
 
 		cp5 = new ControlP5(pApplet);
-		headerFont = pApplet.createFont("Georgia", 20);
-		textFont = pApplet.createFont("Georgia", 14);
-		textColor = pApplet.color(0, 0, 0, 0);
-		backgroundColor = pApplet.color(255, 255, 255);
-		selectedColor = pApplet.color(0, 116, 217);
-		unselectedColor = pApplet.color(150, 80);
 
-		label = new Textlabel(cp5, "Zeitachse", startDrawX, startDrawY, 400, 200).setFont(headerFont)
-				.setColor(textColor);
+		label = new Textlabel(cp5, "Zeitachse", startDrawX, startDrawY, 400, 200).setFont(SanFranciscoApplet.headerFont)
+				.setColor(SanFranciscoApplet.textColor);
 
 		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX, startDrawY + 35,
-				400, 200).setFont(textFont).setColor(textColor);
+				400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 
 		addSlider(startDrawX + 40);
 		addRange();
 
 		lowHandleLabel = new Textlabel(cp5, "" + range.getLowValue(),
 				(int) ((int) range.getPosition()[0] + (10 * (range.getLowValue() - 1915))),
-				(int) range.getPosition()[1] + 20, 400, 200).setFont(textFont).setColor(textColor);
+				(int) range.getPosition()[1] + 20, 400, 200).setFont(SanFranciscoApplet.textFont)
+						.setColor(SanFranciscoApplet.textColor);
 
 		highHandleLabel = new Textlabel(cp5, "" + range.getLowValue(),
 				(int) ((int) range.getPosition()[0] + (10 * (range.getHighValue() - 1915))),
-				(int) range.getPosition()[1] + 20, 400, 200).setFont(textFont).setColor(textColor);
+				(int) range.getPosition()[1] + 20, 400, 200).setFont(SanFranciscoApplet.textFont)
+						.setColor(SanFranciscoApplet.textColor);
 	}
 
 	/**
@@ -107,12 +100,18 @@ public class YearSlider {
 				.setBroadcast(false).setPosition(startDrawX + 58, startDrawY + 140)
 				.setSize(15 + (previousEndDate - previousStartDate) * 10, 20).setHandleSize(15)
 				.setRange(previousStartDate, previousEndDate).setRangeValues(previousStartDate, previousEndDate)
-				.setLabelVisible(false).setColorBackground(unselectedColor).setColorActive(selectedColor)
-				.setBroadcast(true);
+				.setLabelVisible(false).setColorBackground(SanFranciscoApplet.unselectedColor)
+				.setColorActive(SanFranciscoApplet.selectedColor).setBroadcast(true);
 		changeFloatLabelToIntLabel();
 
 	}
 
+	/**
+	 * 
+	 * @param mouseX
+	 * @param mouseY
+	 * @return
+	 */
 	public boolean isOnSlider(int mouseX, int mouseY) {
 		changeFloatLabelToIntLabel();
 		return (mouseX >= startDrawX + 20 && mouseY >= startDrawY + 120);
@@ -149,15 +148,15 @@ public class YearSlider {
 	/**
 	 * Change the color of the slider if the range slider changed
 	 */
-	public void updateSlider() {
+	public void updateDiagramm() {
 		for (int i = 0; i != yearSliderList.size(); i++) {
 			if (Float.valueOf(yearSliderList.get(i).getName().split(" ")[1]) <= range.getHighValue()
 					&& Float.valueOf(yearSliderList.get(i).getName().split(" ")[1]) >= range.getLowValue()) {
-				yearSliderList.set(i, yearSliderList.get(i).setColorForeground(selectedColor));
-				yearSliderList.get(i).setColorForeground(selectedColor);
+				yearSliderList.set(i, yearSliderList.get(i).setColorForeground(SanFranciscoApplet.selectedColor));
+				yearSliderList.get(i).setColorForeground(SanFranciscoApplet.selectedColor);
 			} else {
-				yearSliderList.set(i, yearSliderList.get(i).setColorForeground(unselectedColor));
-				yearSliderList.get(i).setColorForeground(unselectedColor);
+				yearSliderList.set(i, yearSliderList.get(i).setColorForeground(SanFranciscoApplet.unselectedColor));
+				yearSliderList.get(i).setColorForeground(SanFranciscoApplet.unselectedColor);
 			}
 		}
 	}
@@ -208,8 +207,9 @@ public class YearSlider {
 	private Slider setSlider(Integer name, int size, int positionY, int value, int maxValue) {
 
 		Slider slider = cp5.addSlider("Slider: " + name).setPosition(positionY + size, startDrawY + 50).setSize(10, 75)
-				.setRange(0, maxValue).setValue(value).setColorForeground(selectedColor)
-				.setColorBackground(backgroundColor).setValueLabel("").setColorCaptionLabel(textColor).setLock(true);
+				.setRange(0, maxValue).setValue(value).setColorForeground(SanFranciscoApplet.selectedColor)
+				.setColorBackground(SanFranciscoApplet.backgroundColor).setValueLabel("")
+				.setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);
 
 		if ((name % 5) == 0) {
 			slider.setCaptionLabel(name.toString());
@@ -231,10 +231,18 @@ public class YearSlider {
 		return value;
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getStartDate() {
 		return (int) range.getLowValue();
 	}
 
+	/**
+	 * 
+	 * @return
+	 */
 	public int getEndDate() {
 		return (int) range.getHighValue();
 	}

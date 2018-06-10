@@ -237,7 +237,6 @@ public class FilmLocationManager {
 			List<FilmLocation> temp = new ArrayList<FilmLocation>();
 			for (String element : director) {
 				temp.addAll(list.stream().filter(f -> f.getDirector().equals(element)).collect(Collectors.toList()));
-
 			}
 			list = temp;
 			return list;
@@ -262,7 +261,6 @@ public class FilmLocationManager {
 			for (String element : productionCompany) {
 				temp.addAll(list.stream().filter(f -> f.getProductionCompany().equals(element))
 						.collect(Collectors.toList()));
-
 			}
 			list = temp;
 			return list;
@@ -286,7 +284,6 @@ public class FilmLocationManager {
 			List<FilmLocation> temp = new ArrayList<FilmLocation>();
 			for (String element : distributor) {
 				temp.addAll(list.stream().filter(f -> f.getDistributor().equals(element)).collect(Collectors.toList()));
-
 			}
 			list = temp;
 			return list;
@@ -332,7 +329,6 @@ public class FilmLocationManager {
 			List<FilmLocation> temp = new ArrayList<FilmLocation>();
 			for (String element : genre) {
 				temp.addAll(list.stream().filter(f -> f.getGenre().contains(element)).collect(Collectors.toList()));
-
 			}
 			list = temp;
 			return list;
@@ -384,5 +380,4 @@ public class FilmLocationManager {
 	public Map<String, Integer> getTitleList() {
 		return titleList;
 	}
-
 }

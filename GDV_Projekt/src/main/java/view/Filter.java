@@ -1,24 +1,19 @@
 package view;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.TreeSet;
-
 import controlP5.Button;
-import controlP5.Chart;
 import controlP5.ControlP5;
-import controlP5.DropdownList;
 import controlP5.RadioButton;
 import controlP5.Slider;
 import controlP5.Textlabel;
 import data.FilmLocationManager;
 import main.Configuration;
+import main.SanFranciscoApplet;
 import processing.core.PApplet;
-import processing.core.PFont;
 
 @SuppressWarnings("unused")
 public class Filter {
@@ -79,15 +74,6 @@ public class Filter {
 	private Integer distributorMaxValue = distributorList.values().stream().findFirst().get();
 	private Integer genreMaxValue = genreList.values().stream().findFirst().get();
 
-	private PFont headerFont;
-	private PFont textFont;
-	private int textColor;
-	private int backgroundColor;
-	private int selectedColor;
-	private int unselectedColor;
-	private int buttonColor;
-	private int buttonActivColor;
-
 	/**
 	 * Constructor
 	 * 
@@ -116,56 +102,49 @@ public class Filter {
 
 		int currentY = startDrawY + 110;
 		cp5 = new ControlP5(pApplet);
-		headerFont = pApplet.createFont("Georgia", 20);
-		textFont = pApplet.createFont("Georgia", 14);
-		textColor = pApplet.color(0, 0, 0, 0);
-		backgroundColor = pApplet.color(255, 255, 255);
-		selectedColor = pApplet.color(0, 116, 217);
-		unselectedColor = pApplet.color(150, 80);
-		buttonColor = pApplet.color(120);
-		buttonActivColor = pApplet.color(255);
 
 		// header line
-		label = new Textlabel(cp5, "Filter", startDrawX, startDrawY + 10, 400, 200).setFont(headerFont)
-				.setColor(textColor);
+		label = new Textlabel(cp5, "Filter", startDrawX, startDrawY + 10, 400, 200)
+				.setFont(SanFranciscoApplet.headerFont).setColor(SanFranciscoApplet.textColor);
 		descriptionLabel1 = new Textlabel(cp5, "Wählen Sie die zu filternden", startDrawX, startDrawY + 35, 400, 200)
-				.setFont(textFont).setColor(textColor);
+				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		descriptionLabel2 = new Textlabel(cp5, "Parameter aus:", startDrawX, startDrawY + 50, 400, 200)
-				.setFont(textFont).setColor(textColor);
+				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 
 		// buttons
 		selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 70).setSize(80, 30)
-				.setColorForeground(buttonColor).setColorActive(buttonActivColor);
+				.setColorForeground(SanFranciscoApplet.buttonColor).setColorActive(SanFranciscoApplet.buttonActivColor);
 		deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX + 100, startDrawY + 70)
-				.setSize(80, 30).setColorForeground(buttonColor).setColorActive(buttonActivColor);
+				.setSize(80, 30).setColorForeground(SanFranciscoApplet.buttonColor)
+				.setColorActive(SanFranciscoApplet.buttonActivColor);
 
 		// genre filter
 		descriptionTitelLabel = new Textlabel(cp5, "Genre filtern*:", startDrawX, startDrawY + 110, 400, 200)
-				.setFont(textFont).setColor(textColor);
+				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		descriptionTitleDiagramm = new Textlabel(cp5, "Gesamt: " + genreValue, startDrawX + 175, startDrawY + 110, 400,
-				200).setFont(textFont).setColor(textColor);
+				200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		currentY = addFilterElements("Genre", currentY + 5, genreList, genreMaxValue, genreValue);
 
 		// director filter
 		descriptionDirectorLabel = new Textlabel(cp5, "Regisseure filtern*:", startDrawX, currentY + 5, 400, 200)
-				.setFont(textFont).setColor(textColor);
+				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		descriptionDirectorDiagramm = new Textlabel(cp5, "Gesamt: " + directorValue, startDrawX + 175, currentY + 5,
-				400, 200).setFont(textFont).setColor(textColor);
+				400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		currentY = addFilterElements("Regie", currentY + 5, directorList, directorMaxValue, directorValue);
 
 		// production comany filter
 		descriptionProductionCompanyLabel = new Textlabel(cp5, "Produktionsfirma filtern*:", startDrawX, currentY + 5,
-				400, 200).setFont(textFont).setColor(textColor);
+				400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		descriptionProductionCompanyDiagramm = new Textlabel(cp5, "Gesamt: " + productionCompanyValue, startDrawX + 175,
-				currentY + 5, 400, 200).setFont(textFont).setColor(textColor);
+				currentY + 5, 400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		currentY = addFilterElements("Produktion", currentY + 5, productionCompanyList, productionCompanyMaxValue,
 				productionCompanyValue);
 
 		// distributor filter
 		descriptionDistributionLabel = new Textlabel(cp5, "Vertriebsfirma filtern*:", startDrawX, currentY + 5, 400,
-				200).setFont(textFont).setColor(textColor);
+				200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		descriptionDistributionDiagramm = new Textlabel(cp5, "Gesamt: " + distributorValue, startDrawX + 175,
-				currentY + 5, 400, 200).setFont(textFont).setColor(textColor);
+				currentY + 5, 400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		currentY = addFilterElements("Vertrieb", currentY + 5, distributorList, distributorMaxValue, distributorValue);
 
 		setRadioButtonActive(true);
@@ -263,8 +242,9 @@ public class Filter {
 	private RadioButton setRadioButton(String name, int size, int positionY, String itemName, int itemID) {
 
 		return cp5.addRadioButton(name).setPosition(startDrawX, positionY + size).setSize(18, 18)
-				.setColorLabel(textColor).setItemsPerRow(1).addItem(itemName, itemID).setVisible(true).activate(itemID)
-				.setColorActive(selectedColor).setColorBackground(unselectedColor);
+				.setColorLabel(SanFranciscoApplet.textColor).setItemsPerRow(1).addItem(itemName, itemID)
+				.setVisible(true).activate(itemID).setColorActive(SanFranciscoApplet.selectedColor)
+				.setColorBackground(SanFranciscoApplet.unselectedColor);
 	}
 
 	/**
@@ -286,8 +266,9 @@ public class Filter {
 
 		return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 20).setRange(0, maxValue)
 				.setValue(value).setCaptionLabel(Integer.toString(value)).setValueLabel(" ")
-				.setColorForeground(selectedColor).setColorBackground(backgroundColor).setColorCaptionLabel(textColor)
-				.setLock(true);
+				.setColorForeground(SanFranciscoApplet.selectedColor)
+				.setColorBackground(SanFranciscoApplet.backgroundColor)
+				.setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);
 	}
 
 	/**
@@ -343,9 +324,9 @@ public class Filter {
 		sliderList.addAll(genreSliderList);
 		for (int i = 0; i != sliderList.size(); i++) {
 			if (isSelect) {
-				sliderList.get(i).setColorForeground(selectedColor);
+				sliderList.get(i).setColorForeground(SanFranciscoApplet.selectedColor);
 			} else {
-				sliderList.get(i).setColorForeground(unselectedColor);
+				sliderList.get(i).setColorForeground(SanFranciscoApplet.unselectedColor);
 			}
 		}
 	}
@@ -435,7 +416,7 @@ public class Filter {
 			setSliderAktiv(false);
 			selectAll = false;
 		} else if (isSelected(mouseX, mouseY) && !selectAll) {
-			updateSlider(mouseX, mouseY);
+			updateDiagramm(mouseX, mouseY);
 			selectAll = false;
 		}
 	}
@@ -475,7 +456,7 @@ public class Filter {
 	 * @param mouseY
 	 *            the y position of the mouse
 	 */
-	private void updateSlider(int mouseX, int mouseY) {
+	private void updateDiagramm(int mouseX, int mouseY) {
 
 		List<RadioButton> buttonList = new ArrayList<>();
 		buttonList.addAll(titleButtonList);
@@ -493,11 +474,11 @@ public class Filter {
 
 		for (int i = 0; i != buttonList.size(); i++) {
 			if (buttonList.get(i).getItem(0).getState()) {
-				sliderList.set(i, sliderList.get(i).setColorForeground(selectedColor));
-				sliderList.get(i).setColorForeground(selectedColor);
+				sliderList.set(i, sliderList.get(i).setColorForeground(SanFranciscoApplet.selectedColor));
+				sliderList.get(i).setColorForeground(SanFranciscoApplet.selectedColor);
 			} else {
-				sliderList.set(i, sliderList.get(i).setColorForeground(unselectedColor));
-				sliderList.get(i).setColorForeground(unselectedColor);
+				sliderList.set(i, sliderList.get(i).setColorForeground(SanFranciscoApplet.unselectedColor));
+				sliderList.get(i).setColorForeground(SanFranciscoApplet.unselectedColor);
 			}
 		}
 	}

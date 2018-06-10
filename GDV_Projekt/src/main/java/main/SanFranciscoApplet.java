@@ -6,6 +6,7 @@ import java.util.List;
 import data.FilmLocation;
 import data.FilmLocationManager;
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.core.PGraphics;
 import view.Filter;
 import view.IMDBSlider;
@@ -24,9 +25,25 @@ public class SanFranciscoApplet extends PApplet {
 	private PGraphics timeSliderGraphic;
 	private PGraphics filterGraphic;
 
+	public static PFont headerFont;
+	public static PFont textFont;
+	public static int textColor;
+	public static int backgroundColor;
+	public static int selectedColor;
+	public static int unselectedColor;
+	public static int buttonColor;
+	public static int buttonActivColor;
+	public static int filmLocationMarkerColor;
+	public static int filmLocationMarkerActivColor;
+	public static int districtMarkerColor;
+
 	private static final FilmLocationManager manager = FilmLocationManager.getInstance();
 	private List<FilmLocation> filmLocationList = manager.getFilmLocationList();
 
+	/**
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		PApplet.main(new String[] { SanFranciscoApplet.class.getName() });
 	}
@@ -46,7 +63,18 @@ public class SanFranciscoApplet extends PApplet {
 	public void setup() {
 
 		surface.setResizable(true);
-		surface.setTitle("GDV-Projekt WestSideMovies | Hochschule Mannheim Sommersemester 2018");
+		surface.setTitle("GDV-Projekt WestSideMovie | Hochschule Mannheim Sommersemester 2018");
+		headerFont = createFont("Georgia", 20);
+		textFont = createFont("Georgia", 14);
+		textColor = color(0, 0, 0, 0);
+		backgroundColor = color(255, 255, 255);
+		selectedColor = color(0, 116, 217);
+		unselectedColor = color(150, 80);
+		buttonColor = color(120);
+		buttonActivColor = color(255);
+		filmLocationMarkerColor = color(46, 139, 87, 80);
+		filmLocationMarkerActivColor = color(255, 0, 0, 100);
+		districtMarkerColor = color(255, 255, 255, 10);
 
 		// set map
 		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
@@ -115,19 +143,19 @@ public class SanFranciscoApplet extends PApplet {
 		if (yearSlider.isOnSlider(pmouseX, pmouseY)
 				&& yearSlider.startOrEndDateChanged(yearSlider.getStartDate(), yearSlider.getEndDate())) {
 			yearSlider.changeFloatLabelToIntLabel();
-			yearSlider.updateSlider();
+			yearSlider.updateDiagramm();
 			filter();
 		} else if (imdbSlider.isOnLowHandle(pmouseX, pmouseY)) {
 			imdbSlider.changeLowRectanglePostion(mouseY);
-			yearSlider.updateSlider();
+			imdbSlider.updateDiagramm();
 			filter();
 		} else if (imdbSlider.isOnHighHandle(pmouseX, pmouseY)) {
 			imdbSlider.changeHighRectanglePostion(mouseY);
-			yearSlider.updateSlider();
+			imdbSlider.updateDiagramm();
 			filter();
 		} else if (imdbSlider.isOnRangeHandle(pmouseX, pmouseY)) {
 			imdbSlider.changeRectanglesPostion(pmouseY, mouseY);
-			yearSlider.updateSlider();
+			imdbSlider.updateDiagramm();
 			filter();
 		}
 	}
@@ -165,8 +193,6 @@ public class SanFranciscoApplet extends PApplet {
 		filmLocationList = manager.filterByYear(filmLocationList, yearSlider.getStartDate(), yearSlider.getEndDate());
 		filmLocationList = manager.filterByIMDBRanking(filmLocationList, imdbSlider.getStartValue(),
 				imdbSlider.getEndValue());
-		// filmLocationList = manager.filterByTitle(filmLocationList,
-		// filter.getSelectedParameterList("Titel"));
 		filmLocationList = manager.filterByDirector(filmLocationList, filter.getSelectedParameterList("Regie"));
 		filmLocationList = manager.filterByProductionCompany(filmLocationList,
 				filter.getSelectedParameterList("Produktion"));
@@ -175,5 +201,4 @@ public class SanFranciscoApplet extends PApplet {
 		map.setupFilmLocationMarker(filmLocationList);
 		filmLocationList = manager.getFilmLocationList();
 	}
-
 }
