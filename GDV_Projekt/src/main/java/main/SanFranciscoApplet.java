@@ -66,15 +66,16 @@ public class SanFranciscoApplet extends PApplet {
 		surface.setTitle("GDV-Projekt WestSideMovie | Hochschule Mannheim Sommersemester 2018");
 		headerFont = createFont("Georgia", 20);
 		textFont = createFont("Georgia", 14);
-		textColor = color(0, 0, 0, 0);
+		textColor = color(0, 0, 0); 
 		backgroundColor = color(255, 255, 255);
-		selectedColor = color(0, 116, 217);
-		unselectedColor = color(150, 80);
-		buttonColor = color(120);
-		buttonActivColor = color(255);
-		filmLocationMarkerColor = color(46, 139, 87, 80);
-		filmLocationMarkerActivColor = color(255, 0, 0, 100);
-		districtMarkerColor = color(255, 255, 255, 10);
+		//TODO Farben festlegen
+		selectedColor = color(25, 118, 210);
+		unselectedColor = color(144, 202, 249);
+		buttonColor = color(13, 71, 161);
+		buttonActivColor = color(13, 71, 161);
+		filmLocationMarkerColor = color(25, 118, 210, 33);
+		filmLocationMarkerActivColor = color(255, 235, 59);
+		districtMarkerColor = color(227, 242, 253);
 
 		// set map
 		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
