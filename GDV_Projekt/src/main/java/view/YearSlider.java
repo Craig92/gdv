@@ -100,7 +100,7 @@ public class YearSlider {
 				.setBroadcast(false).setPosition(startDrawX + 58, startDrawY + 140)
 				.setSize(15 + (previousEndDate - previousStartDate) * 10, 20).setHandleSize(15)
 				.setRange(previousStartDate, previousEndDate).setRangeValues(previousStartDate, previousEndDate)
-				.setLabelVisible(false).setColorBackground(SanFranciscoApplet.unselectedColor)
+				.setLabelVisible(false).setColorForeground(SanFranciscoApplet.selectedColor).setColorBackground(SanFranciscoApplet.unselectedColor)
 				.setColorActive(SanFranciscoApplet.selectedColor).setBroadcast(true);
 		changeFloatLabelToIntLabel();
 

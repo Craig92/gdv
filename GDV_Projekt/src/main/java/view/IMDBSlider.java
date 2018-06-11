@@ -218,8 +218,8 @@ public class IMDBSlider {
 
 		return cp5.addSlider(name).setPosition(startDrawX + positionX, 150).setSize(10, positionY - 140).setRange(0, 10)
 				.setValue(value).setValueLabel("" + value).setCaptionLabel(" ").setLock(false)
-				.setSliderMode(Slider.FLEXIBLE).setColorBackground(pApplet.color(150, 80))
-				.setColorLabel(pApplet.color(0)).setLabelVisible(false);
+				.setSliderMode(Slider.FLEXIBLE).setColorBackground(SanFranciscoApplet.selectedColor)
+				.setColorLabel(SanFranciscoApplet.backgroundColor).setLabelVisible(false);
 	}
 
 	/**
@@ -240,8 +240,9 @@ public class IMDBSlider {
 	private Slider setSlider(String name, int size, int positionY, int value, int maxValue) {
 
 		Slider slider = cp5.addSlider("Slider: " + name).setPosition(startDrawX + 100, positionY + size).setSize(75, 5)
-				.setRange(0, maxValue).setValue(value).setColorBackground(pApplet.color(255, 255, 255, 75))
-				.setValueLabel(" ").setColorCaptionLabel(pApplet.color(0, 0, 0, 100)).setLock(true);
+				.setRange(0, maxValue).setValue(value).setColorForeground(SanFranciscoApplet.selectedColor)
+				.setColorBackground(SanFranciscoApplet.backgroundColor)
+				.setValueLabel(" ").setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);
 
 		if (name.equals("0,0")) {
 			slider.setCaptionLabel("Keine Bewertung");
