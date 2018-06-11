@@ -54,7 +54,7 @@ public class IMDBSlider {
 	private int minYRectanglePosition;
 	private int heightPosition;
 	private boolean lowPressed, highPressed;
-
+	
 	/**
 	 * Constructor
 	 * 
@@ -196,7 +196,7 @@ public class IMDBSlider {
 		for (Map.Entry<String, Integer> element : imdbList.entrySet()) {
 			Slider slider = setSlider(element.getKey(), positionY, size, element.getValue(), 100);
 			rankingSliderList.add(slider);
-			size += 5;
+			size += Configuration.imdbDiagrammSize;
 		}
 		return size;
 	}
@@ -239,7 +239,7 @@ public class IMDBSlider {
 	 */
 	private Slider setSlider(String name, int size, int positionY, int value, int maxValue) {
 
-		Slider slider = cp5.addSlider("Slider: " + name).setPosition(startDrawX + 100, positionY + size).setSize(75, 5)
+		Slider slider = cp5.addSlider("Slider: " + name).setPosition(startDrawX + 100, positionY + size).setSize(75, Configuration.imdbDiagrammSize)
 				.setRange(0, maxValue).setValue(value).setColorForeground(SanFranciscoApplet.selectedColor)
 				.setColorBackground(SanFranciscoApplet.backgroundColor)
 				.setValueLabel(" ").setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);
@@ -316,7 +316,7 @@ public class IMDBSlider {
 			newYPosition = (int) (highHandleRectangle.getPosition()[1] + highHandleRectangle.getHeight());
 		}
 		lowHandleRectangle.setPosition(lowHandleRectangle.getPosition()[0], newYPosition);
-		lowSlider.setValue((((minYRectanglePosition + 5 - newYPosition) / 5f) * 0.1f));
+		lowSlider.setValue((((minYRectanglePosition + Configuration.imdbDiagrammSize - newYPosition) / Configuration.imdbDiagrammSize) * 0.1f));
 		updateRange();
 	}
 
@@ -331,7 +331,7 @@ public class IMDBSlider {
 			newYPosition = (int) (lowHandleRectangle.getPosition()[1] - highHandleRectangle.getHeight());
 		}
 		highHandleRectangle.setPosition(highHandleRectangle.getPosition()[0], newYPosition);
-		highSlider.setValue((((minYRectanglePosition + 5 - newYPosition) / 5f) * 0.1f));
+		highSlider.setValue((((minYRectanglePosition + Configuration.imdbDiagrammSize - newYPosition) / Configuration.imdbDiagrammSize) * 0.1f));
 		updateRange();
 	}
 

@@ -14,5 +14,8 @@ public class Configuration {
 	public static String locationPath = new File("").getAbsolutePath() + path + "filmlocation.csv";
 	public static int windowWidth = 1920;
 	public static int windowsHeight = 1080;
-	public static int limit = windowWidth/200 + 1;
+	public static int limit = windowsHeight / 100;
+	
+	public static int yearDiagrammSize = 12;
+	public static int imdbDiagrammSize = 7;
 }
