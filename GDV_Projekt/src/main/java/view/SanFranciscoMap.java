@@ -2,6 +2,8 @@ package view;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.TreeMap;
 
 import controlP5.Button;
 import controlP5.ControlP5;
@@ -13,6 +15,8 @@ import de.fhpotsdam.unfolding.data.GeoJSONReader;
 import de.fhpotsdam.unfolding.geo.Location;
 import de.fhpotsdam.unfolding.marker.Marker;
 import de.fhpotsdam.unfolding.marker.MarkerManager;
+import de.fhpotsdam.unfolding.marker.MultiMarker;
+import de.fhpotsdam.unfolding.marker.SimplePolygonMarker;
 import de.fhpotsdam.unfolding.utils.MapUtils;
 import main.Configuration;
 import main.SanFranciscoApplet;
@@ -29,6 +33,9 @@ public class SanFranciscoMap {
 	private UnfoldingMap unfoldingMap;
 	private Location sanFrancisco = new Location(37.7881272f, -122.4296427f);
 	private int zoom = 12;
+
+	private List<Feature> districts;
+	private List<Marker> districtMarkers;
 
 	private List<FilmLocationMarker> filmLocationMarkers = new ArrayList<>();
 	private List<FilmLocation> filmLocationList;
@@ -55,6 +62,8 @@ public class SanFranciscoMap {
 		this.width = width;
 		this.height = height;
 		this.filmLocationList = filmLocationList;
+		districts = GeoJSONReader.loadData(pApplet, Configuration.districtPath);
+		districtMarkers = MapUtils.createSimpleMarkers(districts);
 		setup();
 	}
 
@@ -72,8 +81,9 @@ public class SanFranciscoMap {
 		unfoldingMap.setPanningRestriction(sanFrancisco, 5);
 		unfoldingMap.setZoomRange(12, 15);
 
-		setupDistrictMarker();
 		setupFilmLocationMarker(filmLocationList);
+		setupDistrictName();
+		sumFilmLocationInDistrict();
 
 		resetButton = cp5.addButton("Karte zurücksetzen").setPosition((int) (width - 100), (int) (height - 30))
 				.setSize(100, 30).setColorForeground(SanFranciscoApplet.buttonColor)
@@ -85,10 +95,11 @@ public class SanFranciscoMap {
 	 */
 	private void setupDistrictMarker() {
 
-		List<Feature> districts = GeoJSONReader.loadData(pApplet, Configuration.districtPath);
-		List<Marker> districtMarkers = MapUtils.createSimpleMarkers(districts);
 		for (Marker district : districtMarkers) {
-			district.setColor(SanFranciscoApplet.districtMarkerColor);
+			district.setColor(pApplet.color(0, 0, 0, 10));
+			// district.setHighlightColor(pApplet.color(0, 0, 0, 10));
+			district.setStrokeColor(SanFranciscoApplet.textColor);
+			district.setStrokeWeight(1);
 		}
 		unfoldingMap.addMarkers(districtMarkers);
 	}
@@ -103,7 +114,6 @@ public class SanFranciscoMap {
 
 		filmLocationMarkerManager.clearMarkers();
 		filmLocationMarkers = new ArrayList<>();
-
 		for (FilmLocation filmLocation : filmLocationList) {
 			FilmLocationMarker location = new FilmLocationMarker();
 			location.setLocation(new Location(filmLocation.getBreitengrad(), filmLocation.getLaengengrad()));
@@ -114,6 +124,51 @@ public class SanFranciscoMap {
 			location.setHighlightColor(SanFranciscoApplet.filmLocationMarkerActivColor);
 			filmLocationMarkers.add(location);
 			filmLocationMarkerManager.addMarker(location);
+		}
+		setupDistrictMarker();
+	}
+	
+	/**
+	 * 
+	 */
+	public void setupDistrictName() {
+		int i = 0;
+		for (FilmLocationMarker location : filmLocationMarkers) {
+			for (Marker district : districtMarkers) {
+				MultiMarker m = (MultiMarker) district;
+				SimplePolygonMarker p = (SimplePolygonMarker) m.getMarkers().get(0);
+				if (p.isInsideByLocation(location.getLocation())) {
+					location.getFilmLocation().setDistrict(district.getProperty("supervisor").toString() + " | "
+							+ district.getProperty("supname").toString());
+					this.filmLocationList.set(i, location.getFilmLocation());
+				}
+			}
+			i++;
+		}
+	}
+
+	/**
+	 * 
+	 */
+	public void sumFilmLocationInDistrict() {
+
+		Map<String, Integer> map = new TreeMap<>();
+		for (FilmLocation location : filmLocationList) {
+			String key = "";
+			if (location.getDistrict() == null) {
+				key = "Kein District";
+			} else {
+				key = location.getDistrict();
+			}
+			if (map.containsKey(key)) {
+				map.put(key, map.get(key).intValue() + 1);
+			} else {
+				map.put(key, 1);
+			}
+		}
+
+		for (Map.Entry<String, Integer> entry : map.entrySet()) {
+			System.out.println(entry.getKey() + " | " + entry.getValue());
 		}
 	}
 
@@ -133,7 +188,8 @@ public class SanFranciscoMap {
 		result += "Vertrieb: " + filmLocation.getDistributor() + "\n";
 		result += "IMDb Wertung: " + filmLocation.getImdbRanking() + "\n";
 		result += "Genre: " + filmLocation.getGenre() + "\n";
-		result += "Drehjahr: " + filmLocation.getReleaseYear();
+		result += "Drehjahr: " + filmLocation.getReleaseYear() + "\n";
+		result += "Distrikt: " + filmLocation.getDistrict();
 		return result;
 	}
 
@@ -151,7 +207,7 @@ public class SanFranciscoMap {
 				if (labelHight < (int) (Configuration.windowsHeight * 0.60)) {
 					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()), 25, 25 + labelHight);
 					pApplet.fill(SanFranciscoApplet.textColor);
-					labelHight += 175;
+					labelHight += 185;
 				} else if (!toMany) {
 					pApplet.text("Weitere Drehorte an dieser Position vorhanden", 25, 25 + labelHight);
 					pApplet.fill(SanFranciscoApplet.textColor);
@@ -173,11 +229,19 @@ public class SanFranciscoMap {
 				&& mouseY >= resetButton.getPosition()[1] - 30 && mouseY <= resetButton.getPosition()[1] + 30) {
 			unfoldingMap.zoomAndPanTo(zoom, sanFrancisco);
 		}
-		for (FilmLocationMarker location : filmLocationMarkers)
+		for (FilmLocationMarker location : filmLocationMarkers) {
 			if (location.isInside(unfoldingMap, mouseX, mouseY)) {
 				location.setSelected(true);
 			} else {
 				location.setSelected(false);
 			}
+		}
+		// for (Marker district : districtMarkers) {
+		// if (district.isInside(unfoldingMap, mouseX, mouseY)) {
+		// district.setSelected(true);
+		// } else {
+		// district.setSelected(false);
+		// }
+		// }
 	}
 }

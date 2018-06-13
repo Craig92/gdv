@@ -17,6 +17,7 @@ public class FilmLocation {
 	private double laengengrad;
 	private double imdbRanking;
 	private String genre;
+	private String district;
 
 	/**
 	 * Default Constructor
@@ -59,7 +60,7 @@ public class FilmLocation {
 	 */
 	public FilmLocation(String title, int releaseYear, String funFacts, String productionCompany, String distributor,
 			String director, String writer, String actor1, String actor2, String actor3, double breitengrad,
-			double laengengrad, double imdbRanking, String genre) {
+			double laengengrad, double imdbRanking, String genre, String district) {
 		this.title = title;
 		this.releaseYear = releaseYear;
 		this.funFacts = funFacts;
@@ -73,7 +74,8 @@ public class FilmLocation {
 		this.breitengrad = breitengrad;
 		this.laengengrad = laengengrad;
 		this.imdbRanking = imdbRanking;
-		this.setGenre(genre);
+		this.genre = genre;
+		this.setDistrict(district);
 
 	}
 
@@ -195,5 +197,13 @@ public class FilmLocation {
 
 	public void setGenre(String genre) {
 		this.genre = genre;
+	}
+
+	public String getDistrict() {
+		return district;
+	}
+
+	public void setDistrict(String district) {
+		this.district = district;
 	}
 }
