@@ -119,7 +119,7 @@ public class SanFranciscoMap {
 			FilmLocationMarker location = new FilmLocationMarker();
 			location.setLocation(new Location(filmLocation.getBreitengrad(), filmLocation.getLaengengrad()));
 			location.setFilmLocation(filmLocation);
-			location.setDiameter(zoom - 2);
+			location.setDiameter(unfoldingMap.getZoomLevel() - 2);
 			location.setColor(SanFranciscoApplet.filmLocationMarkerColor);
 			location.setStrokeColor(SanFranciscoApplet.filmLocationMarkerColor);
 			location.setHighlightColor(SanFranciscoApplet.filmLocationMarkerActivColor);
@@ -244,6 +244,10 @@ public class SanFranciscoMap {
 			pApplet.fill(SanFranciscoApplet.textColor);
 			pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
 					+ filmLocationDistrictMap.get("Kein Distrikt").intValue(), width / 2, 25);
+		}
+
+		for (FilmLocationMarker location : filmLocationMarkers) {
+			location.setDiameter(unfoldingMap.getZoomLevel() - 2);
 		}
 
 	}
