@@ -39,6 +39,7 @@ public class SanFranciscoMap {
 
 	private List<FilmLocationMarker> filmLocationMarkers = new ArrayList<>();
 	private List<FilmLocation> filmLocationList;
+	private Map<String, Integer> filmLocationDistrictMap = new TreeMap<>();
 
 	private Button resetButton;
 
@@ -83,7 +84,7 @@ public class SanFranciscoMap {
 
 		setupFilmLocationMarker(filmLocationList);
 		setupDistrictName();
-		sumFilmLocationInDistrict();
+		sumFilmLocationInDistrict(filmLocationList);
 
 		resetButton = cp5.addButton("Karte zurücksetzen").setPosition((int) (width - 100), (int) (height - 30))
 				.setSize(100, 30).setColorForeground(SanFranciscoApplet.buttonColor)
@@ -97,7 +98,7 @@ public class SanFranciscoMap {
 
 		for (Marker district : districtMarkers) {
 			district.setColor(pApplet.color(0, 0, 0, 10));
-			// district.setHighlightColor(pApplet.color(0, 0, 0, 10));
+			district.setHighlightColor(SanFranciscoApplet.filmLocationMarkerActivColorTransparent);
 			district.setStrokeColor(SanFranciscoApplet.textColor);
 			district.setStrokeWeight(1);
 		}
@@ -127,7 +128,7 @@ public class SanFranciscoMap {
 		}
 		setupDistrictMarker();
 	}
-	
+
 	/**
 	 * 
 	 */
@@ -150,25 +151,21 @@ public class SanFranciscoMap {
 	/**
 	 * 
 	 */
-	public void sumFilmLocationInDistrict() {
+	public void sumFilmLocationInDistrict(List<FilmLocation> filmLocationList) {
 
-		Map<String, Integer> map = new TreeMap<>();
+		filmLocationDistrictMap = new TreeMap<>();
 		for (FilmLocation location : filmLocationList) {
 			String key = "";
 			if (location.getDistrict() == null) {
-				key = "Kein District";
+				key = "Kein Distrikt";
 			} else {
 				key = location.getDistrict();
 			}
-			if (map.containsKey(key)) {
-				map.put(key, map.get(key).intValue() + 1);
+			if (filmLocationDistrictMap.containsKey(key)) {
+				filmLocationDistrictMap.put(key, filmLocationDistrictMap.get(key).intValue() + 1);
 			} else {
-				map.put(key, 1);
+				filmLocationDistrictMap.put(key, 1);
 			}
-		}
-
-		for (Map.Entry<String, Integer> entry : map.entrySet()) {
-			System.out.println(entry.getKey() + " | " + entry.getValue());
 		}
 	}
 
@@ -189,14 +186,18 @@ public class SanFranciscoMap {
 		result += "IMDb Wertung: " + filmLocation.getImdbRanking() + "\n";
 		result += "Genre: " + filmLocation.getGenre() + "\n";
 		result += "Drehjahr: " + filmLocation.getReleaseYear() + "\n";
-		result += "Distrikt: " + filmLocation.getDistrict();
+		if (filmLocation.getDistrict() == null) {
+			result += "Außerhalb von San Francisco";
+		} else {
+			result += "Distrikt: " + filmLocation.getDistrict();
+		}
 		return result;
 	}
 
 	/**
 	 * 
 	 */
-	public void draw() {
+	public void draw(int mouseX, int mouseY) {
 		unfoldingMap.draw();
 
 		boolean toMany = false;
@@ -205,16 +206,46 @@ public class SanFranciscoMap {
 			if (location.isSelected()) {
 				// set TextLabel
 				if (labelHight < (int) (Configuration.windowsHeight * 0.60)) {
-					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()), 25, 25 + labelHight);
 					pApplet.fill(SanFranciscoApplet.textColor);
+					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()), 25, 25 + labelHight);
 					labelHight += 185;
 				} else if (!toMany) {
-					pApplet.text("Weitere Drehorte an dieser Position vorhanden", 25, 25 + labelHight);
 					pApplet.fill(SanFranciscoApplet.textColor);
+					pApplet.text("Weitere Drehorte an dieser Position vorhanden", 25, 25 + labelHight);
+					labelHight += 25;
 					toMany = true;
 				}
 			}
 		}
+		pApplet.fill(SanFranciscoApplet.filmLocationMarkerColor);
+		pApplet.stroke(SanFranciscoApplet.filmLocationMarkerColor);
+		pApplet.rect(5, 5, 325, labelHight);
+
+		boolean isShow = false;
+		for (Marker district : districtMarkers) {
+			MultiMarker m = (MultiMarker) district;
+			if (m.isInside(unfoldingMap, mouseX, mouseY)) {
+				district.setSelected(true);
+				pApplet.fill(SanFranciscoApplet.filmLocationMarkerActivColorTransparent);
+				pApplet.rect(width / 2 - 5, 10, 200, 45);
+				pApplet.fill(SanFranciscoApplet.textColor);
+				String text = district.getProperty("supervisor").toString() + " | "
+						+ district.getProperty("supname").toString();
+				pApplet.text("Distrikt: " + text + "\nAnzahl Drehorte: " + filmLocationDistrictMap.get(text).intValue(),
+						width / 2, 25);
+				isShow = true;
+			} else {
+				district.setSelected(false);
+			}
+		}
+		if (mouseX < width && mouseY < height && !isShow) {
+			pApplet.fill(SanFranciscoApplet.filmLocationMarkerActivColorTransparent);
+			pApplet.rect(width / 2 - 5, 10, 200, 45);
+			pApplet.fill(SanFranciscoApplet.textColor);
+			pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
+					+ filmLocationDistrictMap.get("Kein Distrikt").intValue(), width / 2, 25);
+		}
+
 	}
 
 	/**
@@ -236,12 +267,5 @@ public class SanFranciscoMap {
 				location.setSelected(false);
 			}
 		}
-		// for (Marker district : districtMarkers) {
-		// if (district.isInside(unfoldingMap, mouseX, mouseY)) {
-		// district.setSelected(true);
-		// } else {
-		// district.setSelected(false);
-		// }
-		// }
 	}
 }

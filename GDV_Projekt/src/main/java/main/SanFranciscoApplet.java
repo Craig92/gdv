@@ -35,6 +35,7 @@ public class SanFranciscoApplet extends PApplet {
 	public static int buttonActivColor;
 	public static int filmLocationMarkerColor;
 	public static int filmLocationMarkerActivColor;
+	public static int filmLocationMarkerActivColorTransparent;
 	public static int districtMarkerColor;
 
 	private static final FilmLocationManager manager = FilmLocationManager.getInstance();
@@ -66,15 +67,15 @@ public class SanFranciscoApplet extends PApplet {
 		surface.setTitle("GDV-Projekt WestSideMovie | Hochschule Mannheim Sommersemester 2018");
 		headerFont = createFont("Georgia", 20);
 		textFont = createFont("Georgia", 14);
-		textColor = color(0, 0, 0); 
+		textColor = color(0, 0, 0);
 		backgroundColor = color(255, 255, 255);
-		//TODO Farben festlegen
 		selectedColor = color(25, 118, 210);
 		unselectedColor = color(144, 202, 249);
 		buttonColor = color(13, 71, 161);
 		buttonActivColor = color(13, 71, 161);
 		filmLocationMarkerColor = color(25, 118, 210, 33);
 		filmLocationMarkerActivColor = color(255, 235, 59);
+		filmLocationMarkerActivColorTransparent = color(255, 235, 59, 40);
 		districtMarkerColor = color(227, 242, 253);
 
 		// set map
@@ -133,8 +134,7 @@ public class SanFranciscoApplet extends PApplet {
 			imdbSlider.draw();
 		}
 		filter.draw();
-		map.draw();
-
+		map.draw(mouseX, mouseY);
 	}
 
 	/**
@@ -200,6 +200,8 @@ public class SanFranciscoApplet extends PApplet {
 		filmLocationList = manager.filterByDistributor(filmLocationList, filter.getSelectedParameterList("Vertrieb"));
 		filmLocationList = manager.filterByGenre(filmLocationList, filter.getSelectedParameterList("Genre"));
 		map.setupFilmLocationMarker(filmLocationList);
+		map.sumFilmLocationInDistrict(filmLocationList);
 		filmLocationList = manager.getFilmLocationList();
+
 	}
 }
