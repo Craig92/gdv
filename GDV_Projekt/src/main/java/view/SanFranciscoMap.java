@@ -200,6 +200,23 @@ public class SanFranciscoMap {
 	public void draw(int mouseX, int mouseY) {
 		unfoldingMap.draw();
 
+		drawFilmLocationText();
+		drawDistrictText(mouseX, mouseY);
+
+		for (FilmLocationMarker location : filmLocationMarkers) {
+			location.setDiameter(unfoldingMap.getZoomLevel() - 2);
+			if(filmLocationMarkers.size() < 100) {
+				location.setColor(SanFranciscoApplet.selectedColor);
+			}
+		}
+
+	}
+
+	/**
+	 * 
+	 */
+	private void drawFilmLocationText() {
+
 		boolean toMany = false;
 		int labelHight = 0;
 		for (FilmLocationMarker location : filmLocationMarkers) {
@@ -220,7 +237,14 @@ public class SanFranciscoMap {
 		pApplet.fill(SanFranciscoApplet.filmLocationMarkerColor);
 		pApplet.stroke(SanFranciscoApplet.filmLocationMarkerColor);
 		pApplet.rect(5, 5, 325, labelHight);
+	}
 
+	/**
+	 * 
+	 * @param mouseX
+	 * @param mouseY
+	 */
+	private void drawDistrictText(int mouseX, int mouseY) {
 		boolean isShow = false;
 		for (Marker district : districtMarkers) {
 			MultiMarker m = (MultiMarker) district;
@@ -231,8 +255,11 @@ public class SanFranciscoMap {
 				pApplet.fill(SanFranciscoApplet.textColor);
 				String text = district.getProperty("supervisor").toString() + " | "
 						+ district.getProperty("supname").toString();
-				pApplet.text("Distrikt: " + text + "\nAnzahl Drehorte: " + filmLocationDistrictMap.get(text).intValue(),
-						width / 2, 25);
+				String value = "0";
+				if (filmLocationDistrictMap.get(text) != null) {
+					value = "" + filmLocationDistrictMap.get(text).intValue();
+				}
+				pApplet.text("Distrikt: " + text + "\nAnzahl Drehorte: " + value, width / 2, 25);
 				isShow = true;
 			} else {
 				district.setSelected(false);
@@ -245,11 +272,6 @@ public class SanFranciscoMap {
 			pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
 					+ filmLocationDistrictMap.get("Kein Distrikt").intValue(), width / 2, 25);
 		}
-
-		for (FilmLocationMarker location : filmLocationMarkers) {
-			location.setDiameter(unfoldingMap.getZoomLevel() - 2);
-		}
-
 	}
 
 	/**
