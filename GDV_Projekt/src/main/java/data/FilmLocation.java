@@ -56,11 +56,12 @@ public class FilmLocation {
 	 * @param imdbRanking
 	 *            the IMDb rank
 	 * @param genre
-	 *            the film gerne
+	 *            the film genre
 	 */
 	public FilmLocation(String title, int releaseYear, String funFacts, String productionCompany, String distributor,
 			String director, String writer, String actor1, String actor2, String actor3, double breitengrad,
 			double laengengrad, double imdbRanking, String genre, String district) {
+
 		this.title = title;
 		this.releaseYear = releaseYear;
 		this.funFacts = funFacts;
@@ -75,8 +76,7 @@ public class FilmLocation {
 		this.laengengrad = laengengrad;
 		this.imdbRanking = imdbRanking;
 		this.genre = genre;
-		this.setDistrict(district);
-
+		this.district = district;
 	}
 
 	public String getTitle() {

@@ -22,6 +22,7 @@ import main.Configuration;
 import main.SanFranciscoApplet;
 import processing.core.PApplet;
 
+@SuppressWarnings("unused")
 public class SanFranciscoMap {
 
 	private PApplet pApplet;
@@ -36,6 +37,7 @@ public class SanFranciscoMap {
 
 	private List<Feature> districts;
 	private List<Marker> districtMarkers;
+	private List<Location> locationList = new ArrayList<>();
 
 	private List<FilmLocationMarker> filmLocationMarkers = new ArrayList<>();
 	private List<FilmLocation> filmLocationList;
@@ -76,7 +78,6 @@ public class SanFranciscoMap {
 		cp5 = new ControlP5(pApplet);
 
 		unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height);
-		unfoldingMap.zoomAndPanTo(zoom, sanFrancisco);
 		MapUtils.createDefaultEventDispatcher(pApplet, unfoldingMap);
 		filmLocationMarkerManager = unfoldingMap.getDefaultMarkerManager();
 		unfoldingMap.setPanningRestriction(sanFrancisco, 5);
@@ -85,10 +86,24 @@ public class SanFranciscoMap {
 		setupFilmLocationMarker(filmLocationList);
 		setupDistrictName();
 		sumFilmLocationInDistrict(filmLocationList);
+		setMapPosition();
 
 		resetButton = cp5.addButton("Karte zurücksetzen").setPosition((int) (width - 100), (int) (height - 30))
 				.setSize(100, 30).setColorForeground(SanFranciscoApplet.buttonColor)
 				.setColorActive(SanFranciscoApplet.buttonActivColor);
+	}
+
+	/**
+	 * Setup the position in the map
+	 */
+	private void setMapPosition() {
+
+		if (locationList.isEmpty()) {
+			for (FilmLocationMarker location : filmLocationMarkers) {
+				locationList.add(location.getLocation());
+			}
+		}
+		unfoldingMap.zoomAndPanToFit(locationList);
 	}
 
 	/**
@@ -130,7 +145,7 @@ public class SanFranciscoMap {
 	}
 
 	/**
-	 * 
+	 * Setup the name of the district
 	 */
 	public void setupDistrictName() {
 		int i = 0;
@@ -149,7 +164,7 @@ public class SanFranciscoMap {
 	}
 
 	/**
-	 * 
+	 * Count the FilmLocations in a District
 	 */
 	public void sumFilmLocationInDistrict(List<FilmLocation> filmLocationList) {
 
@@ -195,7 +210,7 @@ public class SanFranciscoMap {
 	}
 
 	/**
-	 * 
+	 * Draw the map
 	 */
 	public void draw(int mouseX, int mouseY) {
 		unfoldingMap.draw();
@@ -205,7 +220,7 @@ public class SanFranciscoMap {
 
 		for (FilmLocationMarker location : filmLocationMarkers) {
 			location.setDiameter(unfoldingMap.getZoomLevel() - 2);
-			if(filmLocationMarkers.size() < 100) {
+			if (filmLocationMarkers.size() < 100) {
 				location.setColor(SanFranciscoApplet.selectedColor);
 			}
 		}
@@ -213,7 +228,7 @@ public class SanFranciscoMap {
 	}
 
 	/**
-	 * 
+	 * Setup the TextLabel about the FilmLocations
 	 */
 	private void drawFilmLocationText() {
 
@@ -221,7 +236,6 @@ public class SanFranciscoMap {
 		int labelHight = 0;
 		for (FilmLocationMarker location : filmLocationMarkers) {
 			if (location.isSelected()) {
-				// set TextLabel
 				if (labelHight < (int) (Configuration.windowsHeight * 0.60)) {
 					pApplet.fill(SanFranciscoApplet.textColor);
 					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()), 25, 25 + labelHight);
@@ -240,6 +254,7 @@ public class SanFranciscoMap {
 	}
 
 	/**
+	 * Setup the TextLabel about the Districts
 	 * 
 	 * @param mouseX
 	 * @param mouseY
@@ -284,7 +299,7 @@ public class SanFranciscoMap {
 
 		if (mouseX >= resetButton.getPosition()[0] - 100 && mouseX <= resetButton.getPosition()[0] + 100
 				&& mouseY >= resetButton.getPosition()[1] - 30 && mouseY <= resetButton.getPosition()[1] + 30) {
-			unfoldingMap.zoomAndPanTo(zoom, sanFrancisco);
+			setMapPosition();
 		}
 		for (FilmLocationMarker location : filmLocationMarkers) {
 			if (location.isInside(unfoldingMap, mouseX, mouseY)) {

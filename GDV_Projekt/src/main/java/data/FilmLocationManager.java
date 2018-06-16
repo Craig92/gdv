@@ -43,7 +43,7 @@ public class FilmLocationManager {
 	}
 
 	/**
-	 * 
+	 * Load the FilmLocation data from the file
 	 */
 	public void setup() {
 
@@ -57,17 +57,17 @@ public class FilmLocationManager {
 			while ((line = reader.readNext()) != null) {
 				FilmLocation location = new FilmLocation();
 				location.setTitle(line[0]);
-				setMap("Titel", line[0]);
+				countKeys("Titel", line[0]);
 				location.setReleaseYear(Integer.parseInt(line[1]));
-				setMap("Jahr", line[1]);
+				countKeys("Jahr", line[1]);
 				location.setLocation(line[2]);
 				location.setFunFacts(line[3]);
 				location.setProductionCompany(line[4]);
-				setMap("Produktion", line[4]);
+				countKeys("Produktion", line[4]);
 				location.setDistributor(line[5]);
-				setMap("Vertrieb", line[5]);
+				countKeys("Vertrieb", line[5]);
 				location.setDirector(line[6]);
-				setMap("Regie", line[6]);
+				countKeys("Regie", line[6]);
 				location.setWriter(line[7]);
 				location.setActor1(line[8]);
 				location.setActor2(line[9]);
@@ -75,14 +75,14 @@ public class FilmLocationManager {
 				location.setBreitengrad(Double.parseDouble(line[11].replaceAll(",", ".")));
 				location.setLaengengrad(Double.parseDouble(line[12].replaceAll(",", ".")));
 				location.setImdbRanking(Double.parseDouble(line[13].replaceAll(",", ".")));
-				setMap("IMDB", line[13]);
+				countKeys("IMDB", line[13]);
 				location.setGenre(line[14]);
-				setMap("Genre", line[14]);
+				countKeys("Genre", line[14]);
 				filmLocationList.add(location);
 			}
 			reader.close();
-			completeMap();
-			sortMap();
+			completeKeys();
+			sort();
 
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -90,49 +90,59 @@ public class FilmLocationManager {
 	}
 
 	/**
+	 * Count the keys in the different collections
 	 * 
 	 * @param type
+	 *            the type of the parameter
 	 * @param key
+	 *            the key of the handed parameter
 	 */
-	private void setMap(String type, String key) {
+	private void countKeys(String type, String key) {
 
-		if (type.equals("Titel")) {
+		switch (type) {
+		case "Titel":
 			if (titleList.containsKey(key)) {
 				titleList.put(key, titleList.get(key) + 1);
 			} else {
 				titleList.put(key, 1);
 			}
-		} else if (type.equals("Regie")) {
+			break;
+		case "Regie":
 			if (directorList.containsKey(key)) {
 				directorList.put(key, directorList.get(key) + 1);
 			} else {
 				directorList.put(key, 1);
 			}
-		} else if (type.equals("Produktion")) {
+			break;
+		case "Produktion":
 			if (productionCompanyList.containsKey(key)) {
 				productionCompanyList.put(key, productionCompanyList.get(key) + 1);
 			} else {
 				productionCompanyList.put(key, 1);
 			}
-		} else if (type.equals("Vertrieb")) {
+			break;
+		case "Vertrieb":
 			if (distributorList.containsKey(key)) {
 				distributorList.put(key, distributorList.get(key) + 1);
 			} else {
 				distributorList.put(key, 1);
 			}
-		} else if (type.equals("IMDB")) {
+			break;
+		case "IMDB":
 			if (imdbRankingList.containsKey(key)) {
 				imdbRankingList.put(key, imdbRankingList.get(key) + 1);
 			} else {
 				imdbRankingList.put(key, 1);
 			}
-		} else if (type.equals("Jahr")) {
+			break;
+		case "Jahr":
 			if (releaseYearList.containsKey(Integer.valueOf(key))) {
 				releaseYearList.put(Integer.valueOf(key), releaseYearList.get(Integer.valueOf(key)) + 1);
 			} else {
 				releaseYearList.put(Integer.valueOf(key), 1);
 			}
-		} else if (type.equals("Genre")) {
+			break;
+		case "Genre":
 			for (String element : key.split(",")) {
 				element = element.replaceAll(" ", "");
 				if (genreList.containsKey(element)) {
@@ -141,13 +151,14 @@ public class FilmLocationManager {
 					genreList.put(element, 1);
 				}
 			}
+			break;
 		}
 	}
 
 	/**
-	 * 
+	 * Complete the lists with the missing IMDb rating and years keys
 	 */
-	private void completeMap() {
+	private void completeKeys() {
 
 		for (int dezimalzahl = 0; dezimalzahl != 10; dezimalzahl++) {
 			for (int dezimalstelle = 0; dezimalstelle != 10; dezimalstelle++) {
@@ -165,14 +176,15 @@ public class FilmLocationManager {
 		}
 	}
 
-	private void sortMap() {
+	/**
+	 * Sorted the different lists in the right order
+	 */
+	private void sort() {
 
 		titleList = titleList.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		directorList = directorList.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
-
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
 
 		distributorList = distributorList.entrySet().stream()
@@ -193,7 +205,6 @@ public class FilmLocationManager {
 
 		genreList = genreList.entrySet().stream().sorted(Map.Entry.comparingByValue(Comparator.reverseOrder()))
 				.collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue, (e1, e2) -> e1, LinkedHashMap::new));
-
 	}
 
 	/**
@@ -213,7 +224,6 @@ public class FilmLocationManager {
 			List<FilmLocation> temp = new ArrayList<FilmLocation>();
 			for (String element : title) {
 				temp.addAll(list.stream().filter(f -> f.getTitle().equals(element)).collect(Collectors.toList()));
-
 			}
 			list = temp;
 			return list;
@@ -335,6 +345,17 @@ public class FilmLocationManager {
 		}
 	}
 
+	/**
+	 * Filter the list by the handed parameter
+	 * 
+	 * @param list
+	 *            the handed list
+	 * @param startYear
+	 *            the start year
+	 * @param endYear
+	 *            the end year
+	 * @return the filtered list
+	 */
 	public List<FilmLocation> filterByYear(List<FilmLocation> list, int startYear, int endYear) {
 
 		if (list == null || startYear < 1915 || endYear < 1916 || startYear > 2018 || endYear > 2019

@@ -59,7 +59,7 @@ public class SanFranciscoApplet extends PApplet {
 	}
 
 	/**
-	 * Set the size and position of the different elements
+	 * Set the size, color and position of the different elements
 	 */
 	public void setup() {
 
@@ -128,11 +128,10 @@ public class SanFranciscoApplet extends PApplet {
 		mapGraphic.endDraw();
 		image(mapGraphic, 0, 0);
 
-		yearSlider.draw();
-
 		if (Configuration.windowWidth > 1024) {
 			imdbSlider.draw();
 		}
+		yearSlider.draw();
 		filter.draw();
 		map.draw(mouseX, mouseY);
 	}
