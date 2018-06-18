@@ -37,6 +37,8 @@ public class SanFranciscoApplet extends PApplet {
 	public static int filmLocationMarkerActivColor;
 	public static int filmLocationMarkerActivColorTransparent;
 	public static int districtMarkerColor;
+	public static int draggedColor;
+	public static int hoverColor;
 
 	private static final FilmLocationManager manager = FilmLocationManager.getInstance();
 	private List<FilmLocation> filmLocationList = manager.getFilmLocationList();
@@ -77,7 +79,8 @@ public class SanFranciscoApplet extends PApplet {
 		filmLocationMarkerActivColor = color(255, 235, 59);
 		filmLocationMarkerActivColorTransparent = color(255, 235, 59, 40);
 		districtMarkerColor = color(227, 242, 253);
-
+		hoverColor = buttonColor;
+		draggedColor = buttonColor;
 		// set map
 		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
 				(int) (Configuration.windowsHeight * 0.78), P2D);

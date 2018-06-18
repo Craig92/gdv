@@ -53,7 +53,6 @@ public class IMDBSlider {
 	private int maxYRectanglePosition;
 	private int minYRectanglePosition;
 	private int heightPosition;
-	private boolean lowPressed, highPressed;
 	private int heigthSlider;
 	
 	/**
@@ -130,7 +129,7 @@ public class IMDBSlider {
 				.setPosition(highSlider.getPosition()[0] - 10, (int) highSlider.getPosition()[1] + 15)
 				.setSize(highSlider.getHandleSize() * 2, highSlider.getHandleSize() * 1).setMoveable(true)
 				.setColorBackground(SanFranciscoApplet.selectedColor)
-				.setColorForeground(SanFranciscoApplet.backgroundColor)
+				.setColorForeground(SanFranciscoApplet.selectedColor)
 				.setColorCaptionLabel(SanFranciscoApplet.textColor).setColorActive(SanFranciscoApplet.selectedColor)
 				.setLabelVisible(false);
 		lowHandleRectangle = cp5.addButton("lowHandleButton").setLabelVisible(false)
@@ -138,11 +137,11 @@ public class IMDBSlider {
 						(int) lowSlider.getPosition()[1] + heightPosition - lowSlider.getHandleSize() - 150)
 				.setSize(lowSlider.getHandleSize() * 2, lowSlider.getHandleSize()).setMoveable(true)
 				.setColorBackground(SanFranciscoApplet.selectedColor)
-				.setColorForeground(SanFranciscoApplet.backgroundColor)
+				.setColorForeground(SanFranciscoApplet.selectedColor)
 				.setColorCaptionLabel(SanFranciscoApplet.textColor).setColorActive(SanFranciscoApplet.selectedColor);
 		rangeRectangle = cp5.addButton("rangeButton").setLabelVisible(false).setMoveable(true)
 				.setColorBackground(SanFranciscoApplet.selectedColor)
-				.setColorForeground(SanFranciscoApplet.backgroundColor)
+				.setColorForeground(SanFranciscoApplet.selectedColor)
 				.setColorCaptionLabel(SanFranciscoApplet.textColor).setColorActive(SanFranciscoApplet.selectedColor);
 		updateRange();
 
@@ -179,7 +178,6 @@ public class IMDBSlider {
 		updateHandleLabels();
 		lowHandleLabel.draw(pApplet);
 		highHandleLabel.draw(pApplet);
-		backgroundRectangle.bringToFront();
 		rangeRectangle.bringToFront();
 		lowHandleRectangle.bringToFront();
 		highHandleRectangle.bringToFront();
@@ -312,6 +310,8 @@ public class IMDBSlider {
 	 * @param newYPosition
 	 */
 	public void changeLowRectanglePostion(float newYPosition) {
+		lowHandleRectangle.setColor(lowHandleRectangle.getColor()
+				.setForeground(SanFranciscoApplet.draggedColor));
 		if (newYPosition > minYRectanglePosition) {
 			newYPosition = minYRectanglePosition;
 		} else if (newYPosition < highHandleRectangle.getPosition()[1] + highHandleRectangle.getHeight()) {
@@ -329,6 +329,8 @@ public class IMDBSlider {
 	 * @param newYPosition
 	 */
 	public void changeHighRectanglePostion(float newYPosition) {
+		highHandleRectangle.setColor(lowHandleRectangle.getColor()
+				.setForeground(SanFranciscoApplet.draggedColor));
 		if (newYPosition < maxYRectanglePosition) {
 			newYPosition = maxYRectanglePosition;
 		} else if (newYPosition + highHandleRectangle.getHeight() > lowHandleRectangle.getPosition()[1]) {
@@ -347,6 +349,8 @@ public class IMDBSlider {
 	 * @param mouseY
 	 */
 	public void changeRectanglesPostion(float pmouseY, float mouseY) {
+		rangeRectangle.setColor(lowHandleRectangle.getColor()
+				.setForeground(SanFranciscoApplet.draggedColor));
 		// wenn positiv dann runter(höheres y) wenn negativ dann hoch (kleineres y)
 		float yMove = mouseY - pmouseY;
 		float highY = highHandleRectangle.getPosition()[1] + yMove;
@@ -366,9 +370,9 @@ public class IMDBSlider {
 						(int) (lowHandleRectangle.getPosition()[1] - highHandleRectangle.getPosition()[1])
 								- highHandleRectangle.getHeight());
 		// nötig da buttons befehl zum neuzeichnen braucht, anstatt .draw
+		rangeRectangle.update();
 		highHandleRectangle.update();
 		lowHandleRectangle.update();
-		rangeRectangle.update();
 	}
 
 	/**
@@ -418,8 +422,7 @@ public class IMDBSlider {
 	 * @return the start value
 	 */
 	public double getStartValue() {
-		return highSlider.getValue() > lowSlider.getValue() ? Math.round(lowSlider.getValue() * 2) / 2
-				: Math.round(highSlider.getValue() * 2) / 2;
+		return lowSlider.getValue();//Math.round(lowSlider.getValue());
 	}
 
 	/**
@@ -428,8 +431,7 @@ public class IMDBSlider {
 	 * @return the end value
 	 */
 	public double getEndValue() {
-		return highSlider.getValue() < lowSlider.getValue() ? Math.round(lowSlider.getValue() * 2) / 2
-				: Math.round(highSlider.getValue() * 2) / 2;
+		return highSlider.getValue();//Math.round(highSlider.getValue());
 	}
 
 	/**
@@ -446,23 +448,16 @@ public class IMDBSlider {
 	 */
 	private void hoverSlider() {
 		if (isOnLowHandle(pApplet.mouseX, pApplet.mouseY)) {
-			lowHandleRectangle
-					.setColor(lowHandleRectangle.getColor().setForeground(lowHandleRectangle.getColor().getActive()));
-		} else {
-			lowHandleRectangle.setColor(
-					lowHandleRectangle.getColor().setForeground(lowHandleRectangle.getColor().getBackground()));
+			this.lowHandleRectangle.setColor(lowHandleRectangle.getColor().setForeground(SanFranciscoApplet.hoverColor));
 		}
 		if (isOnHighHandle(pApplet.mouseX, pApplet.mouseY)) {
-			highHandleRectangle
-					.setColor(highHandleRectangle.getColor().setForeground(highHandleRectangle.getColor().getActive()));
-		} else {
-			highHandleRectangle.setColor(
-					highHandleRectangle.getColor().setForeground(highHandleRectangle.getColor().getBackground()));
+			this.highHandleRectangle.setColor(highHandleRectangle.getColor().setForeground(SanFranciscoApplet.hoverColor));
 		}
 		if (isOnRangeHandle(pApplet.mouseX, pApplet.mouseY)) {
-			rangeRectangle.setColor(rangeRectangle.getColor().setForeground(rangeRectangle.getColor().getActive()));
-		} else {
-			rangeRectangle.setColor(rangeRectangle.getColor().setForeground(rangeRectangle.getColor().getBackground()));
-		}
+			this.rangeRectangle.setColor(rangeRectangle.getColor().setForeground(SanFranciscoApplet.hoverColor));
+		} 
+		rangeRectangle.update();
+		highHandleRectangle.update();
+		lowHandleRectangle.update();
 	}
 }
