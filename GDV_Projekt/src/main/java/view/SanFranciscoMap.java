@@ -78,6 +78,17 @@ public class SanFranciscoMap {
 		cp5 = new ControlP5(pApplet);
 
 		unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height);
+		setupMap();
+
+		resetButton = cp5.addButton("Karte zurücksetzen").setPosition((int) (width - 100), (int) (height - 30))
+				.setSize(100, 30).setColorForeground(SanFranciscoApplet.buttonColor)
+				.setColorActive(SanFranciscoApplet.buttonActivColor);
+	}
+
+	/**
+	 * Setup the map
+	 */
+	public void setupMap() {
 		MapUtils.createDefaultEventDispatcher(pApplet, unfoldingMap);
 		filmLocationMarkerManager = unfoldingMap.getDefaultMarkerManager();
 		unfoldingMap.setPanningRestriction(sanFrancisco, 5);
@@ -87,10 +98,6 @@ public class SanFranciscoMap {
 		setupDistrictName();
 		sumFilmLocationInDistrict(filmLocationList);
 		setMapPosition();
-
-		resetButton = cp5.addButton("Karte zurücksetzen").setPosition((int) (width - 100), (int) (height - 30))
-				.setSize(100, 30).setColorForeground(SanFranciscoApplet.buttonColor)
-				.setColorActive(SanFranciscoApplet.buttonActivColor);
 	}
 
 	/**
@@ -266,7 +273,8 @@ public class SanFranciscoMap {
 			if (m.isInside(unfoldingMap, mouseX, mouseY)) {
 				district.setSelected(true);
 				pApplet.fill(SanFranciscoApplet.filmLocationMarkerActivColorTransparent);
-				pApplet.rect(width / 2 - 5, 10, 200, 45);
+				// pApplet.rect(width / 2 - 5, 10, 200, 45);
+				pApplet.rect(mouseX + 25, mouseY + 25, 200, 45);
 				pApplet.fill(SanFranciscoApplet.textColor);
 				String text = district.getProperty("supervisor").toString() + " | "
 						+ district.getProperty("supname").toString();
@@ -274,7 +282,9 @@ public class SanFranciscoMap {
 				if (filmLocationDistrictMap.get(text) != null) {
 					value = "" + filmLocationDistrictMap.get(text).intValue();
 				}
-				pApplet.text("Distrikt: " + text + "\nAnzahl Drehorte: " + value, width / 2, 25);
+				// pApplet.text("Distrikt: " + text + "\nAnzahl Drehorte: " + value, width / 2,
+				// 25);
+				pApplet.text("Distrikt: " + text + "\nAnzahl Drehorte: " + value, mouseX + 25, mouseY + 45);
 				isShow = true;
 			} else {
 				district.setSelected(false);
@@ -282,10 +292,13 @@ public class SanFranciscoMap {
 		}
 		if (mouseX < width && mouseY < height && !isShow) {
 			pApplet.fill(SanFranciscoApplet.filmLocationMarkerActivColorTransparent);
-			pApplet.rect(width / 2 - 5, 10, 200, 45);
+			// pApplet.rect(width / 2 - 5, 10, 200, 45);
+			pApplet.rect(mouseX + 25, mouseY + 25, 200, 45);
 			pApplet.fill(SanFranciscoApplet.textColor);
+			// pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
+			// + filmLocationDistrictMap.get("Kein Distrikt").intValue(), width / 2, 25);
 			pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
-					+ filmLocationDistrictMap.get("Kein Distrikt").intValue(), width / 2, 25);
+					+ filmLocationDistrictMap.get("Kein Distrikt").intValue(), mouseX + 25, mouseY + 45);
 		}
 	}
 
@@ -307,6 +320,20 @@ public class SanFranciscoMap {
 			} else {
 				location.setSelected(false);
 			}
+		}
+	}
+
+	/**
+	 * 
+	 * @param key
+	 */
+	public void keyPressed(char key) {
+		if (key == 'x') {
+			unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height, Configuration.provider);
+			setupMap();
+		} else if (key == 'y') {
+			unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height);
+			setupMap();
 		}
 	}
 }

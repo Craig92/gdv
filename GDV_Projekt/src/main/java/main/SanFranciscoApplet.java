@@ -189,6 +189,14 @@ public class SanFranciscoApplet extends PApplet {
 	}
 
 	/**
+	 * 
+	 */
+	public void keyPressed() {
+		map.keyPressed(key);
+		filter();
+	}
+
+	/**
 	 * Filter the map with the different filters
 	 */
 	private void filter() {

@@ -2,8 +2,7 @@ package main;
 
 import java.io.File;
 
-import de.fhpotsdam.unfolding.providers.AbstractMapProvider;
-import de.fhpotsdam.unfolding.providers.Microsoft;
+import de.fhpotsdam.unfolding.providers.*;
 
 public class Configuration {
 
@@ -15,7 +14,7 @@ public class Configuration {
 	public static int windowWidth = 1920;
 	public static int windowsHeight = 1080;
 	public static int limit = windowsHeight / 100;
-	
+
 	public static int yearDiagrammSize = 12;
 	public static int imdbDiagrammSize = 7;
 }
