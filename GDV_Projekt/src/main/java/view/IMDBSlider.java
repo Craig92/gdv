@@ -54,6 +54,7 @@ public class IMDBSlider {
 	private int minYRectanglePosition;
 	private int heightPosition;
 	private boolean lowPressed, highPressed;
+	private int heigthSlider;
 	
 	/**
 	 * Constructor
@@ -156,6 +157,7 @@ public class IMDBSlider {
 				.setColorLabel(SanFranciscoApplet.selectedColor);
 		backgroundRectangle.lock();
 		backgroundRectangle.update();
+		
 	}
 
 	/**
@@ -316,7 +318,9 @@ public class IMDBSlider {
 			newYPosition = (int) (highHandleRectangle.getPosition()[1] + highHandleRectangle.getHeight());
 		}
 		lowHandleRectangle.setPosition(lowHandleRectangle.getPosition()[0], newYPosition);
-		lowSlider.setValue((((minYRectanglePosition + Configuration.imdbDiagrammSize - newYPosition) / Configuration.imdbDiagrammSize) * 0.1f));
+		float diff = (minYRectanglePosition+lowHandleRectangle.getHeight())-maxYRectanglePosition;
+		float value = (minYRectanglePosition+lowHandleRectangle.getHeight()-newYPosition)/diff*10.0f;
+		lowSlider.setValue(value);
 		updateRange();
 	}
 
@@ -331,7 +335,9 @@ public class IMDBSlider {
 			newYPosition = (int) (lowHandleRectangle.getPosition()[1] - highHandleRectangle.getHeight());
 		}
 		highHandleRectangle.setPosition(highHandleRectangle.getPosition()[0], newYPosition);
-		highSlider.setValue((((minYRectanglePosition + Configuration.imdbDiagrammSize - newYPosition) / Configuration.imdbDiagrammSize) * 0.1f));
+		float diff = (minYRectanglePosition+lowHandleRectangle.getHeight())-maxYRectanglePosition;
+		float value = (minYRectanglePosition+lowHandleRectangle.getHeight()-newYPosition)/diff*10.0f;
+		highSlider.setValue(value);
 		updateRange();
 	}
 
