@@ -4,6 +4,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
@@ -336,11 +337,12 @@ public class FilmLocationManager {
 		if (list == null || genre == null || genre.isEmpty()) {
 			return list;
 		} else {
-			List<FilmLocation> temp = new ArrayList<FilmLocation>();
+			Set<FilmLocation> temp = new HashSet<FilmLocation>();
 			for (String element : genre) {
 				temp.addAll(list.stream().filter(f -> f.getGenre().contains(element)).collect(Collectors.toList()));
 			}
-			list = temp;
+			list = new ArrayList<>();
+			list.addAll(temp);
 			return list;
 		}
 	}

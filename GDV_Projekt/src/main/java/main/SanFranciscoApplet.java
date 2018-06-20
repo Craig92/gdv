@@ -178,6 +178,7 @@ public class SanFranciscoApplet extends PApplet {
 					&& filter.getSelectedParameterList("Genre").isEmpty()) {
 				filmLocationList = new ArrayList<>();
 				map.setupFilmLocationMarker(filmLocationList);
+				map.sumFilmLocationInDistrict(filmLocationList);
 				filmLocationList = manager.getFilmLocationList();
 
 			} else {

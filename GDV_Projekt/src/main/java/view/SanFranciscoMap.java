@@ -189,6 +189,10 @@ public class SanFranciscoMap {
 				filmLocationDistrictMap.put(key, 1);
 			}
 		}
+		
+		if(filmLocationList.isEmpty()) {
+			filmLocationDistrictMap.put("Kein Distrikt", 0);
+		}
 	}
 
 	/**
