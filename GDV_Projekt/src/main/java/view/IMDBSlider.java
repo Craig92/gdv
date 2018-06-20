@@ -92,7 +92,7 @@ public class IMDBSlider {
 		heightPosition += addSlider(heightPosition);
 
 		// team info
-		teamNameLabel = new Textlabel(cp5, "Team: WestCostMovie", startDrawX, (int) (startDrawY + heightPosition + 15),
+		teamNameLabel = new Textlabel(cp5, "Team: WestCoastMovie", startDrawX, (int) (startDrawY + heightPosition + 15),
 				400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		teamMemberLabel1 = new Textlabel(cp5, "Silvia Altrichter, Dominique Bost,", startDrawX,
 				(int) (startDrawY + heightPosition + 30), 400, 200).setFont(SanFranciscoApplet.textFont)
