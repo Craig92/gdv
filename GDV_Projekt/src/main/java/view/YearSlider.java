@@ -60,7 +60,7 @@ public class YearSlider {
 		label = new Textlabel(cp5, "Zeitachse", startDrawX, startDrawY, 400, 200).setFont(SanFranciscoApplet.headerFont)
 				.setColor(SanFranciscoApplet.textColor);
 
-		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX, startDrawY + 35,
+		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX, startDrawY + 20,
 				400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 
 		addSlider(startDrawX + 20);
@@ -68,12 +68,12 @@ public class YearSlider {
 
 		lowHandleLabel = new Textlabel(cp5, "" + range.getLowValue(),
 				(int) ((int) range.getPosition()[0] + (10 * (range.getLowValue() - 1915))),
-				(int) range.getPosition()[1] + 20, 400, 200).setFont(SanFranciscoApplet.textFont)
+				(int) range.getPosition()[1] , 400, 200).setFont(SanFranciscoApplet.textFont)
 						.setColor(SanFranciscoApplet.textColor);
 
 		highHandleLabel = new Textlabel(cp5, "" + range.getLowValue(),
 				(int) ((int) range.getPosition()[0] + (10 * (range.getHighValue() - 1915))),
-				(int) range.getPosition()[1] + 20, 400, 200).setFont(SanFranciscoApplet.textFont)
+				(int) range.getPosition()[1] , 400, 200).setFont(SanFranciscoApplet.textFont)
 						.setColor(SanFranciscoApplet.textColor);
 	}
 
@@ -207,7 +207,7 @@ public class YearSlider {
 	 */
 	private Slider setSlider(Integer name, int size, int positionY, int value, int maxValue) {
 
-		Slider slider = cp5.addSlider("Slider: " + name).setPosition(positionY + size, startDrawY + 50).setSize(Configuration.yearDiagrammSize, 75)
+		Slider slider = cp5.addSlider("Slider: " + name).setPosition(positionY + size, startDrawY + 35 ).setSize(Configuration.yearDiagrammSize, 75)
 				.setRange(0, maxValue).setValue(value).setColorForeground(SanFranciscoApplet.selectedColor)
 				.setColorBackground(SanFranciscoApplet.backgroundColor).setValueLabel("")
 				.setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);

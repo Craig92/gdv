@@ -92,7 +92,7 @@ public class SanFranciscoMap {
 		MapUtils.createDefaultEventDispatcher(pApplet, unfoldingMap);
 		filmLocationMarkerManager = unfoldingMap.getDefaultMarkerManager();
 		unfoldingMap.setPanningRestriction(sanFrancisco, 5);
-		unfoldingMap.setZoomRange(12, 18);
+		unfoldingMap.setZoomRange(12, 17);
 
 		setupFilmLocationMarker(filmLocationList);
 		setupDistrictName();

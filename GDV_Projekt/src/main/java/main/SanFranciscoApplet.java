@@ -82,27 +82,27 @@ public class SanFranciscoApplet extends PApplet {
 		hoverColor = buttonColor;
 		draggedColor = buttonColor;
 		// set map
-		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
-				(int) (Configuration.windowsHeight * 0.78), P2D);
-		map = new SanFranciscoMap(this, 0, 0, (int) (Configuration.windowWidth * 0.68),
-				(int) (Configuration.windowsHeight * 0.78), filmLocationList);
+		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.78),
+				(int) (Configuration.windowsHeight * 0.83), P2D);
+		map = new SanFranciscoMap(this, 0, 0, (int) (Configuration.windowWidth * 0.78),
+				(int) (Configuration.windowsHeight * 0.83), filmLocationList);
 
 		// set timeslider
-		timeSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
-				(int) (Configuration.windowsHeight * 0.2), P2D);
-		yearSlider = new YearSlider(this, 0, (int) (Configuration.windowsHeight * 0.80),
-				(int) (Configuration.windowWidth * 0.68), (int) (Configuration.windowsHeight * 0.78));
+		timeSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.78),
+				(int) (Configuration.windowsHeight * 0.15), P2D);
+		yearSlider = new YearSlider(this, 0, (int) (Configuration.windowsHeight * 0.78),
+				(int) (Configuration.windowWidth * 0.78), (int) (Configuration.windowsHeight * 0.15));
 
 		// set filter
-		filterGraphic = createGraphics((int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight, P2D);
-		filter = new Filter(this, (int) (Configuration.windowWidth * 0.70), 0, (int) (Configuration.windowWidth * 0.15),
+		filterGraphic = createGraphics((int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight, P2D);
+		filter = new Filter(this, (int) (Configuration.windowWidth * 0.80), 0, (int) (Configuration.windowWidth * 0.10),
 				Configuration.windowsHeight);
 
 		// set imdbslider
-		imbdRankingSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight,
+		imbdRankingSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight,
 				P2D);
-		imdbSlider = new IMDBSlider(this, (int) (Configuration.windowWidth * 0.85), 0,
-				(int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight);
+		imdbSlider = new IMDBSlider(this, (int) (Configuration.windowWidth * 0.90), 0,
+				(int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight);
 	}
 
 	/**
@@ -114,17 +114,17 @@ public class SanFranciscoApplet extends PApplet {
 		imbdRankingSliderGraphic.beginDraw();
 		imbdRankingSliderGraphic.background(backgroundColor);
 		imbdRankingSliderGraphic.endDraw();
-		image(imbdRankingSliderGraphic, (int) (Configuration.windowWidth * 0.85), 0);
+		image(imbdRankingSliderGraphic, (int) (Configuration.windowWidth * 0.90), 0);
 
 		filterGraphic.beginDraw();
 		filterGraphic.background(backgroundColor);
 		filterGraphic.endDraw();
-		image(filterGraphic, (int) (Configuration.windowWidth * 0.70), 0);
+		image(filterGraphic, (int) (Configuration.windowWidth * 0.80), 0);
 
 		timeSliderGraphic.beginDraw();
 		timeSliderGraphic.background(backgroundColor);
 		timeSliderGraphic.endDraw();
-		image(timeSliderGraphic, 0, (int) (Configuration.windowsHeight * 0.8));
+		image(timeSliderGraphic, 0, (int) (Configuration.windowsHeight * 0.9));
 
 		mapGraphic.beginDraw();
 		mapGraphic.background(backgroundColor);
