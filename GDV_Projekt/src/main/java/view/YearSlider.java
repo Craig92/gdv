@@ -56,11 +56,12 @@ public class YearSlider {
 	private void setup() {
 
 		cp5 = new ControlP5(pApplet);
+		cp5.setFont(SanFranciscoApplet.buttonFont);
 
-		label = new Textlabel(cp5, "Zeitachse", startDrawX, startDrawY, 400, 200).setFont(SanFranciscoApplet.headerFont)
+		label = new Textlabel(cp5, "Zeitachse", startDrawX + 20, startDrawY, 400, 200).setFont(SanFranciscoApplet.headerFont)
 				.setColor(SanFranciscoApplet.textColor);
 
-		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX, startDrawY + 20,
+		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX + 20, startDrawY + 20,
 				400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 
 		addSlider(startDrawX + 20);
@@ -207,7 +208,7 @@ public class YearSlider {
 	 */
 	private Slider setSlider(Integer name, int size, int positionY, int value, int maxValue) {
 
-		Slider slider = cp5.addSlider("Slider: " + name).setPosition(positionY + size, startDrawY + 35 ).setSize(Configuration.yearDiagrammSize, 75)
+		Slider slider = cp5.addSlider("Slider: " + name).setPosition(positionY + size, startDrawY + 45 ).setSize(Configuration.yearDiagrammSize, 75)
 				.setRange(0, maxValue).setValue(value).setColorForeground(SanFranciscoApplet.selectedColor)
 				.setColorBackground(SanFranciscoApplet.backgroundColor).setValueLabel("")
 				.setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);

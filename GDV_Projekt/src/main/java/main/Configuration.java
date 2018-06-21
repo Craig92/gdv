@@ -17,4 +17,5 @@ public class Configuration {
 
 	public static int yearDiagrammSize = 12;
 	public static int imdbDiagrammSize = 7;
+	public static boolean iExpo = true;
 }

@@ -80,6 +80,7 @@ public class IMDBSlider {
 
 		heightPosition = 150;
 		cp5 = new ControlP5(pApplet);
+		cp5.setFont(SanFranciscoApplet.buttonFont);
 
 		descriptionIMDBLabel = new Textlabel(cp5, "IMDb-Bewertung filtern:", startDrawX, startDrawY + 110, 400, 200)
 				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);

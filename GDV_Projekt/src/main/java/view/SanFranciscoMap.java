@@ -76,12 +76,13 @@ public class SanFranciscoMap {
 	private void setup() {
 
 		cp5 = new ControlP5(pApplet);
-
+		cp5.setFont(SanFranciscoApplet.buttonFont);
+		
 		unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height);
 		setupMap();
 
-		resetButton = cp5.addButton("Karte zurücksetzen").setPosition((int) (width - 100), (int) (height - 30))
-				.setSize(100, 30).setColorForeground(SanFranciscoApplet.buttonColor)
+		resetButton = cp5.addButton("Karte zurücksetzen").setPosition((int) (width - 200), (int) (height - 30))
+				.setSize(200, 30).setColorForeground(SanFranciscoApplet.buttonColor)
 				.setColorActive(SanFranciscoApplet.buttonActivColor);
 	}
 
@@ -249,19 +250,19 @@ public class SanFranciscoMap {
 			if (location.isSelected()) {
 				if (labelHight < (int) (Configuration.windowsHeight * 0.60)) {
 					pApplet.fill(SanFranciscoApplet.textColor);
-					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()), 25, 25 + labelHight);
-					labelHight += 185;
+					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()), 25, 35 + labelHight);
+					labelHight += 230;
 				} else if (!toMany) {
 					pApplet.fill(SanFranciscoApplet.textColor);
-					pApplet.text("Weitere Drehorte an dieser Position vorhanden", 25, 25 + labelHight);
-					labelHight += 25;
+					pApplet.text("Weitere Drehorte an dieser Position vorhanden", 25, 35 + labelHight);
+					labelHight += 35;
 					toMany = true;
 				}
 			}
 		}
 		pApplet.fill(SanFranciscoApplet.filmLocationMarkerColor);
 		pApplet.stroke(SanFranciscoApplet.filmLocationMarkerColor);
-		pApplet.rect(5, 5, 325, labelHight);
+		pApplet.rect(5, 5, 400, labelHight);
 	}
 
 	/**
@@ -278,7 +279,7 @@ public class SanFranciscoMap {
 				district.setSelected(true);
 				pApplet.fill(SanFranciscoApplet.filmLocationMarkerActivColorTransparent);
 				// pApplet.rect(width / 2 - 5, 10, 200, 45);
-				pApplet.rect(mouseX + 25, mouseY + 25, 200, 45);
+				pApplet.rect(mouseX + 25, mouseY + 25, 230, 55);
 				pApplet.fill(SanFranciscoApplet.textColor);
 				String text = district.getProperty("supervisor").toString() + " | "
 						+ district.getProperty("supname").toString();
@@ -318,7 +319,7 @@ public class SanFranciscoMap {
 	 */
 	public void mouseClicked(int mouseX, int mouseY) {
 
-		if (mouseX >= resetButton.getPosition()[0] - 100 && mouseX <= resetButton.getPosition()[0] + 100
+		if (mouseX >= resetButton.getPosition()[0] - 200 && mouseX <= resetButton.getPosition()[0] + 200
 				&& mouseY >= resetButton.getPosition()[1] - 30 && mouseY <= resetButton.getPosition()[1] + 30) {
 			setMapPosition();
 		}

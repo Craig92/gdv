@@ -102,6 +102,7 @@ public class Filter {
 
 		int currentY = startDrawY + 110;
 		cp5 = new ControlP5(pApplet);
+		cp5.setFont(SanFranciscoApplet.buttonFont);
 
 		// header line
 		label = new Textlabel(cp5, "Filter", startDrawX, startDrawY + 10, 400, 200)
@@ -112,10 +113,10 @@ public class Filter {
 				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 
 		// buttons
-		selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 70).setSize(80, 30)
+		selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 70).setSize(160, 30)
 				.setColorForeground(SanFranciscoApplet.buttonColor).setColorActive(SanFranciscoApplet.buttonActivColor);
-		deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX + 100, startDrawY + 70)
-				.setSize(80, 30).setColorForeground(SanFranciscoApplet.buttonColor)
+		deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX +200, startDrawY + 70)
+				.setSize(160, 30).setColorForeground(SanFranciscoApplet.buttonColor)
 				.setColorActive(SanFranciscoApplet.buttonActivColor);
 
 		// genre filter
@@ -182,10 +183,15 @@ public class Filter {
 	public int addFilterElements(String parameter, int positionY, Map<String, Integer> list, Integer maxValue,
 			Integer currentValue) {
 
+		int limit = 0;
 		int size = 20;
 		RadioButton button = null;
 		Slider slider = null;
-		int limit = Configuration.limit;
+		if (Configuration.iExpo) {
+			limit = Configuration.limit / 2;
+		} else {
+			limit = Configuration.limit;
+		}
 		for (Map.Entry<String, Integer> element : list.entrySet()) {
 			if (limit != 0) {
 
@@ -216,7 +222,12 @@ public class Filter {
 					break;
 				}
 
-				size += 20;
+				if (Configuration.iExpo) {
+					size += 40;
+				} else {
+					size += 20;
+				}
+
 				limit--;
 			}
 		}
@@ -241,10 +252,17 @@ public class Filter {
 	 */
 	private RadioButton setRadioButton(String name, int size, int positionY, String itemName, int itemID) {
 
-		return cp5.addRadioButton(name).setPosition(startDrawX, positionY + size).setSize(18, 18)
-				.setColorLabel(SanFranciscoApplet.textColor).setItemsPerRow(1).addItem(itemName, itemID)
-				.setVisible(true).activate(itemID).setColorActive(SanFranciscoApplet.selectedColor)
-				.setColorBackground(SanFranciscoApplet.unselectedColor);
+		if (Configuration.iExpo) {
+			return cp5.addRadioButton(name).setPosition(startDrawX, positionY + size).setSize(36, 36)
+					.setColorLabel(SanFranciscoApplet.textColor).setItemsPerRow(1).addItem(itemName, itemID)
+					.setVisible(true).activate(itemID).setColorActive(SanFranciscoApplet.selectedColor)
+					.setColorBackground(SanFranciscoApplet.unselectedColor);
+		} else {
+			return cp5.addRadioButton(name).setPosition(startDrawX, positionY + size).setSize(18, 18)
+					.setColorLabel(SanFranciscoApplet.textColor).setItemsPerRow(1).addItem(itemName, itemID)
+					.setVisible(true).activate(itemID).setColorActive(SanFranciscoApplet.selectedColor)
+					.setColorBackground(SanFranciscoApplet.unselectedColor);
+		}
 	}
 
 	/**
@@ -264,11 +282,19 @@ public class Filter {
 	 */
 	private Slider setSlider(String name, int size, int positionY, int value, int maxValue, int completeValue) {
 
-		return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 20).setRange(0, maxValue)
-				.setValue(value).setCaptionLabel(Integer.toString(value)).setValueLabel(" ")
-				.setColorForeground(SanFranciscoApplet.selectedColor)
-				.setColorBackground(SanFranciscoApplet.backgroundColor)
-				.setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);
+		if (Configuration.iExpo) {
+			return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 40)
+					.setRange(0, maxValue).setValue(value).setCaptionLabel(Integer.toString(value)).setValueLabel(" ")
+					.setColorForeground(SanFranciscoApplet.selectedColor)
+					.setColorBackground(SanFranciscoApplet.backgroundColor)
+					.setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);
+		} else {
+			return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 20)
+					.setRange(0, maxValue).setValue(value).setCaptionLabel(Integer.toString(value)).setValueLabel(" ")
+					.setColorForeground(SanFranciscoApplet.selectedColor)
+					.setColorBackground(SanFranciscoApplet.backgroundColor)
+					.setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);
+		}
 	}
 
 	/**
@@ -399,13 +425,13 @@ public class Filter {
 	 */
 	public void mouseClicked(int mouseX, int mouseY) {
 
-		if (mouseX >= selectAllButton.getPosition()[0] - 100 && mouseX <= selectAllButton.getPosition()[0] + 100
+		if (mouseX >= selectAllButton.getPosition()[0] - 200 && mouseX <= selectAllButton.getPosition()[0] + 200
 				&& mouseY >= selectAllButton.getPosition()[1] - 30 && mouseY <= selectAllButton.getPosition()[1] + 30) {
 			setRadioButtonActive(true);
 			setSliderAktiv(true);
 			selectAll = true;
-		} else if (mouseX >= deselectAllButton.getPosition()[0] - 100
-				&& mouseX <= deselectAllButton.getPosition()[0] + 100
+		} else if (mouseX >= deselectAllButton.getPosition()[0] - 200
+				&& mouseX <= deselectAllButton.getPosition()[0] + 200
 				&& mouseY >= deselectAllButton.getPosition()[1] - 30
 				&& mouseY <= deselectAllButton.getPosition()[1] + 30) {
 			setRadioButtonActive(false);

@@ -27,6 +27,7 @@ public class SanFranciscoApplet extends PApplet {
 
 	public static PFont headerFont;
 	public static PFont textFont;
+	public static PFont buttonFont;
 	public static int textColor;
 	public static int backgroundColor;
 	public static int selectedColor;
@@ -68,7 +69,8 @@ public class SanFranciscoApplet extends PApplet {
 		surface.setResizable(true);
 		surface.setTitle("GDV-Projekt WestSideMovie | Hochschule Mannheim Sommersemester 2018");
 		headerFont = createFont("Georgia", 20);
-		textFont = createFont("Georgia", 14);
+		textFont = createFont("Georgia", 18);
+		buttonFont = createFont("Georgia", 12);
 		textColor = color(0, 0, 0);
 		backgroundColor = color(255, 255, 255);
 		selectedColor = color(25, 118, 210);
@@ -81,17 +83,19 @@ public class SanFranciscoApplet extends PApplet {
 		districtMarkerColor = color(227, 242, 253);
 		hoverColor = buttonColor;
 		draggedColor = buttonColor;
+		
+		cursor(loadImage("./src/main/resources/icon.png"));
 		// set map
 		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.78),
-				(int) (Configuration.windowsHeight * 0.83), P2D);
+				(int) (Configuration.windowsHeight * 0.89), P2D);
 		map = new SanFranciscoMap(this, 0, 0, (int) (Configuration.windowWidth * 0.78),
-				(int) (Configuration.windowsHeight * 0.83), filmLocationList);
+				(int) (Configuration.windowsHeight * 0.89), filmLocationList);
 
 		// set timeslider
 		timeSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.78),
 				(int) (Configuration.windowsHeight * 0.15), P2D);
-		yearSlider = new YearSlider(this, 0, (int) (Configuration.windowsHeight * 0.78),
-				(int) (Configuration.windowWidth * 0.78), (int) (Configuration.windowsHeight * 0.15));
+		yearSlider = new YearSlider(this, 0, (int) (Configuration.windowsHeight * 0.90),
+				(int) (Configuration.windowWidth * 0.90), (int) (Configuration.windowsHeight * 0.10));
 
 		// set filter
 		filterGraphic = createGraphics((int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight, P2D);
@@ -168,9 +172,9 @@ public class SanFranciscoApplet extends PApplet {
 	 */
 	public void mouseClicked() {
 
-		if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.70) && mouseY < (Configuration.windowsHeight * 0.8)) {
+		if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.78) && mouseY < (Configuration.windowsHeight * 0.89)) {
 			map.mouseClicked(mouseX, mouseY);
-		} else if (mouseX > (Configuration.windowWidth * 0.70) && mouseX < (Configuration.windowWidth * 0.85)) {
+		} else if (mouseX > (Configuration.windowWidth * 0.78) && mouseX < (Configuration.windowWidth * 0.90)) {
 			filter.mouseClicked(mouseX, mouseY);
 			if (filter.getSelectedParameterList("Titel").isEmpty() && filter.getSelectedParameterList("Regie").isEmpty()
 					&& filter.getSelectedParameterList("Produktion").isEmpty()
@@ -184,7 +188,7 @@ public class SanFranciscoApplet extends PApplet {
 			} else {
 				filter();
 			}
-		} else if (mouseX > (Configuration.windowWidth * 0.85)) {
+		} else if (mouseX > (Configuration.windowWidth * 0.90)) {
 			filter();
 		}
 	}
