@@ -92,7 +92,7 @@ public class SanFranciscoMap {
 		MapUtils.createDefaultEventDispatcher(pApplet, unfoldingMap);
 		filmLocationMarkerManager = unfoldingMap.getDefaultMarkerManager();
 		unfoldingMap.setPanningRestriction(sanFrancisco, 5);
-		unfoldingMap.setZoomRange(12, 15);
+		unfoldingMap.setZoomRange(12, 18);
 
 		setupFilmLocationMarker(filmLocationList);
 		setupDistrictName();
@@ -189,8 +189,8 @@ public class SanFranciscoMap {
 				filmLocationDistrictMap.put(key, 1);
 			}
 		}
-		
-		if(filmLocationList.isEmpty()) {
+
+		if (filmLocationList.isEmpty()) {
 			filmLocationDistrictMap.put("Kein Distrikt", 0);
 		}
 	}
@@ -231,7 +231,7 @@ public class SanFranciscoMap {
 
 		for (FilmLocationMarker location : filmLocationMarkers) {
 			location.setDiameter(unfoldingMap.getZoomLevel() - 2);
-			if (filmLocationMarkers.size() < 100) {
+			if (filmLocationMarkers.size() < 1) {
 				location.setColor(SanFranciscoApplet.selectedColor);
 			}
 		}
@@ -299,10 +299,14 @@ public class SanFranciscoMap {
 			// pApplet.rect(width / 2 - 5, 10, 200, 45);
 			pApplet.rect(mouseX + 25, mouseY + 25, 200, 45);
 			pApplet.fill(SanFranciscoApplet.textColor);
+			int value = 0;
+			if (filmLocationDistrictMap.get("Kein Distrikt") != null) {
+				value = filmLocationDistrictMap.get("Kein Distrikt").intValue();
+			}
 			// pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
-			// + filmLocationDistrictMap.get("Kein Distrikt").intValue(), width / 2, 25);
-			pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
-					+ filmLocationDistrictMap.get("Kein Distrikt").intValue(), mouseX + 25, mouseY + 45);
+			// + value, width / 2, 25);
+			 pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
+			 + value, mouseX + 25, mouseY + 45);
 		}
 	}
 
