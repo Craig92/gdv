@@ -113,11 +113,21 @@ public class Filter {
 				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 
 		// buttons
-		selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 70).setSize(160, 30)
-				.setColorForeground(SanFranciscoApplet.buttonColor).setColorActive(SanFranciscoApplet.buttonActivColor);
-		deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX +200, startDrawY + 70)
-				.setSize(160, 30).setColorForeground(SanFranciscoApplet.buttonColor)
-				.setColorActive(SanFranciscoApplet.buttonActivColor);
+		if (Configuration.iExpo) {
+			selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 70)
+					.setSize(160, 30).setColorForeground(SanFranciscoApplet.buttonColor)
+					.setColorActive(SanFranciscoApplet.buttonActivColor);
+			deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX + 200, startDrawY + 70)
+					.setSize(160, 30).setColorForeground(SanFranciscoApplet.buttonColor)
+					.setColorActive(SanFranciscoApplet.buttonActivColor);
+		} else {
+			selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 70).setSize(80, 30)
+					.setColorForeground(SanFranciscoApplet.buttonColor)
+					.setColorActive(SanFranciscoApplet.buttonActivColor);
+			deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX + 100, startDrawY + 70)
+					.setSize(80, 30).setColorForeground(SanFranciscoApplet.buttonColor)
+					.setColorActive(SanFranciscoApplet.buttonActivColor);
+		}
 
 		// genre filter
 		descriptionTitelLabel = new Textlabel(cp5, "Genre filtern*:", startDrawX, startDrawY + 110, 400, 200)
@@ -183,15 +193,11 @@ public class Filter {
 	public int addFilterElements(String parameter, int positionY, Map<String, Integer> list, Integer maxValue,
 			Integer currentValue) {
 
-		int limit = 0;
+		int limit = Configuration.limit;
 		int size = 20;
 		RadioButton button = null;
 		Slider slider = null;
-		if (Configuration.iExpo) {
-			limit = Configuration.limit / 2;
-		} else {
-			limit = Configuration.limit;
-		}
+
 		for (Map.Entry<String, Integer> element : list.entrySet()) {
 			if (limit != 0) {
 
@@ -222,12 +228,7 @@ public class Filter {
 					break;
 				}
 
-				if (Configuration.iExpo) {
-					size += 40;
-				} else {
-					size += 20;
-				}
-
+				size += (Configuration.iExpo) ? 40 : 20;
 				limit--;
 			}
 		}
@@ -425,25 +426,50 @@ public class Filter {
 	 */
 	public void mouseClicked(int mouseX, int mouseY) {
 
-		if (mouseX >= selectAllButton.getPosition()[0] - 200 && mouseX <= selectAllButton.getPosition()[0] + 200
-				&& mouseY >= selectAllButton.getPosition()[1] - 30 && mouseY <= selectAllButton.getPosition()[1] + 30) {
-			setRadioButtonActive(true);
-			setSliderAktiv(true);
-			selectAll = true;
-		} else if (mouseX >= deselectAllButton.getPosition()[0] - 200
-				&& mouseX <= deselectAllButton.getPosition()[0] + 200
-				&& mouseY >= deselectAllButton.getPosition()[1] - 30
-				&& mouseY <= deselectAllButton.getPosition()[1] + 30) {
-			setRadioButtonActive(false);
-			setSliderAktiv(false);
-			selectAll = false;
-		} else if (isSelected(mouseX, mouseY) && selectAll) {
-			setRadioButtonActive(false);
-			setSliderAktiv(false);
-			selectAll = false;
-		} else if (isSelected(mouseX, mouseY) && !selectAll) {
-			updateDiagramm(mouseX, mouseY);
-			selectAll = false;
+		if (Configuration.iExpo) {
+			if (mouseX >= selectAllButton.getPosition()[0] - 200 && mouseX <= selectAllButton.getPosition()[0] + 200
+					&& mouseY >= selectAllButton.getPosition()[1] - 30
+					&& mouseY <= selectAllButton.getPosition()[1] + 30) {
+				setRadioButtonActive(true);
+				setSliderAktiv(true);
+				selectAll = true;
+			} else if (mouseX >= deselectAllButton.getPosition()[0] - 200
+					&& mouseX <= deselectAllButton.getPosition()[0] + 200
+					&& mouseY >= deselectAllButton.getPosition()[1] - 30
+					&& mouseY <= deselectAllButton.getPosition()[1] + 30) {
+				setRadioButtonActive(false);
+				setSliderAktiv(false);
+				selectAll = false;
+			} else if (isSelected(mouseX, mouseY) && selectAll) {
+				setRadioButtonActive(false);
+				setSliderAktiv(false);
+				selectAll = false;
+			} else if (isSelected(mouseX, mouseY) && !selectAll) {
+				updateDiagramm(mouseX, mouseY);
+				selectAll = false;
+			}
+		} else {
+			if (mouseX >= selectAllButton.getPosition()[0] - 100 && mouseX <= selectAllButton.getPosition()[0] + 100
+					&& mouseY >= selectAllButton.getPosition()[1] - 30
+					&& mouseY <= selectAllButton.getPosition()[1] + 30) {
+				setRadioButtonActive(true);
+				setSliderAktiv(true);
+				selectAll = true;
+			} else if (mouseX >= deselectAllButton.getPosition()[0] - 100
+					&& mouseX <= deselectAllButton.getPosition()[0] + 100
+					&& mouseY >= deselectAllButton.getPosition()[1] - 30
+					&& mouseY <= deselectAllButton.getPosition()[1] + 30) {
+				setRadioButtonActive(false);
+				setSliderAktiv(false);
+				selectAll = false;
+			} else if (isSelected(mouseX, mouseY) && selectAll) {
+				setRadioButtonActive(false);
+				setSliderAktiv(false);
+				selectAll = false;
+			} else if (isSelected(mouseX, mouseY) && !selectAll) {
+				updateDiagramm(mouseX, mouseY);
+				selectAll = false;
+			}
 		}
 	}
 

@@ -68,9 +68,15 @@ public class SanFranciscoApplet extends PApplet {
 
 		surface.setResizable(true);
 		surface.setTitle("GDV-Projekt WestSideMovie | Hochschule Mannheim Sommersemester 2018");
-		headerFont = createFont("Georgia", 20);
-		textFont = createFont("Georgia", 18);
-		buttonFont = createFont("Georgia", 12);
+		if (Configuration.iExpo) {
+			headerFont = createFont("Georgia", 20);
+			textFont = createFont("Georgia", 18);
+			buttonFont = createFont("Georgia", 12);
+		} else {
+			headerFont = createFont("Georgia", 20);
+			textFont = createFont("Georgia", 14);
+			buttonFont = createFont("Georgia", 9);
+		}
 		textColor = color(0, 0, 0);
 		backgroundColor = color(255, 255, 255);
 		selectedColor = color(25, 118, 210);
@@ -83,30 +89,54 @@ public class SanFranciscoApplet extends PApplet {
 		districtMarkerColor = color(227, 242, 253);
 		hoverColor = buttonColor;
 		draggedColor = buttonColor;
-		
+
 		cursor(loadImage("./src/main/resources/icon.png"));
 		// set map
-		mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.78),
-				(int) (Configuration.windowsHeight * 0.89), P2D);
-		map = new SanFranciscoMap(this, 0, 0, (int) (Configuration.windowWidth * 0.78),
-				(int) (Configuration.windowsHeight * 0.89), filmLocationList);
+		if (Configuration.iExpo) {
+			mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.78),
+					(int) (Configuration.windowsHeight * 0.89), P2D);
+			map = new SanFranciscoMap(this, 0, 0, (int) (Configuration.windowWidth * 0.78),
+					(int) (Configuration.windowsHeight * 0.89), filmLocationList);
 
-		// set timeslider
-		timeSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.78),
-				(int) (Configuration.windowsHeight * 0.15), P2D);
-		yearSlider = new YearSlider(this, 0, (int) (Configuration.windowsHeight * 0.90),
-				(int) (Configuration.windowWidth * 0.90), (int) (Configuration.windowsHeight * 0.10));
+			// set timeslider
+			timeSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.78),
+					(int) (Configuration.windowsHeight * 0.15), P2D);
+			yearSlider = new YearSlider(this, 0, (int) (Configuration.windowsHeight * 0.90),
+					(int) (Configuration.windowWidth * 0.90), (int) (Configuration.windowsHeight * 0.10));
 
-		// set filter
-		filterGraphic = createGraphics((int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight, P2D);
-		filter = new Filter(this, (int) (Configuration.windowWidth * 0.80), 0, (int) (Configuration.windowWidth * 0.10),
-				Configuration.windowsHeight);
+			// set filter
+			filterGraphic = createGraphics((int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight, P2D);
+			filter = new Filter(this, (int) (Configuration.windowWidth * 0.80), 0,
+					(int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight);
 
-		// set imdbslider
-		imbdRankingSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight,
-				P2D);
-		imdbSlider = new IMDBSlider(this, (int) (Configuration.windowWidth * 0.90), 0,
-				(int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight);
+			// set imdbslider
+			imbdRankingSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.10),
+					Configuration.windowsHeight, P2D);
+			imdbSlider = new IMDBSlider(this, (int) (Configuration.windowWidth * 0.90), 0,
+					(int) (Configuration.windowWidth * 0.10), Configuration.windowsHeight);
+		} else {
+			mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
+					(int) (Configuration.windowsHeight * 0.78), P2D);
+			map = new SanFranciscoMap(this, 0, 0, (int) (Configuration.windowWidth * 0.68),
+					(int) (Configuration.windowsHeight * 0.78), filmLocationList);
+
+			// set timeslider
+			timeSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.68),
+					(int) (Configuration.windowsHeight * 0.2), P2D);
+			yearSlider = new YearSlider(this, 0, (int) (Configuration.windowsHeight * 0.80),
+					(int) (Configuration.windowWidth * 0.68), (int) (Configuration.windowsHeight * 0.78));
+
+			// set filter
+			filterGraphic = createGraphics((int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight, P2D);
+			filter = new Filter(this, (int) (Configuration.windowWidth * 0.70), 0,
+					(int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight);
+
+			// set imdbslider
+			imbdRankingSliderGraphic = createGraphics((int) (Configuration.windowWidth * 0.15),
+					Configuration.windowsHeight, P2D);
+			imdbSlider = new IMDBSlider(this, (int) (Configuration.windowWidth * 0.85), 0,
+					(int) (Configuration.windowWidth * 0.15), Configuration.windowsHeight);
+		}
 	}
 
 	/**
@@ -114,22 +144,39 @@ public class SanFranciscoApplet extends PApplet {
 	 */
 	public void draw() {
 
-		background(backgroundColor);
-		imbdRankingSliderGraphic.beginDraw();
-		imbdRankingSliderGraphic.background(backgroundColor);
-		imbdRankingSliderGraphic.endDraw();
-		image(imbdRankingSliderGraphic, (int) (Configuration.windowWidth * 0.90), 0);
+		if (Configuration.iExpo) {
+			background(backgroundColor);
+			imbdRankingSliderGraphic.beginDraw();
+			imbdRankingSliderGraphic.background(backgroundColor);
+			imbdRankingSliderGraphic.endDraw();
+			image(imbdRankingSliderGraphic, (int) (Configuration.windowWidth * 0.90), 0);
 
-		filterGraphic.beginDraw();
-		filterGraphic.background(backgroundColor);
-		filterGraphic.endDraw();
-		image(filterGraphic, (int) (Configuration.windowWidth * 0.80), 0);
+			filterGraphic.beginDraw();
+			filterGraphic.background(backgroundColor);
+			filterGraphic.endDraw();
+			image(filterGraphic, (int) (Configuration.windowWidth * 0.80), 0);
 
-		timeSliderGraphic.beginDraw();
-		timeSliderGraphic.background(backgroundColor);
-		timeSliderGraphic.endDraw();
-		image(timeSliderGraphic, 0, (int) (Configuration.windowsHeight * 0.9));
+			timeSliderGraphic.beginDraw();
+			timeSliderGraphic.background(backgroundColor);
+			timeSliderGraphic.endDraw();
+			image(timeSliderGraphic, 0, (int) (Configuration.windowsHeight * 0.9));
+		} else {
+			background(backgroundColor);
+			imbdRankingSliderGraphic.beginDraw();
+			imbdRankingSliderGraphic.background(backgroundColor);
+			imbdRankingSliderGraphic.endDraw();
+			image(imbdRankingSliderGraphic, (int) (Configuration.windowWidth * 0.85), 0);
 
+			filterGraphic.beginDraw();
+			filterGraphic.background(backgroundColor);
+			filterGraphic.endDraw();
+			image(filterGraphic, (int) (Configuration.windowWidth * 0.70), 0);
+
+			timeSliderGraphic.beginDraw();
+			timeSliderGraphic.background(backgroundColor);
+			timeSliderGraphic.endDraw();
+			image(timeSliderGraphic, 0, (int) (Configuration.windowsHeight * 0.80));
+		}
 		mapGraphic.beginDraw();
 		mapGraphic.background(backgroundColor);
 		mapGraphic.endDraw();
@@ -172,24 +219,50 @@ public class SanFranciscoApplet extends PApplet {
 	 */
 	public void mouseClicked() {
 
-		if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.78) && mouseY < (Configuration.windowsHeight * 0.89)) {
-			map.mouseClicked(mouseX, mouseY);
-		} else if (mouseX > (Configuration.windowWidth * 0.78) && mouseX < (Configuration.windowWidth * 0.90)) {
-			filter.mouseClicked(mouseX, mouseY);
-			if (filter.getSelectedParameterList("Titel").isEmpty() && filter.getSelectedParameterList("Regie").isEmpty()
-					&& filter.getSelectedParameterList("Produktion").isEmpty()
-					&& filter.getSelectedParameterList("Vertrieb").isEmpty()
-					&& filter.getSelectedParameterList("Genre").isEmpty()) {
-				filmLocationList = new ArrayList<>();
-				map.setupFilmLocationMarker(filmLocationList);
-				map.sumFilmLocationInDistrict(filmLocationList);
-				filmLocationList = manager.getFilmLocationList();
+		if (Configuration.iExpo) {
+			if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.78)
+					&& mouseY < (Configuration.windowsHeight * 0.89)) {
+				map.mouseClicked(mouseX, mouseY);
+			} else if (mouseX > (Configuration.windowWidth * 0.78) && mouseX < (Configuration.windowWidth * 0.90)) {
+				filter.mouseClicked(mouseX, mouseY);
+				if (filter.getSelectedParameterList("Titel").isEmpty()
+						&& filter.getSelectedParameterList("Regie").isEmpty()
+						&& filter.getSelectedParameterList("Produktion").isEmpty()
+						&& filter.getSelectedParameterList("Vertrieb").isEmpty()
+						&& filter.getSelectedParameterList("Genre").isEmpty()) {
+					filmLocationList = new ArrayList<>();
+					map.setupFilmLocationMarker(filmLocationList);
+					map.sumFilmLocationInDistrict(filmLocationList);
+					filmLocationList = manager.getFilmLocationList();
 
-			} else {
+				} else {
+					filter();
+				}
+			} else if (mouseX > (Configuration.windowWidth * 0.90)) {
 				filter();
 			}
-		} else if (mouseX > (Configuration.windowWidth * 0.90)) {
-			filter();
+		} else {
+			if (mouseX > 0 && mouseX < (Configuration.windowWidth * 0.70)
+					&& mouseY < (Configuration.windowsHeight * 0.80)) {
+				map.mouseClicked(mouseX, mouseY);
+			} else if (mouseX > (Configuration.windowWidth * 0.70) && mouseX < (Configuration.windowWidth * 0.85)) {
+				filter.mouseClicked(mouseX, mouseY);
+				if (filter.getSelectedParameterList("Titel").isEmpty()
+						&& filter.getSelectedParameterList("Regie").isEmpty()
+						&& filter.getSelectedParameterList("Produktion").isEmpty()
+						&& filter.getSelectedParameterList("Vertrieb").isEmpty()
+						&& filter.getSelectedParameterList("Genre").isEmpty()) {
+					filmLocationList = new ArrayList<>();
+					map.setupFilmLocationMarker(filmLocationList);
+					map.sumFilmLocationInDistrict(filmLocationList);
+					filmLocationList = manager.getFilmLocationList();
+
+				} else {
+					filter();
+				}
+			} else if (mouseX > (Configuration.windowWidth * 0.85)) {
+				filter();
+			}
 		}
 	}
 

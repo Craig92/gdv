@@ -32,7 +32,7 @@ public class YearSlider {
 	private Map<Integer, Integer> yearList = manager.getReleaseYearList();
 	private int yearValue = setValues(yearList);
 	private int previousStartDate = 1915, previousEndDate = 2018;
-	
+
 	/**
 	 * 
 	 * @param pApplet
@@ -58,23 +58,23 @@ public class YearSlider {
 		cp5 = new ControlP5(pApplet);
 		cp5.setFont(SanFranciscoApplet.buttonFont);
 
-		label = new Textlabel(cp5, "Zeitachse", startDrawX + 20, startDrawY, 400, 200).setFont(SanFranciscoApplet.headerFont)
-				.setColor(SanFranciscoApplet.textColor);
+		label = new Textlabel(cp5, "Zeitachse", startDrawX + 20, startDrawY, 400, 200)
+				.setFont(SanFranciscoApplet.headerFont).setColor(SanFranciscoApplet.textColor);
 
-		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX + 20, startDrawY + 20,
-				400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
+		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX + 20,
+				startDrawY + 20, 400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 
 		addSlider(startDrawX + 20);
 		addRange();
 
 		lowHandleLabel = new Textlabel(cp5, "" + range.getLowValue(),
 				(int) ((int) range.getPosition()[0] + (10 * (range.getLowValue() - 1915))),
-				(int) range.getPosition()[1] , 400, 200).setFont(SanFranciscoApplet.textFont)
+				(int) range.getPosition()[1] + 30, 400, 200).setFont(SanFranciscoApplet.textFont)
 						.setColor(SanFranciscoApplet.textColor);
 
 		highHandleLabel = new Textlabel(cp5, "" + range.getLowValue(),
 				(int) ((int) range.getPosition()[0] + (10 * (range.getHighValue() - 1915))),
-				(int) range.getPosition()[1] , 400, 200).setFont(SanFranciscoApplet.textFont)
+				(int) range.getPosition()[1] + 30, 400, 200).setFont(SanFranciscoApplet.textFont)
 						.setColor(SanFranciscoApplet.textColor);
 	}
 
@@ -100,12 +100,13 @@ public class YearSlider {
 		range = cp5.addRange("rangeController")
 				// disable broadcasting since setRange and setRangeValues will trigger an event
 				.setBroadcast(false).setPosition(startDrawX + 38, startDrawY + 140)
-				.setSize(15 + (previousEndDate - previousStartDate) * Configuration.yearDiagrammSize, 20).setHandleSize(15)
-				.setRange(previousStartDate, previousEndDate).setRangeValues(previousStartDate, previousEndDate)
-				.setLabelVisible(false).setColorForeground(SanFranciscoApplet.selectedColor).setColorBackground(SanFranciscoApplet.unselectedColor)
-				.setColorActive(SanFranciscoApplet.draggedColor).setBroadcast(true);
+				.setSize(15 + (previousEndDate - previousStartDate) * Configuration.yearDiagrammSize, 20)
+				.setHandleSize(15).setRange(previousStartDate, previousEndDate)
+				.setRangeValues(previousStartDate, previousEndDate).setLabelVisible(false)
+				.setColorForeground(SanFranciscoApplet.selectedColor)
+				.setColorBackground(SanFranciscoApplet.unselectedColor).setColorActive(SanFranciscoApplet.draggedColor)
+				.setBroadcast(true);
 		changeFloatLabelToIntLabel();
-
 	}
 
 	/**
@@ -167,9 +168,11 @@ public class YearSlider {
 	 * Set the value label
 	 */
 	private void updateHandleLabels() {
-		lowHandleLabel.setPosition(range.getPosition()[0] + (Configuration.yearDiagrammSize * (range.getLowValue() - 1915)),
+		lowHandleLabel.setPosition(
+				range.getPosition()[0] + (Configuration.yearDiagrammSize * (range.getLowValue() - 1915)),
 				lowHandleLabel.getPosition()[1]);
-		highHandleLabel.setPosition(range.getPosition()[0] + (Configuration.yearDiagrammSize * (range.getHighValue() - 1915)),
+		highHandleLabel.setPosition(
+				range.getPosition()[0] + (Configuration.yearDiagrammSize * (range.getHighValue() - 1915)),
 				highHandleLabel.getPosition()[1]);
 		lowHandleLabel.setText("" + (int) range.getLowValue());
 		highHandleLabel.setText("" + (int) range.getHighValue());
@@ -208,8 +211,9 @@ public class YearSlider {
 	 */
 	private Slider setSlider(Integer name, int size, int positionY, int value, int maxValue) {
 
-		Slider slider = cp5.addSlider("Slider: " + name).setPosition(positionY + size, startDrawY + 45 ).setSize(Configuration.yearDiagrammSize, 75)
-				.setRange(0, maxValue).setValue(value).setColorForeground(SanFranciscoApplet.selectedColor)
+		Slider slider = cp5.addSlider("Slider: " + name).setPosition(positionY + size, startDrawY + 45)
+				.setSize(Configuration.yearDiagrammSize, 75).setRange(0, maxValue).setValue(value)
+				.setColorForeground(SanFranciscoApplet.selectedColor)
 				.setColorBackground(SanFranciscoApplet.backgroundColor).setValueLabel("")
 				.setColorCaptionLabel(SanFranciscoApplet.textColor).setLock(true);
 
