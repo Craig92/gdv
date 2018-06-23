@@ -44,6 +44,7 @@ public class IMDBSlider {
 	private List<Slider> rankingSliderList = new ArrayList<>();
 	private Map<String, Integer> imdbList = manager.getIMDBRankingList();
 	private int imdbValue = setValues(imdbList);
+	private int imdbMax = getMax(imdbList);
 
 	private Slider highSlider;
 	private Slider lowSlider;
@@ -194,7 +195,7 @@ public class IMDBSlider {
 
 		int size = 20;
 		for (Map.Entry<String, Integer> element : imdbList.entrySet()) {
-			Slider slider = setSlider(element.getKey(), positionY, size, element.getValue(), 100);
+			Slider slider = setSlider(element.getKey(), positionY, size, element.getValue(), imdbMax);
 			rankingSliderList.add(slider);
 			size += Configuration.imdbDiagrammSize;
 		}
@@ -412,6 +413,22 @@ public class IMDBSlider {
 			value += i;
 		}
 		return value;
+	}
+
+	/**
+	 * 
+	 * @param map
+	 * @return
+	 */
+	private Integer getMax(Map<String, Integer> map) {
+
+		Integer max = new Integer(0);
+		for (Integer i : map.values()) {
+			if (max <= i) {
+				max = i;
+			}
+		}
+		return max;
 	}
 
 	/**

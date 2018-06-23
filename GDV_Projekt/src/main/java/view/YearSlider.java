@@ -31,6 +31,7 @@ public class YearSlider {
 	private List<Slider> yearSliderList = new ArrayList<>();
 	private Map<Integer, Integer> yearList = manager.getReleaseYearList();
 	private int yearValue = setValues(yearList);
+	private int yearMax = getMax(yearList);
 	private int previousStartDate = 1915, previousEndDate = 2018;
 
 	/**
@@ -188,7 +189,7 @@ public class YearSlider {
 
 		int size = 20;
 		for (Map.Entry<Integer, Integer> element : yearList.entrySet()) {
-			Slider slider = setSlider(element.getKey(), positionY, size, element.getValue(), 100);
+			Slider slider = setSlider(element.getKey(), positionY, size, element.getValue(), yearMax);
 			yearSliderList.add(slider);
 			size += Configuration.yearDiagrammSize;
 		}
@@ -235,6 +236,22 @@ public class YearSlider {
 			value += i;
 		}
 		return value;
+	}
+
+	/**
+	 * 
+	 * @param map
+	 * @return
+	 */
+	private Integer getMax(Map<Integer, Integer> map) {
+
+		Integer max = new Integer(0);
+		for (Integer i : map.values()) {
+			if (max <= i) {
+				max = i;
+			}
+		}
+		return max;
 	}
 
 	/**
