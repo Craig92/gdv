@@ -77,7 +77,7 @@ public class SanFranciscoMap {
 
 		cp5 = new ControlP5(pApplet);
 		cp5.setFont(SanFranciscoApplet.buttonFont);
-		
+
 		unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height);
 		setupMap();
 
@@ -306,8 +306,7 @@ public class SanFranciscoMap {
 			}
 			// pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
 			// + value, width / 2, 25);
-			 pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
-			 + value, mouseX + 25, mouseY + 45);
+			pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: " + value, mouseX + 25, mouseY + 45);
 		}
 	}
 
@@ -336,11 +335,11 @@ public class SanFranciscoMap {
 	 * 
 	 * @param key
 	 */
-	public void keyPressed(char key) {
-		if (key == 'x') {
+	public void keyPressed(boolean isSimpleMap) {
+		if (isSimpleMap) {
 			unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height, Configuration.provider);
 			setupMap();
-		} else if (key == 'y') {
+		} else {
 			unfoldingMap = new UnfoldingMap(pApplet, startDrawX, startDrawY, width, height);
 			setupMap();
 		}

@@ -1,5 +1,7 @@
 package main;
 
+import java.awt.Desktop;
+import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,6 +45,8 @@ public class SanFranciscoApplet extends PApplet {
 
 	private static final FilmLocationManager manager = FilmLocationManager.getInstance();
 	private List<FilmLocation> filmLocationList = manager.getFilmLocationList();
+
+	private boolean isSimpleMap = true;
 
 	/**
 	 * 
@@ -90,7 +94,6 @@ public class SanFranciscoApplet extends PApplet {
 		hoverColor = buttonColor;
 		draggedColor = buttonColor;
 
-		cursor(loadImage("./src/main/resources/icon.png"));
 		// set map
 		if (Configuration.iExpo) {
 			mapGraphic = createGraphics((int) (Configuration.windowWidth * 0.78),
@@ -270,8 +273,24 @@ public class SanFranciscoApplet extends PApplet {
 	 * 
 	 */
 	public void keyPressed() {
-		map.keyPressed(key);
-		filter();
+		if (key == 'w') {
+			if (Desktop.isDesktopSupported()) {
+				try {
+					Desktop.getDesktop().browse(new URI("https://www.sportschau.de/"));
+				} catch (Exception e) {
+
+				}
+			}
+		}
+		if (key == 'm') {
+			cursor(loadImage("./src/main/resources/icon.png"));
+		}
+		if (key == 'x') {
+			map.keyPressed(isSimpleMap);
+			isSimpleMap = !isSimpleMap;
+			filter();
+		}
+
 	}
 
 	/**
