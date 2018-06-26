@@ -32,7 +32,7 @@ public class SanFranciscoMap {
 	private int height;
 
 	private UnfoldingMap unfoldingMap;
-	private Location sanFrancisco = new Location(37.7881272f, -122.4296427f);
+	private Location sanFrancisco = new Location(37.7577326f, -122.4551095f);
 	private int zoom = 12;
 
 	private List<Feature> districts;
@@ -106,12 +106,13 @@ public class SanFranciscoMap {
 	 */
 	private void setMapPosition() {
 
-		if (locationList.isEmpty()) {
-			for (FilmLocationMarker location : filmLocationMarkers) {
-				locationList.add(location.getLocation());
-			}
-		}
-		unfoldingMap.zoomAndPanToFit(locationList);
+		unfoldingMap.zoomAndPanTo(13, sanFrancisco);
+		//if (locationList.isEmpty()) {
+		//	for (FilmLocationMarker location : filmLocationMarkers) {
+		//		locationList.add(location.getLocation());
+		//	}
+		//}
+		//unfoldingMap.zoomAndPanToFit(locationList);
 	}
 
 	/**
@@ -248,7 +249,7 @@ public class SanFranciscoMap {
 		int labelHight = 0;
 		for (FilmLocationMarker location : filmLocationMarkers) {
 			if (location.isSelected()) {
-				if (labelHight < (int) (Configuration.windowsHeight * 0.60)) {
+				if (labelHight < (int) (Configuration.windowsHeight * 0.80)) {
 					pApplet.fill(SanFranciscoApplet.textColor);
 					pApplet.text(setFilmLocationTextLabel(location.getFilmLocation()), 25, 35 + labelHight);
 					labelHight += 230;
@@ -262,7 +263,7 @@ public class SanFranciscoMap {
 		}
 		pApplet.fill(SanFranciscoApplet.filmLocationMarkerColor);
 		pApplet.stroke(SanFranciscoApplet.filmLocationMarkerColor);
-		pApplet.rect(5, 5, 400, labelHight);
+		pApplet.rect(5, 5, 500, labelHight);
 	}
 
 	/**
@@ -298,7 +299,7 @@ public class SanFranciscoMap {
 		if (mouseX < width && mouseY < height && !isShow) {
 			pApplet.fill(SanFranciscoApplet.filmLocationMarkerActivColorTransparent);
 			// pApplet.rect(width / 2 - 5, 10, 200, 45);
-			pApplet.rect(mouseX + 25, mouseY + 25, 200, 45);
+			pApplet.rect(mouseX + 25, mouseY + 25, 230, 55);
 			pApplet.fill(SanFranciscoApplet.textColor);
 			int value = 0;
 			if (filmLocationDistrictMap.get("Kein Distrikt") != null) {
@@ -306,7 +307,7 @@ public class SanFranciscoMap {
 			}
 			// pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: "
 			// + value, width / 2, 25);
-			pApplet.text("Außerhalb von San Francisco \nAnzahl Drehorte: " + value, mouseX + 25, mouseY + 45);
+			pApplet.text("Außerhalb \nAnzahl Drehorte: " + value, mouseX + 25, mouseY + 45);
 		}
 	}
 

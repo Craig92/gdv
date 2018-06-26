@@ -12,18 +12,18 @@ public class Configuration {
 	public static String districtPath = new File("").getAbsolutePath() + path + "districts.geo.json";
 	public static String locationPath = new File("").getAbsolutePath() + path + "filmlocation.csv";
 
-	public static int windowWidth = 1920;
-	public static int windowsHeight = 1080;
-	public static int limit = windowsHeight / 100;
-	public static int yearDiagrammSize = 12;
-	public static int imdbDiagrammSize = 7;
-	public static boolean iExpo = false;
+//	public static int windowWidth = 1920;
+//	public static int windowsHeight = 1080;
+//	public static int limit = windowsHeight / 100;
+//	public static int yearDiagrammSize = 12;
+//	public static int imdbDiagrammSize = 7;
+//	public static boolean iExpo = false;
 
-//	 public static int windowWidth = 3840;
-//	 public static int windowsHeight = 2160;
-//	 public static int limit = 10;
-//	 public static int yearDiagrammSize = 24;
-//	 public static int imdbDiagrammSize = 12;
-//	 public static boolean iExpo = true;
+	 public static int windowWidth = 3840;
+	 public static int windowsHeight = 2160;
+	 public static int limit = 11;
+	 public static int yearDiagrammSize = 28;
+	 public static int imdbDiagrammSize = 16;
+	 public static boolean iExpo = true;
 
 }

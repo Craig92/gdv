@@ -100,7 +100,7 @@ public class Filter {
 	 */
 	private void setup() {
 
-		int currentY = startDrawY + 110;
+		int currentY = startDrawY + 140;
 		cp5 = new ControlP5(pApplet);
 		cp5.setFont(SanFranciscoApplet.buttonFont);
 
@@ -114,10 +114,10 @@ public class Filter {
 
 		// buttons
 		if (Configuration.iExpo) {
-			selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 70)
+			selectAllButton = cp5.addButton("Alles auswaehlen").setPosition(startDrawX, startDrawY + 80)
 					.setSize(160, 30).setColorForeground(SanFranciscoApplet.buttonColor)
 					.setColorActive(SanFranciscoApplet.buttonActivColor);
-			deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX + 200, startDrawY + 70)
+			deselectAllButton = cp5.addButton("Alles abwaehlen").setPosition(startDrawX + 200, startDrawY + 80)
 					.setSize(160, 30).setColorForeground(SanFranciscoApplet.buttonColor)
 					.setColorActive(SanFranciscoApplet.buttonActivColor);
 		} else {
@@ -130,31 +130,31 @@ public class Filter {
 		}
 
 		// genre filter
-		descriptionTitelLabel = new Textlabel(cp5, "Genre filtern*:", startDrawX, startDrawY + 110, 400, 200)
+		descriptionTitelLabel = new Textlabel(cp5, "Genre filtern*:", startDrawX - 5, startDrawY + 130, 400, 200)
 				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
-		descriptionTitleDiagramm = new Textlabel(cp5, "Gesamt: " + genreValue, startDrawX + 175, startDrawY + 110, 400,
+		descriptionTitleDiagramm = new Textlabel(cp5, "Gesamt: " + genreValue, startDrawX + 250 -5, startDrawY + 130, 400,
 				200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		currentY = addFilterElements("Genre", currentY + 5, genreList, genreMaxValue, genreValue);
 
 		// director filter
-		descriptionDirectorLabel = new Textlabel(cp5, "Regisseure filtern*:", startDrawX, currentY + 5, 400, 200)
+		descriptionDirectorLabel = new Textlabel(cp5, "Regisseure filtern*:", startDrawX - 5, currentY + 5, 400, 200)
 				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
-		descriptionDirectorDiagramm = new Textlabel(cp5, "Gesamt: " + directorValue, startDrawX + 175, currentY + 5,
+		descriptionDirectorDiagramm = new Textlabel(cp5, "Gesamt: " + directorValue, startDrawX + 250 - 5, currentY + 5,
 				400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		currentY = addFilterElements("Regie", currentY + 5, directorList, directorMaxValue, directorValue);
 
 		// production comany filter
-		descriptionProductionCompanyLabel = new Textlabel(cp5, "Produktionsfirma filtern*:", startDrawX, currentY + 5,
+		descriptionProductionCompanyLabel = new Textlabel(cp5, "Produktionsfirma filtern*:", startDrawX - 5, currentY + 5,
 				400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
-		descriptionProductionCompanyDiagramm = new Textlabel(cp5, "Gesamt: " + productionCompanyValue, startDrawX + 175,
+		descriptionProductionCompanyDiagramm = new Textlabel(cp5, "Gesamt: " + productionCompanyValue, startDrawX + 250 - 5,
 				currentY + 5, 400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		currentY = addFilterElements("Produktion", currentY + 5, productionCompanyList, productionCompanyMaxValue,
 				productionCompanyValue);
 
 		// distributor filter
-		descriptionDistributionLabel = new Textlabel(cp5, "Vertriebsfirma filtern*:", startDrawX, currentY + 5, 400,
+		descriptionDistributionLabel = new Textlabel(cp5, "Vertriebsfirma filtern*:", startDrawX - 5, currentY + 5, 400,
 				200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
-		descriptionDistributionDiagramm = new Textlabel(cp5, "Gesamt: " + distributorValue, startDrawX + 175,
+		descriptionDistributionDiagramm = new Textlabel(cp5, "Gesamt: " + distributorValue, startDrawX + 250 - 5,
 				currentY + 5, 400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 		currentY = addFilterElements("Vertrieb", currentY + 5, distributorList, distributorMaxValue, distributorValue);
 
@@ -284,7 +284,7 @@ public class Filter {
 	private Slider setSlider(String name, int size, int positionY, int value, int maxValue, int completeValue) {
 
 		if (Configuration.iExpo) {
-			return cp5.addSlider(name).setPosition(startDrawX + 175, positionY + size).setSize(75, 40)
+			return cp5.addSlider(name).setPosition(startDrawX + 250, positionY + size).setSize(75, 40)
 					.setRange(0, maxValue).setValue(value).setCaptionLabel(Integer.toString(value)).setValueLabel(" ")
 					.setColorForeground(SanFranciscoApplet.selectedColor)
 					.setColorBackground(SanFranciscoApplet.backgroundColor)

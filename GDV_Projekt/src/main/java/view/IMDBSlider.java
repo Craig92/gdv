@@ -83,7 +83,7 @@ public class IMDBSlider {
 		cp5 = new ControlP5(pApplet);
 		cp5.setFont(SanFranciscoApplet.buttonFont);
 
-		descriptionIMDBLabel = new Textlabel(cp5, "IMDb-Bewertung filtern:", startDrawX, startDrawY + 110, 400, 200)
+		descriptionIMDBLabel = new Textlabel(cp5, "IMDb-Bewertung filtern:", startDrawX, startDrawY + 130, 400, 200)
 				.setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 
 		infoLabel1 = new Textlabel(cp5, "* Es kann nur nach den " + Configuration.limit + " häufigsten", startDrawX,
@@ -455,7 +455,7 @@ public class IMDBSlider {
 	 * @return
 	 */
 	private int getXPostionHandleLabel(Slider localSlider) {
-		return startDrawX + 35;
+		return startDrawX + 25;
 	}
 
 	/**

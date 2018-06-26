@@ -59,10 +59,10 @@ public class YearSlider {
 		cp5 = new ControlP5(pApplet);
 		cp5.setFont(SanFranciscoApplet.buttonFont);
 
-		label = new Textlabel(cp5, "Zeitachse", startDrawX + 20, startDrawY, 400, 200)
+		label = new Textlabel(cp5, "Zeitachse", startDrawX + 30, startDrawY, 400, 200)
 				.setFont(SanFranciscoApplet.headerFont).setColor(SanFranciscoApplet.textColor);
 
-		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX + 20,
+		descriptionLabel = new Textlabel(cp5, "Wählen Sie den zu filternden Zeitraum aus:", startDrawX + 30,
 				startDrawY + 20, 400, 200).setFont(SanFranciscoApplet.textFont).setColor(SanFranciscoApplet.textColor);
 
 		addSlider(startDrawX + 20);
