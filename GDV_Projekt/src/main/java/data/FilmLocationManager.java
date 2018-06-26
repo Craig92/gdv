@@ -75,12 +75,9 @@ public class FilmLocationManager {
 				location.setActor3(line[10]);
 				location.setBreitengrad(Double.parseDouble(line[11].replaceAll(",", ".")));
 				location.setLaengengrad(Double.parseDouble(line[12].replaceAll(",", ".")));
-				String imdb = line[13].replaceAll(",", ".");
-				if(imdb.length() == 1) {
-					imdb += ".0";
-				}
-				location.setImdbRanking(Double.parseDouble(imdb));
-				countKeys("IMDB", line[13]);
+				double imdb = Double.parseDouble(line[13].replaceAll(",", "."));
+				location.setImdbRanking(imdb);
+				countKeys("IMDB", "" + imdb);
 				location.setGenre(line[14]);
 				countKeys("Genre", line[14]);
 				filmLocationList.add(location);
@@ -167,8 +164,8 @@ public class FilmLocationManager {
 
 		for (int dezimalzahl = 0; dezimalzahl != 10; dezimalzahl++) {
 			for (int dezimalstelle = 0; dezimalstelle != 10; dezimalstelle++) {
-				String key = "" + dezimalzahl + "," + dezimalstelle;
-				if (!imdbRankingList.containsKey(key) ) {
+				String key = "" + dezimalzahl + "." + dezimalstelle;
+				if (!imdbRankingList.containsKey(key)) {
 					imdbRankingList.put(key, 0);
 				}
 			}
